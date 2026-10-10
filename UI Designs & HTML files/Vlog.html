@@ -1,0 +1,914 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vlog Archive - Adv. Kriti Malviya</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- =========================
+         STYLES
+    ========================= -->
+    <style>
+        /* GLOBAL VARIABLES */
+        :root {
+            --black: #111111;
+            --charcoal: #242424;
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3;
+            --muted: #777268;
+            --border-color: rgba(184, 155, 82, 0.2); 
+            --white: #FFFFFF;
+
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            --radius-md: 4px;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.6s var(--ease-out-expo);
+            
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: var(--font-sans); background-color: var(--off-white); 
+            color: var(--black); overflow-x: hidden; position: relative; 
+            min-height: 100vh; display: flex; flex-direction: column;
+            -webkit-font-smoothing: antialiased; 
+        }
+        body::before { 
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            pointer-events: none; z-index: 9999; opacity: 0.03; background-image: var(--noise-fine); 
+        }
+        
+        /* Respect Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        /* =========================
+           HEADER (UNTOUCHED)
+        ========================= */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 200; }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--black); overflow: hidden; z-index: 201; }
+        .brand-logo { width: 32px; height: 32px; object-fit: contain; border-radius: 50%; }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link, .nav-btn { text-decoration: none; color: var(--black); font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; position: relative; padding: 8px 0; transition: color var(--transition-smooth); display: inline-flex; align-items: center; gap: 6px; }
+        .nav-link::after, .nav-btn::after { content: ''; position: absolute; width: 100%; height: 6px; background-color: var(--pastel-yellow); bottom: 4px; left: 0; opacity: 0; z-index: -1; transform: translateY(10px); transition: all var(--transition-smooth); }
+        .nav-link:hover::after, .nav-btn:hover::after, .nav-btn[aria-expanded="true"]::after { opacity: 1; transform: translateY(0); }
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .menu-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; position: relative; z-index: 250; border-radius: 50%; transition: background var(--transition-smooth); }
+        .menu-toggle:hover { background: rgba(184, 155, 82, 0.1); }
+        .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--black); transition: all 0.4s var(--ease-out-expo); transform-origin: center; }
+        .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* =========================
+           SIDE MENU (UNTOUCHED)
+        ========================= */
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 205; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+        .menu-overlay.is-active { opacity: 1; pointer-events: auto; }
+        .side-menu-panel { position: fixed; top: 0; right: 0; width: 440px; max-width: 92vw; height: 100vh; background-color: var(--cream); background-image: var(--noise-fine); border-left: 1px solid var(--border-color); padding: 50px; z-index: 210; transform: translateX(100%); opacity: 0; transition: transform 0.7s var(--ease-out-expo), opacity 0.5s ease; overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+        .side-menu-panel.is-open { transform: translateX(0); opacity: 1; }
+        .menu-bg-letter { position: absolute; bottom: -5%; right: -10%; font-family: var(--font-serif); font-size: 40rem; color: var(--black); opacity: 0.03; z-index: 0; pointer-events: none; line-height: 0.8; user-select: none; }
+        .menu-dec-plus { position: absolute; top: 52px; left: 20px; font-family: var(--font-sans); font-size: 1rem; color: var(--gold); opacity: 0.6; pointer-events: none; }
+        .menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+        .menu-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); font-weight: 600; }
+        .menu-close { background: none; border: none; font-size: 2.4rem; line-height: 1; color: var(--black); cursor: pointer; transition: transform 0.4s var(--ease-out-expo), color 0.3s; font-family: var(--font-sans); font-weight: 300; padding: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+        .menu-close:hover { transform: rotate(90deg) scale(1.1); color: var(--gold); }
+        .menu-divider { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.3; margin-bottom: 40px; position: relative; z-index: 2; }
+        .side-nav-links { display: flex; flex-direction: column; gap: 28px; position: relative; z-index: 2; }
+        .side-link { display: flex; align-items: center; text-decoration: none; position: relative; padding-bottom: 6px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo); }
+        .side-menu-panel.is-open .side-link { opacity: 1; transform: translateY(0); }
+        .side-menu-panel .side-link:nth-child(1) { transition-delay: 0.10s; } .side-menu-panel .side-link:nth-child(2) { transition-delay: 0.15s; } .side-menu-panel .side-link:nth-child(3) { transition-delay: 0.20s; } .side-menu-panel .side-link:nth-child(4) { transition-delay: 0.25s; } .side-menu-panel .side-link:nth-child(5) { transition-delay: 0.30s; } .side-menu-panel .side-link:nth-child(6) { transition-delay: 0.35s; } .side-menu-panel .side-link:nth-child(7) { transition-delay: 0.40s; }
+        .menu-num { font-family: var(--font-sans); font-size: 0.85rem; color: var(--muted); margin-right: 20px; transition: color 0.4s ease; font-weight: 500; }
+        .menu-text { font-family: var(--font-serif); font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--black); line-height: 1.2; transition: transform 0.4s var(--ease-out-expo), color 0.3s; }
+        .menu-arrow { position: absolute; right: 0; font-family: var(--font-sans); font-size: 1.2rem; color: var(--gold); opacity: 0; transform: translateX(-10px); transition: all 0.4s var(--ease-out-expo); }
+        .side-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-out-expo); }
+        .side-link:hover .menu-text, .side-link.active .menu-text { transform: translateX(6px); color: var(--black); }
+        .side-link:hover .menu-num, .side-link.active .menu-num { color: var(--gold); }
+        .side-link:hover .menu-arrow, .side-link.active .menu-arrow { opacity: 1; transform: translateX(0); }
+        .side-link:hover::after, .side-link.active::after { transform: scaleX(1); }
+        .side-link.active .menu-text { font-style: italic; }
+        .menu-footer { margin-top: auto; padding-top: 50px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease 0.45s, transform 0.5s var(--ease-out-expo) 0.45s; }
+        .side-menu-panel.is-open .menu-footer { opacity: 1; transform: translateY(0); }
+        .menu-footer-line { width: 40px; height: 2px; background: var(--gold); margin-bottom: 24px; }
+        .menu-footer-title { font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--black); font-weight: 600; margin-bottom: 6px; }
+        .menu-footer-desc { font-family: var(--font-serif); font-size: 1.1rem; color: var(--muted); line-height: 1.4; }
+
+        /* =========================
+           VLOG HERO
+        ========================= */
+        .vl-hero {
+            padding: 80px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+        }
+
+        .vl-hero-left { flex: 1 1 600px; opacity: 0; transform: translateY(20px); animation: pageFadeUp 1s var(--ease-out-expo) forwards 0.1s; }
+        .vl-hero-right { flex: 1 1 300px; display: flex; flex-direction: column; align-items: flex-end; text-align: right; opacity: 0; transform: translateY(20px); animation: pageFadeUp 1s var(--ease-out-expo) forwards 0.2s; }
+        
+        @keyframes pageFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        .vl-label {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--gold); font-weight: 600;
+            margin-bottom: 24px; display: flex; align-items: center; gap: 16px;
+        }
+        .vl-label::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+
+        .vl-title {
+            font-family: var(--font-serif); font-size: clamp(4rem, 10vw, 8.5rem); line-height: 0.9; color: var(--black);
+            text-transform: uppercase; letter-spacing: -0.03em; margin-bottom: 24px;
+        }
+
+        .vl-desc {
+            font-size: 1.15rem; line-height: 1.7; color: var(--muted); max-width: 450px;
+            border-left: 2px solid var(--gold); padding-left: 24px;
+        }
+
+        .vl-counter-num { font-family: var(--font-serif); font-size: clamp(3.5rem, 8vw, 6.5rem); line-height: 1; color: var(--black); margin-bottom: 8px; }
+        .vl-counter-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); font-weight: 600; }
+
+        .vert-label { position: absolute; writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.25em; color: var(--gold-light); font-weight: 600; white-space: nowrap; z-index: 0; pointer-events: none; }
+        .vert-hero { top: 120px; right: 2%; }
+        
+        @media (max-width: 768px) {
+            .vl-hero { padding: 40px 5%; flex-direction: column; align-items: flex-start; gap: 40px; }
+            .vl-hero-right { align-items: flex-start; text-align: left; }
+            .vert-hero { display: none; }
+        }
+
+        /* =========================
+           FEATURED VIDEO 
+        ========================= */
+        .vl-featured-sec {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            opacity: 0; transform: translateY(20px); animation: pageFadeUp 1s var(--ease-out-expo) forwards 0.3s;
+        }
+
+        .vl-featured-card {
+            background: var(--cream);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s var(--ease-out-expo);
+            position: relative;
+        }
+        
+        .vl-featured-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
+
+        .vl-f-img-col {
+            flex: 2 1 600px;
+            position: relative;
+            background: var(--black);
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        .vl-f-img-col img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.8s var(--ease-out-expo), opacity 0.4s ease;
+        }
+        .vl-featured-card:hover .vl-f-img-col img { transform: scale(1.02); opacity: 0.4; }
+
+        /* The Iframe Container (Hidden until hover) */
+        .vl-iframe-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease; background: var(--black);
+        }
+        .vl-iframe-container iframe {
+            width: 100%; height: 100%; border: none; pointer-events: none; /* Let clicks pass to the card */
+            /* Scale up slightly to crop out YT controls/title if they sneak in */
+            transform: scale(1.1); 
+        }
+
+        .vl-f-play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; border-radius: 50%; background: rgba(247, 245, 239, 0.9);
+            display: flex; align-items: center; justify-content: center; z-index: 3;
+            transition: all 0.4s var(--ease-out-expo); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .vl-f-play-btn::after {
+            content: ''; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 18px solid var(--gold); margin-left: 6px;
+        }
+        
+        /* Desktop Hover: Fade out Play Button & Image, Fade in Iframe Preview */
+        @media (hover: hover) and (pointer: fine) {
+            .vl-featured-card.is-playing .vl-f-play-btn { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            .vl-featured-card.is-playing .vl-iframe-container { opacity: 1; }
+        }
+
+        .vl-f-content {
+            flex: 1 1 350px;
+            padding: 60px 40px;
+            display: flex; flex-direction: column; justify-content: center; position: relative;
+        }
+
+        .vl-f-label {
+            position: absolute; top: 0; left: 40px; transform: translateY(-50%); background: var(--gold); color: var(--white);
+            font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; padding: 6px 12px; border-radius: 2px;
+        }
+
+        .vl-card-cat { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+        .vl-f-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); color: var(--black); line-height: 1.1; margin-bottom: 20px; }
+        .vl-f-desc { font-size: 1.05rem; color: var(--muted); line-height: 1.6; margin-bottom: 30px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .vl-f-meta { display: flex; align-items: center; justify-content: space-between; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 24px; }
+        .vl-card-date { font-size: 0.85rem; color: var(--muted); font-family: var(--font-sans); letter-spacing: 0.05em; }
+        .vl-watch-link { font-size: 0.85rem; font-weight: 600; color: var(--black); text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .vl-featured-card:hover .vl-watch-link { color: var(--gold); }
+        .vl-watch-link::after { content: '→'; font-size: 1.2em; transition: transform 0.4s var(--ease-out-expo); }
+        .vl-featured-card:hover .vl-watch-link::after { transform: translateX(6px); }
+
+        @media (max-width: 768px) {
+            .vl-f-content { padding: 40px 30px; }
+            .vl-f-img-col { min-height: 250px; }
+        }
+
+        /* =========================
+           FILTERS & SEARCH
+        ========================= */
+        .vl-toolbar {
+            padding: 60px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            border-bottom: 1px solid rgba(184, 155, 82, 0.1);
+            margin-bottom: 60px;
+            opacity: 0; transform: translateY(10px); animation: pageFadeUp 1s var(--ease-out-expo) forwards 0.4s;
+        }
+
+        .vl-filters { display: flex; flex-wrap: wrap; gap: 24px; flex: 1 1 auto; }
+        
+        .filter-btn {
+            background: transparent; border: none; padding: 8px 0; font-family: var(--font-sans); font-size: 0.8rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: color 0.4s ease; letter-spacing: 0.15em; text-transform: uppercase; position: relative;
+        }
+        .filter-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease-out-expo); }
+        .filter-btn:hover, .filter-btn.active { color: var(--black); }
+        .filter-btn.active::after { transform: scaleX(1); }
+
+        .vl-search-wrap { position: relative; flex: 0 1 300px; }
+        .vl-search {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-color); padding: 10px 30px 10px 0; font-family: var(--font-sans); font-size: 0.9rem; color: var(--black); outline: none; transition: border-color 0.3s;
+        }
+        .vl-search:focus { border-color: var(--gold); }
+        .vl-search::placeholder { color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.75rem; font-weight: 500; }
+        .vl-search-icon { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--gold); pointer-events: none; }
+
+        @media (max-width: 768px) {
+            .vl-toolbar { flex-direction: column; align-items: flex-start; }
+            .vl-search-wrap { width: 100%; flex: 1 1 100%; }
+        }
+
+        /* =========================
+           VIDEO GRID
+        ========================= */
+        .vl-archive { padding: 0 5% 100px; max-width: 1400px; margin: 0 auto; min-height: 400px; }
+        .vl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); grid-auto-flow: dense; gap: 40px; width: 100%; }
+        
+        .vl-empty-state { grid-column: 1 / -1; padding: 100px 0; text-align: center; font-family: var(--font-serif); font-size: 2rem; color: var(--muted); display: none; }
+
+        /* Video Card */
+        .vl-card {
+            display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s var(--ease-out-expo), opacity 0.5s ease; cursor: pointer; position: relative; opacity: 0; transform: translateY(30px);
+        }
+        .vl-card.in-view { opacity: 1; transform: translateY(0); }
+        .vl-card.is-hiding { opacity: 0; transform: scale(0.98); pointer-events: none; }
+        .vl-card.is-hidden { display: none !important; }
+
+        .vl-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+
+        .vl-card-img-wrap { width: 100%; aspect-ratio: 16/9; position: relative; background: var(--black); overflow: hidden; }
+        .vl-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: transform 0.8s var(--ease-out-expo), opacity 0.4s ease; }
+        .vl-card:hover .vl-card-img-wrap img { transform: scale(1.05); opacity: 0.5; }
+
+        .vl-card-play {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border-radius: 50%; background: rgba(247, 245, 239, 0.95); display: flex; align-items: center; justify-content: center; z-index: 3; transition: all 0.4s var(--ease-out-expo); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .vl-card-play::after { content: ''; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 12px solid var(--gold); margin-left: 4px; }
+        
+        @media (hover: hover) and (pointer: fine) {
+            .vl-card.is-playing .vl-card-play { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            .vl-card.is-playing .vl-iframe-container { opacity: 1; }
+        }
+
+        .vl-card-content { padding: 30px; display: flex; flex-direction: column; flex: 1; }
+        .vl-card-title { font-family: var(--font-serif); font-size: 1.4rem; color: var(--black); line-height: 1.3; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .vl-card-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.5; margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+        .vl-card-meta { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: auto; }
+
+        /* Dynamic Spans for editorial variety */
+        .vl-span-2 { grid-column: span 2; }
+        @media (max-width: 900px) { .vl-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } .vl-span-2 { grid-column: span 1; } }
+
+        /* =========================
+           CLOSING 
+        ========================= */
+        .vl-closing { padding: 60px 5% 100px; text-align: center; max-width: 800px; margin: 0 auto; border-top: 1px solid var(--border-color); }
+        .vl-closing-label { font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+        .vl-closing-text { font-family: var(--font-serif); font-size: 1.6rem; color: var(--black); font-style: italic; }
+
+        /* =========================
+           FOOTER
+        ========================= */
+        .footer { padding: 60px 5%; text-align: center; background: var(--cream); border-top: 1px solid var(--border-color); margin-top: auto; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); margin-bottom: 10px; }
+        .footer-copy { font-size: 0.85rem; color: var(--muted); }
+
+        /* =========================
+           VIDEO VIEWER / LIGHTBOX
+        ========================= */
+        .viewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 15, 15, 0.98); z-index: 9999; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .viewer.is-active { opacity: 1; pointer-events: auto; }
+        
+        .vw-header { display: flex; justify-content: flex-end; padding: 24px 40px; }
+        .vw-close { background: none; border: none; color: var(--white); font-size: 2.5rem; cursor: pointer; line-height: 1; font-family: var(--font-sans); font-weight: 300; transition: color 0.3s, transform 0.4s var(--ease-out-expo); }
+        .vw-close:hover { color: var(--gold); transform: rotate(90deg) scale(1.1); }
+        
+        .vw-content { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 0 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
+        .vw-iframe-wrap { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; box-shadow: 0 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(184, 155, 82, 0.2); border-radius: 4px; overflow: hidden; transform: scale(0.96) translateY(20px); opacity: 0; transition: transform 0.6s var(--ease-out-expo), opacity 0.5s ease; }
+        .viewer.is-active .vw-iframe-wrap { transform: scale(1) translateY(0); opacity: 1; }
+        .vw-iframe-wrap iframe { width: 100%; height: 100%; border: none; }
+        
+        .vw-nav { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--white); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.4s var(--ease-out-expo); font-size: 1.4rem; }
+        .vw-nav:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-50%) scale(1.05); }
+        .vw-prev { left: 20px; } .vw-next { right: 20px; }
+
+        .vw-footer { padding: 24px 5% 40px; max-width: 1000px; margin: 0 auto; width: 100%; color: var(--white); }
+        .vw-cat { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold-light); margin-bottom: 8px; }
+        .vw-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 12px; }
+        .vw-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.6; }
+
+        @media (max-width: 768px) {
+            .vw-content { padding: 0 20px; }
+            .vw-nav { display: none; }
+            .vw-header, .vw-footer { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================
+         HEADER 
+    ========================= -->
+    <header class="header" id="top">
+        <a href="hero.html" class="brand">
+            <img src="lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <nav class="nav-links">
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">HOME</a>
+            </div>
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">RELATIONSHIP CONSELLING</a>
+            </div>
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">LEGAL CONSELLING</a>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- =========================
+         HAMBURGER MENU PANEL
+    ========================= -->
+    <div class="menu-overlay"></div>
+    <aside class="side-menu-panel">
+        <div class="menu-bg-letter">K</div>
+        <div class="menu-dec-plus">+</div>
+        <div class="menu-top">
+            <span class="menu-label">MENU</span>
+            <button class="menu-close close-on-click" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+        <nav class="side-nav-links">
+            <a href="hero.html" class="side-link close-on-click">
+                <span class="menu-num">01</span><span class="menu-text">Home</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="hero.html#advocate" class="side-link close-on-click">
+                <span class="menu-num">02</span><span class="menu-text">Advocate Kritimalviya</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="gallery.html" class="side-link close-on-click">
+                <span class="menu-num">03</span><span class="menu-text">Photo Gallery</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="awards.html" class="side-link close-on-click">
+                <span class="menu-num">04</span><span class="menu-text">Awards And Achivements</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <!-- Active State -->
+            <a href="vlog.html" class="side-link active close-on-click">
+                <span class="menu-num">05</span><span class="menu-text">Vlog</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#blog" class="side-link close-on-click">
+                <span class="menu-num">06</span><span class="menu-text">Blog</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="hero.html#about-us" class="side-link close-on-click">
+                <span class="menu-num">07</span><span class="menu-text">About US</span><span class="menu-arrow">&rarr;</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- =========================
+         VLOG HERO 
+    ========================= -->
+    <section class="vl-hero">
+        <div class="vert-label vert-hero">ARCHIVE</div>
+        
+        <div class="vl-hero-left">
+            <div class="vl-label">VIDEO ARCHIVE / ADV. KRITI MALVIYA</div>
+            <h1 class="vl-title">THE<br>VLOG</h1>
+            <p class="vl-desc">Conversations, insights, guidance, and perspectives on legal and relationship-related topics.</p>
+        </div>
+
+        <div class="vl-hero-right">
+            <div class="vl-counter-num" id="vl-counter-num">0</div>
+            <div class="vl-counter-label">CURATED VIDEOS</div>
+        </div>
+    </section>
+
+    <!-- =========================
+         FEATURED VIDEO CONTAINER
+    ========================= -->
+    <section id="vl-featured-container">
+        <!-- Injected by JS -->
+    </section>
+
+    <!-- =========================
+         FILTERS & SEARCH 
+    ========================= -->
+    <div class="vl-toolbar" id="vl-toolbar">
+        <div class="vl-filters" id="vl-filters">
+            <!-- Buttons Injected dynamically -->
+        </div>
+        <div class="vl-search-wrap">
+            <input type="text" id="vl-search" class="vl-search" placeholder="Search videos...">
+            <svg class="vl-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+    </div>
+
+    <!-- =========================
+         VIDEO ARCHIVE GRID
+    ========================= -->
+    <main class="vl-archive">
+        <div class="vl-grid" id="vl-grid">
+            <!-- Cards injected by JS -->
+        </div>
+        <div class="vl-empty-state" id="vl-empty">
+            <span style="font-size:1.2rem; font-family:var(--font-sans); color:var(--muted);">No videos found matching your search.</span>
+        </div>
+    </main>
+
+    <!-- =========================
+         CLOSING
+    ========================= -->
+    <div class="vl-closing">
+        <div class="vl-closing-label">END OF VIDEO ARCHIVE</div>
+        <div class="vl-closing-text">"More conversations and insights will be added over time."</div>
+    </div>
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+    <footer class="footer">
+        <div class="footer-brand">KRITIMALVIYA</div>
+        <div class="footer-copy">Premium Legal & Relationship Counselling</div>
+    </footer>
+
+    <!-- =========================
+         VIDEO VIEWER (LIGHTBOX)
+    ========================= -->
+    <div class="viewer" id="viewer" role="dialog" aria-modal="true">
+        <div class="vw-header">
+            <button class="vw-close" id="vw-close" aria-label="Close Viewer">&times;</button>
+        </div>
+        <div class="vw-content" id="vw-content">
+            <button class="vw-nav vw-prev" id="vw-prev" aria-label="Previous Video">&larr;</button>
+            <div class="vw-iframe-wrap" id="vw-iframe-wrap">
+                <!-- Iframe injected by JS -->
+            </div>
+            <button class="vw-nav vw-next" id="vw-next" aria-label="Next Video">&rarr;</button>
+        </div>
+        <div class="vw-footer">
+            <div class="vw-cat" id="vw-cat">Category</div>
+            <div class="vw-title" id="vw-title">Title</div>
+            <div class="vw-desc" id="vw-desc">Description</div>
+        </div>
+    </div>
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+    <script>
+        // ======================================================
+        // VLOG VIDEOS — EDIT ONLY THIS SECTION
+        // ======================================================
+        /*
+          Supported URLs:
+          - https://www.youtube.com/watch?v=VIDEO_ID
+          - https://youtu.be/VIDEO_ID
+          - https://www.youtube.com/shorts/VIDEO_ID
+        */
+        const videos = [
+            {
+                url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Replace with real URL
+                title: "Understanding Family Law Mediation",
+                description: "A comprehensive guide to how mediation works in family law disputes, focusing on clear communication and practical resolution outside of the courtroom.",
+                category: "Legal",
+                date: "Oct 2026",
+                featured: true
+            },
+            {
+                url: "https://youtu.be/jNQXAC9IVRw",
+                title: "Navigating Property Disputes",
+                description: "Key documentation and steps required when facing complex property and banking legal issues.",
+                category: "Legal",
+                date: "Sep 2026",
+                featured: false
+            },
+            {
+                url: "https://www.youtube.com/shorts/M7FIvfx5J10",
+                title: "5 Signs of Communication Breakdown",
+                description: "Short insights into identifying when a relationship needs professional communication support.",
+                category: "Relationship Counselling",
+                date: "Aug 2026",
+                featured: false
+            },
+            {
+                url: "https://www.youtube.com/watch?v=tPEE9ZwTmy0",
+                title: "The Emotional Toll of Legal Separation",
+                description: "Discussing the intersection of legal reality and emotional well-being during difficult life transitions.",
+                category: "Relationship Counselling",
+                date: "Jul 2026",
+                featured: false
+            },
+            {
+                url: "https://youtu.be/9bZkp7q19f0",
+                title: "What to Expect in Your First Consultation",
+                description: "A brief overview of how we approach initial meetings to ensure clarity, confidentiality, and comfort.",
+                category: "Education",
+                date: "Jun 2026",
+                featured: false
+            }
+        ];
+        // ======================================================
+
+        // YT Helper
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- 1. MENU LOGIC ---
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidePanel = document.querySelector('.side-menu-panel');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const closeLinks = document.querySelectorAll('.close-on-click');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                menuToggle.classList.toggle('is-open', isMenuOpen);
+                sidePanel.classList.toggle('is-open', isMenuOpen);
+                menuOverlay.classList.toggle('is-active', isMenuOpen);
+                document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            menuOverlay.addEventListener('click', toggleMenu);
+            closeLinks.forEach(link => link.addEventListener('click', () => { if (isMenuOpen) toggleMenu(); }));
+
+            // --- 2. DATA PREPARATION ---
+            const processedVideos = videos.map((v, index) => {
+                const videoId = getYouTubeId(v.url);
+                return {
+                    ...v,
+                    id: videoId,
+                    thumbMaxRes: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+                    thumbHq: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+                    originalIndex: index
+                };
+            }).filter(v => v.id); // Remove invalid URLs
+
+            const grid = document.getElementById('vl-grid');
+            const featuredContainer = document.getElementById('vl-featured-container');
+            const filterContainer = document.getElementById('vl-filters');
+            const counterEl = document.getElementById('vl-counter-num');
+            const emptyState = document.getElementById('vl-empty');
+            const searchInput = document.getElementById('vl-search');
+            
+            let currentFilter = 'All';
+            let searchQuery = '';
+            let currentViewableItems = [];
+            let viewerCurrentIndex = 0;
+
+            // Update Counter
+            counterEl.textContent = processedVideos.length.toString().padStart(2, '0');
+
+            // Generate Categories
+            const categories = ['All'];
+            processedVideos.forEach(item => {
+                if (item.category && !categories.includes(item.category)) {
+                    categories.push(item.category);
+                }
+            });
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${cat === 'All' ? 'active' : ''}`;
+                btn.textContent = cat;
+                btn.addEventListener('click', () => applyFilter(cat, btn));
+                filterContainer.appendChild(btn);
+            });
+
+            // Find Featured (if none marked, use first)
+            let featuredVid = processedVideos.find(v => v.featured);
+            if (!featuredVid && processedVideos.length > 0) featuredVid = processedVideos[0];
+            const regularVideos = processedVideos.filter(v => v !== featuredVid);
+
+            // --- 3. RENDER FEATURED VIDEO ---
+            if (featuredVid) {
+                featuredContainer.innerHTML = `
+                    <div class="vl-featured-sec">
+                        <div class="vl-featured-card js-vid-card" data-index="${featuredVid.originalIndex}" data-id="${featuredVid.id}">
+                            <div class="vl-f-img-col">
+                                <img src="${featuredVid.thumbMaxRes}" onerror="this.onerror=null; this.src='${featuredVid.thumbHq}';" alt="${featuredVid.title}">
+                                <div class="vl-f-play-btn"></div>
+                                <div class="vl-iframe-container js-preview-container"></div>
+                            </div>
+                            <div class="vl-f-content">
+                                <div class="vl-f-label">FEATURED</div>
+                                <div class="vl-card-cat">${featuredVid.category}</div>
+                                <h2 class="vl-f-title">${featuredVid.title}</h2>
+                                <p class="vl-f-desc">${featuredVid.description}</p>
+                                <div class="vl-f-meta">
+                                    <div class="vl-card-date">${featuredVid.date}</div>
+                                    <div class="vl-watch-link">Watch Video</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- 4. RENDER REGULAR GRID ---
+            regularVideos.forEach((data, i) => {
+                const card = document.createElement('div');
+                // Occasional 2-column span for editorial variety
+                let sizeClass = (i % 5 === 0 && i !== 0) ? 'vl-span-2' : '';
+                
+                card.className = `vl-card js-vid-card ${sizeClass}`;
+                card.dataset.category = data.category || 'Uncategorized';
+                card.dataset.index = data.originalIndex;
+                card.dataset.id = data.id;
+
+                card.innerHTML = `
+                    <div class="vl-card-img-wrap">
+                        <img src="${data.thumbMaxRes}" onerror="this.onerror=null; this.src='${data.thumbHq}';" alt="${data.title}" loading="lazy">
+                        <div class="vl-card-play"></div>
+                        <div class="vl-iframe-container js-preview-container"></div>
+                    </div>
+                    <div class="vl-card-content">
+                        <div class="vl-card-cat">${data.category}</div>
+                        <div class="vl-card-title">${data.title}</div>
+                        <div class="vl-card-desc">${data.description}</div>
+                        <div class="vl-card-meta">
+                            <div class="vl-card-date">${data.date}</div>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+
+            // --- 5. HOVER PREVIEW LOGIC (Desktop Only) ---
+            const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+            let previewTimeout;
+
+            document.querySelectorAll('.js-vid-card').forEach(card => {
+                // Click opens viewer
+                card.addEventListener('click', () => openViewer(parseInt(card.dataset.index)));
+
+                // Hover triggers iframe load & playback
+                if (isDesktop) {
+                    card.addEventListener('mouseenter', () => {
+                        const container = card.querySelector('.js-preview-container');
+                        const vidId = card.dataset.id;
+                        
+                        // Small delay to prevent accidental loads while scrolling fast
+                        previewTimeout = setTimeout(() => {
+                            card.classList.add('is-playing');
+                            // Load iframe ONLY if it doesn't exist yet
+                            if(!container.innerHTML) {
+                                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${vidId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${vidId}&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>`;
+                            }
+                        }, 400);
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        clearTimeout(previewTimeout);
+                        card.classList.remove('is-playing');
+                        // Remove iframe from DOM to stop playback & save resources
+                        const container = card.querySelector('.js-preview-container');
+                        if(container) container.innerHTML = '';
+                    });
+                }
+            });
+
+            // --- 6. FILTER & SEARCH LOGIC ---
+            function updateVisibility() {
+                const items = document.querySelectorAll('.vl-card');
+                let visibleCount = 0;
+                
+                const lowerQuery = searchQuery.toLowerCase();
+
+                items.forEach(item => {
+                    const idx = item.dataset.index;
+                    const data = processedVideos[idx];
+                    
+                    const matchesCategory = (currentFilter === 'All' || data.category === currentFilter);
+                    const matchesSearch = (data.title.toLowerCase().includes(lowerQuery) || data.description.toLowerCase().includes(lowerQuery) || data.category.toLowerCase().includes(lowerQuery));
+
+                    if (matchesCategory && matchesSearch) {
+                        item.classList.remove('is-hiding');
+                        item.classList.remove('is-hidden');
+                        setTimeout(() => { item.style.opacity = ''; item.style.transform = ''; }, 50);
+                        visibleCount++;
+                    } else {
+                        item.classList.add('is-hiding');
+                        setTimeout(() => {
+                            if (item.classList.contains('is-hiding')) item.classList.add('is-hidden');
+                        }, 500); 
+                    }
+                });
+
+                if(visibleCount === 0 && items.length > 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    emptyState.style.display = 'none';
+                }
+
+                updateViewerArray();
+            }
+
+            function applyFilter(category, btn) {
+                if (currentFilter === category) return;
+                currentFilter = category;
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateVisibility();
+            }
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                updateVisibility();
+            });
+
+            // --- 7. SCROLL REVEAL (Intersection Observer) ---
+            const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, i) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => { entry.target.classList.add('in-view'); }, i * 100);
+                        scrollObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.vl-card').forEach(el => scrollObserver.observe(el));
+
+
+            // --- 8. VIDEO VIEWER (LIGHTBOX) ---
+            const viewer = document.getElementById('viewer');
+            const vwIframeWrap = document.getElementById('vw-iframe-wrap');
+            const vwTitle = document.getElementById('vw-title');
+            const vwDesc = document.getElementById('vw-desc');
+            const vwCategory = document.getElementById('vw-cat');
+            const vwClose = document.getElementById('vw-close');
+            const vwPrev = document.getElementById('vw-prev');
+            const vwNext = document.getElementById('vw-next');
+
+            function updateViewerArray() {
+                // Determine which videos are currently visible/valid for next/prev logic
+                currentViewableItems = processedVideos.filter(v => {
+                    const lowerQuery = searchQuery.toLowerCase();
+                    const matchesCategory = (currentFilter === 'All' || v.category === currentFilter);
+                    const matchesSearch = (v.title.toLowerCase().includes(lowerQuery) || v.description.toLowerCase().includes(lowerQuery));
+                    return matchesCategory && matchesSearch;
+                });
+                
+                // Always ensure featured video is available if filtering allows it
+            }
+            updateViewerArray();
+
+            window.openViewer = function(originalIndex) {
+                viewerCurrentIndex = currentViewableItems.findIndex(v => v.originalIndex === originalIndex);
+                // If opening from featured while it's filtered out of the grid, just force it
+                if(viewerCurrentIndex === -1) {
+                    currentViewableItems = [processedVideos[originalIndex]];
+                    viewerCurrentIndex = 0;
+                }
+                
+                loadVideoIntoViewer();
+                viewer.classList.add('is-active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            function closeViewer() {
+                viewer.classList.remove('is-active');
+                document.body.style.overflow = '';
+                // Destroy iframe to stop audio
+                setTimeout(() => { vwIframeWrap.innerHTML = ''; }, 400);
+            }
+
+            function prevVideo() {
+                if(currentViewableItems.length <= 1) return;
+                viewerCurrentIndex = (viewerCurrentIndex > 0) ? viewerCurrentIndex - 1 : currentViewableItems.length - 1;
+                loadVideoIntoViewer();
+            }
+
+            function nextVideo() {
+                if(currentViewableItems.length <= 1) return;
+                viewerCurrentIndex = (viewerCurrentIndex < currentViewableItems.length - 1) ? viewerCurrentIndex + 1 : 0;
+                loadVideoIntoViewer();
+            }
+
+            function loadVideoIntoViewer() {
+                if(currentViewableItems.length === 0) return;
+                const data = currentViewableItems[viewerCurrentIndex];
+                
+                // Animate out
+                vwIframeWrap.style.opacity = 0;
+                vwIframeWrap.style.transform = 'scale(0.96) translateY(20px)';
+                
+                setTimeout(() => {
+                    // Inject iframe with sound ON
+                    vwIframeWrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${data.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    vwTitle.textContent = data.title;
+                    vwDesc.textContent = data.description;
+                    vwCategory.textContent = data.category;
+                    
+                    // Animate in
+                    requestAnimationFrame(() => {
+                        vwIframeWrap.style.opacity = 1;
+                        vwIframeWrap.style.transform = 'scale(1) translateY(0)';
+                    });
+                }, 300);
+            }
+
+            vwClose.addEventListener('click', closeViewer);
+            vwPrev.addEventListener('click', prevVideo);
+            vwNext.addEventListener('click', nextVideo);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (viewer.classList.contains('is-active')) closeViewer();
+                    if (isMenuOpen) toggleMenu();
+                }
+                if (viewer.classList.contains('is-active')) {
+                    if (e.key === 'ArrowLeft') prevVideo();
+                    if (e.key === 'ArrowRight') nextVideo();
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

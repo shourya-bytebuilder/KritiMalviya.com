@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery - Adv. Kriti Malviya</title>
+    
+    <!-- Google Fonts: DM Serif Display (Editorial Serif) & Inter (Clean Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- =========================
+         STYLES
+    ========================= -->
+    <style>
+        /* GLOBAL VARIABLES */
+        :root {
+            /* Premium Editorial Palette */
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3; 
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --black: #111111;
+            --muted: #6E6A60;
+            --border-color: rgba(184, 155, 82, 0.2); /* Soft gold border */
+
+            /* Typography */
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            /* Sizing & Animation */
+            --radius-md: 4px; /* More editorial/sharp corners */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+            --transition-smooth: 0.6s var(--ease-out-expo);
+            
+            /* Noise Texture */
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: var(--font-sans); 
+            background-color: var(--off-white); 
+            color: var(--black); 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            position: relative; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Subtle Noise Overlay */
+        body::before { 
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            pointer-events: none; z-index: 9999; opacity: 0.03; background-image: var(--noise-fine); 
+        }
+
+        /* =========================
+           HEADER & NAVIGATION 
+        ========================= */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 200; }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--black); overflow: hidden; z-index: 201; }
+        .brand-logo { width: 32px; height: 32px; object-fit: contain; border-radius: 50%; }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link, .nav-btn { text-decoration: none; color: var(--black); font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; position: relative; padding: 8px 0; transition: color var(--transition-smooth); display: inline-flex; align-items: center; gap: 6px; }
+        .nav-link::after, .nav-btn::after { content: ''; position: absolute; width: 100%; height: 6px; background-color: var(--pastel-yellow); bottom: 4px; left: 0; opacity: 0; z-index: -1; transform: translateY(10px); transition: all var(--transition-smooth); }
+        .nav-link:hover::after, .nav-btn:hover::after, .nav-btn[aria-expanded="true"]::after { opacity: 1; transform: translateY(0); }
+
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .menu-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; position: relative; z-index: 250; border-radius: 50%; transition: background var(--transition-smooth); }
+        .menu-toggle:hover { background: rgba(184, 155, 82, 0.1); }
+        .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--black); transition: all 0.4s var(--ease-out-expo); transform-origin: center; }
+        .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* =========================
+           SIDE MENU PANEL 
+        ========================= */
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 205; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+        .menu-overlay.is-active { opacity: 1; pointer-events: auto; }
+
+        .side-menu-panel { position: fixed; top: 0; right: 0; width: 440px; max-width: 92vw; height: 100vh; background-color: var(--cream); background-image: var(--noise-fine); border-left: 1px solid var(--border-color); padding: 50px; z-index: 210; transform: translateX(100%); opacity: 0; transition: transform 0.7s var(--ease-out-expo), opacity 0.5s ease; overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+        .side-menu-panel.is-open { transform: translateX(0); opacity: 1; }
+
+        .menu-bg-letter { position: absolute; bottom: -5%; right: -10%; font-family: var(--font-serif); font-size: 40rem; color: var(--black); opacity: 0.03; z-index: 0; pointer-events: none; line-height: 0.8; user-select: none; }
+        .menu-dec-plus { position: absolute; top: 52px; left: 20px; font-family: var(--font-sans); font-size: 1rem; color: var(--gold); opacity: 0.6; pointer-events: none; }
+
+        .menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+        .menu-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); font-weight: 600; }
+        .menu-close { background: none; border: none; font-size: 2.4rem; line-height: 1; color: var(--black); cursor: pointer; transition: transform 0.4s var(--ease-out-expo), color 0.3s; font-family: var(--font-sans); font-weight: 300; padding: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+        .menu-close:hover { transform: rotate(90deg) scale(1.1); color: var(--gold); }
+        .menu-divider { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.3; margin-bottom: 40px; position: relative; z-index: 2; }
+
+        .side-nav-links { display: flex; flex-direction: column; gap: 28px; position: relative; z-index: 2; }
+        .side-link { display: flex; align-items: center; text-decoration: none; position: relative; padding-bottom: 6px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo); }
+        .side-menu-panel.is-open .side-link { opacity: 1; transform: translateY(0); }
+        
+        .side-menu-panel .side-link:nth-child(1) { transition-delay: 0.10s; }
+        .side-menu-panel .side-link:nth-child(2) { transition-delay: 0.15s; }
+        .side-menu-panel .side-link:nth-child(3) { transition-delay: 0.20s; }
+        .side-menu-panel .side-link:nth-child(4) { transition-delay: 0.25s; }
+        .side-menu-panel .side-link:nth-child(5) { transition-delay: 0.30s; }
+        .side-menu-panel .side-link:nth-child(6) { transition-delay: 0.35s; }
+        .side-menu-panel .side-link:nth-child(7) { transition-delay: 0.40s; }
+
+        .menu-num { font-family: var(--font-sans); font-size: 0.85rem; color: var(--muted); margin-right: 20px; transition: color 0.4s ease; font-weight: 500; }
+        .menu-text { font-family: var(--font-serif); font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--black); line-height: 1.2; transition: transform 0.4s var(--ease-out-expo), color 0.3s; }
+        .menu-arrow { position: absolute; right: 0; font-family: var(--font-sans); font-size: 1.2rem; color: var(--gold); opacity: 0; transform: translateX(-10px); transition: all 0.4s var(--ease-out-expo); }
+        .side-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-out-expo); }
+        
+        .side-link:hover .menu-text, .side-link.active .menu-text { transform: translateX(6px); color: var(--black); }
+        .side-link:hover .menu-num, .side-link.active .menu-num { color: var(--gold); }
+        .side-link:hover .menu-arrow, .side-link.active .menu-arrow { opacity: 1; transform: translateX(0); }
+        .side-link:hover::after, .side-link.active::after { transform: scaleX(1); }
+        
+        .side-link.active .menu-text { font-style: italic; }
+
+        .menu-footer { margin-top: auto; padding-top: 50px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease 0.45s, transform 0.5s var(--ease-out-expo) 0.45s; }
+        .side-menu-panel.is-open .menu-footer { opacity: 1; transform: translateY(0); }
+        .menu-footer-line { width: 40px; height: 2px; background: var(--gold); margin-bottom: 24px; }
+        .menu-footer-title { font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--black); font-weight: 600; margin-bottom: 6px; }
+        .menu-footer-desc { font-family: var(--font-serif); font-size: 1.1rem; color: var(--muted); line-height: 1.4; }
+
+        /* =========================
+           MONUMENTAL PAGE INTRODUCTION
+        ========================= */
+        .page-intro {
+            padding: 80px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .intro-bg-mark {
+            position: absolute;
+            top: 20px;
+            left: 2%;
+            font-family: var(--font-serif);
+            font-size: clamp(10rem, 20vw, 18rem);
+            line-height: 0.8;
+            color: var(--gold);
+            opacity: 0.05;
+            pointer-events: none;
+            user-select: none;
+            z-index: -1;
+        }
+
+        .intro-left { 
+            flex: 1 1 500px; 
+            opacity: 0;
+            transform: translateY(30px);
+            animation: softFadeIn 1.2s var(--ease-out-expo) forwards 0.2s;
+        }
+        
+        .intro-right { 
+            flex: 1 1 300px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-end; 
+            text-align: right; 
+            opacity: 0;
+            transform: translateY(30px);
+            animation: softFadeIn 1.2s var(--ease-out-expo) forwards 0.4s;
+        }
+
+        @keyframes softFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .intro-label::before {
+            content: ''; width: 40px; height: 1px; background: var(--gold);
+        }
+
+        .page-title {
+            font-family: var(--font-serif);
+            font-size: clamp(4rem, 9vw, 7.5rem);
+            line-height: 0.9;
+            color: var(--black);
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .page-desc {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--muted);
+            max-width: 500px;
+            border-left: 2px solid var(--gold);
+            padding-left: 24px;
+        }
+
+        .photo-counter {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+        .photo-counter-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* =========================
+           EDITORIAL CATEGORY FILTER
+        ========================= */
+        .gallery-filters {
+            padding: 20px 5% 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: softFadeIn 1s var(--ease-out-expo) forwards 0.6s;
+            border-bottom: 1px solid rgba(184, 155, 82, 0.15);
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 0;
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.4s ease;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s var(--ease-out-expo);
+        }
+
+        .filter-btn:hover { color: var(--black); }
+        .filter-btn.active { color: var(--black); }
+        .filter-btn.active::after { transform: scaleX(1); }
+
+        /* =========================
+           DATA-DRIVEN GALLERY GRID
+        ========================= */
+        .gallery-container {
+            padding: 0 5% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex: 1; /* Pushes footer down */
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-rows: 300px; /* Enhanced Base row height */
+            gap: 32px; /* Elegant, wider gaps */
+            grid-auto-flow: dense;
+            width: 100%;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Responsive structural overrides */
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); grid-auto-rows: 240px; gap: 20px; }
+            .intro-right { align-items: flex-start; text-align: left; margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 24px; width: 100%; flex: 1 1 100%; }
+        }
+        @media (max-width: 480px) {
+            .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+            .item-wide, .item-large, .item-tall { grid-column: span 1 !important; grid-row: span 1 !important; height: 350px; }
+            .gallery-filters { gap: 20px; }
+        }
+
+        /* Grid Item Setup */
+        .gallery-item {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background-color: var(--cream);
+            cursor: zoom-in;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            /* Ultra subtle shadow for premium feel */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+            border: 1px solid rgba(184, 155, 82, 0.05);
+        }
+
+        /* Sizing Classes (Assigned dynamically by JS) */
+        .item-normal { grid-column: span 1; grid-row: span 1; }
+        .item-wide   { grid-column: span 2; grid-row: span 1; }
+        .item-tall   { grid-column: span 1; grid-row: span 2; }
+        .item-large  { grid-column: span 2; grid-row: span 2; }
+
+        /* Revealed State */
+        .gallery-item.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Filtering States */
+        .gallery-item.is-hiding {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .gallery-item.is-hidden {
+            display: none !important;
+        }
+
+        /* Image Setup */
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s var(--ease-out-expo), filter 0.6s ease;
+            opacity: 0; 
+            will-change: transform;
+        }
+        .gallery-img.loaded {
+            opacity: 1;
+        }
+
+        /* Loading Indicator */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px; height: 30px;
+            border: 1px solid var(--gold-light);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            opacity: 0.4;
+            z-index: 0;
+        }
+        .gallery-img.loaded ~ .gallery-item::before { display: none; }
+        @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* Error state (Broken Image) */
+        .gallery-item.is-broken {
+            background-color: var(--surface-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .gallery-item.is-broken::before { display: none; }
+        .gallery-item.is-broken::after {
+            content: 'IMAGE UNAVAILABLE';
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 4px;
+        }
+
+        /* =========================
+           MAGAZINE-STYLE HOVER OVERLAY
+        ========================= */
+        .item-overlay {
+            position: absolute;
+            inset: 0; /* fills the entire card */
+            background: rgba(17, 17, 17, 0.45); /* Elegant dark tint */
+            backdrop-filter: blur(4px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(4px);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transition: opacity 0.6s var(--ease-out-expo);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.05);
+        }
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        .overlay-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transform: translateY(-10px);
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+        .gallery-item:hover .overlay-top { transform: translateY(0); }
+
+        .overlay-category {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            background: var(--white);
+            padding: 6px 12px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .overlay-icon {
+            color: var(--white);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .overlay-bottom {
+            transform: translateY(15px);
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+        .gallery-item:hover .overlay-bottom { transform: translateY(0); }
+
+        .overlay-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            color: var(--white);
+            line-height: 1.1;
+        }
+
+        /* =========================
+           ELEVATED LIGHTBOX VIEWER
+        ========================= */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+        .lightbox.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lb-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px 5%;
+            color: var(--white);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .lb-counter {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .lb-close {
+            background: none; border: none;
+            color: var(--white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            line-height: 1;
+            font-family: var(--font-sans);
+            font-weight: 300;
+            transition: color 0.3s, transform 0.5s var(--ease-out-expo);
+        }
+        .lb-close:hover { color: var(--gold); transform: rotate(90deg) scale(1.1); }
+
+        .lb-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 100px;
+        }
+
+        .lb-img {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            transform: scale(0.96) translateY(20px);
+            opacity: 0;
+            transition: transform 0.6s var(--ease-out-expo), opacity 0.5s ease;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+        .lightbox.is-active .lb-img {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .lb-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--white);
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-out-expo);
+            font-size: 1.4rem;
+        }
+        .lb-nav:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-50%) scale(1.05); }
+        .lb-prev { left: 40px; }
+        .lb-next { right: 40px; }
+
+        .lb-footer {
+            padding: 32px 5% 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+        }
+        .lb-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+        .lb-category {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gold-light);
+        }
+
+        @media (max-width: 768px) {
+            .lb-content { padding: 0 20px; }
+            .lb-nav { display: none; } /* Use swipe on mobile */
+            .lb-header, .lb-footer { padding: 24px; }
+        }
+
+        /* =========================
+           GALLERY END / FOOTER
+        ========================= */
+        .gallery-end {
+            text-align: center;
+            padding: 80px 5% 120px;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .end-title {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .end-line {
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+        .end-desc {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--black);
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+    <header class="header" id="top">
+        <a href="hero.html" class="brand">
+            <img src="lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <nav class="nav-links">
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">HOME</a>
+            </div>
+            <!-- Standard Header Links -->
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">RELATIONSHIP CONSELLING</a>
+            </div>
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">LEGAL CONSELLING</a>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- =========================
+         HAMBURGER MENU PANEL
+    ========================= -->
+    <div class="menu-overlay"></div>
+    <aside class="side-menu-panel">
+        <div class="menu-bg-letter">K</div>
+        <div class="menu-dec-plus">+</div>
+        <div class="menu-top">
+            <span class="menu-label">MENU</span>
+            <button class="menu-close close-on-click" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+        <nav class="side-nav-links">
+            <a href="hero.html" class="side-link close-on-click">
+                <span class="menu-num">01</span><span class="menu-text">Home</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="hero.html#advocate" class="side-link close-on-click">
+                <span class="menu-num">02</span><span class="menu-text">Advocate Kritimalviya</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <!-- Active State for Gallery -->
+            <a href="gallery.html" class="side-link active close-on-click">
+                <span class="menu-num">03</span><span class="menu-text">Photo Gallery</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#awards" class="side-link close-on-click">
+                <span class="menu-num">04</span><span class="menu-text">Awards And Achivements</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#vlog" class="side-link close-on-click">
+                <span class="menu-num">05</span><span class="menu-text">Vlog</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#blog" class="side-link close-on-click">
+                <span class="menu-num">06</span><span class="menu-text">Blog</span><span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="hero.html#about-us" class="side-link close-on-click">
+                <span class="menu-num">07</span><span class="menu-text">About US</span><span class="menu-arrow">&rarr;</span>
+            </a>
+        </nav>
+        <div class="menu-footer">
+            <div class="menu-footer-line"></div>
+            <div class="menu-footer-title">ADV. KRITI MALVIYA</div>
+            <div class="menu-footer-desc">Legal & Relationship<br>Counselling</div>
+        </div>
+    </aside>
+
+    <!-- =========================
+         PAGE INTRODUCTION
+    ========================= -->
+    <section class="page-intro">
+        <div class="intro-bg-mark">G</div>
+        <div class="intro-left">
+            <div class="intro-label">ADV. KRITI MALVIYA / ARCHIVE</div>
+            <h1 class="page-title">PHOTO<br>GALLERY</h1>
+            <p class="page-desc">A carefully curated visual collection of moments, professional milestones, events, and memories.</p>
+        </div>
+        <div class="intro-right">
+            <div class="photo-counter" id="photo-counter">0</div>
+            <div class="photo-counter-label">PHOTOGRAPHS</div>
+        </div>
+    </section>
+
+    <!-- =========================
+         CATEGORY FILTERS
+    ========================= -->
+    <div class="gallery-filters" id="gallery-filters">
+        <!-- Minimal Typographic Filter Buttons injected dynamically by JS -->
+    </div>
+
+    <!-- =========================
+         DATA-DRIVEN GALLERY GRID
+    ========================= -->
+    <main class="gallery-container">
+        <!-- The layout automatically reclaims empty space due to grid-auto-flow: dense -->
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Images injected dynamically by JS -->
+        </div>
+    </main>
+
+    <!-- =========================
+         GALLERY END
+    ========================= -->
+    <div class="gallery-end">
+        <div class="end-title">END OF ARCHIVE</div>
+        <div class="end-line"></div>
+        <div class="end-desc">"More moments will be added over time."</div>
+    </div>
+
+    <!-- =========================
+         IMAGE VIEWER / LIGHTBOX
+    ========================= -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+        <div class="lb-header">
+            <div class="lb-counter" id="lb-counter">0 / 0</div>
+            <button class="lb-close" id="lb-close" aria-label="Close Lightbox">&times;</button>
+        </div>
+        <div class="lb-content" id="lb-content">
+            <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <img src="" alt="Gallery Image" class="lb-img" id="lb-img">
+            <button class="lb-nav lb-next" id="lb-next" aria-label="Next Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+        <div class="lb-footer">
+            <div class="lb-title" id="lb-title">Title</div>
+            <div class="lb-category" id="lb-category">Category</div>
+        </div>
+    </div>
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+    <script>
+        // ======================================================
+        // GALLERY PHOTOS — EDIT THIS SECTION ONLY
+        // ======================================================
+        /*
+          IMPORTANT GOOGLE DRIVE NOTE:
+          Normal sharing URLs (e.g., drive.google.com/file/d/ID/view) DO NOT WORK in <img src="">.
+          You MUST convert them to direct-view URLs.
+          
+          Formula:
+          1. Copy the FILE_ID from your share link.
+          2. Use: https://drive.google.com/uc?export=view&id=FILE_ID
+          
+          The file MUST be set to "Anyone with the link can view".
+        */
+        const galleryImages = [
+            {
+                src: "kritimalviya about me.jpg", // Replace with real URL
+                title: "Adv. Kriti Malviya Profile",
+                category: "Portraits",
+                featured: true // Makes this image visually prominent (Large 2x2)
+            },
+            {
+                src: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800",
+                title: "Legal Strategy Session",
+                category: "Professional"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=800",
+                title: "Court Documentation",
+                category: "Professional"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=800",
+                title: "Client Mediation",
+                category: "Counselling"
+            },
+            {
+                src: "https://drive.google.com/file/d/1Z1O7a1SFcWU2np9xTX3Q-8qvK49nHpFD/view?usp=drive_link",
+                title: "Law Association Seminar",
+                category: "Events"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800",
+                title: "Financial Planning",
+                category: "Professional"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=800",
+                title: "Couples Therapy Workshop",
+                category: "Counselling"
+            }
+            // Add new objects here! The layout automatically handles them.
+        ];
+        // ======================================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- 1. MENU LOGIC ---
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidePanel = document.querySelector('.side-menu-panel');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const closeLinks = document.querySelectorAll('.close-on-click');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                menuToggle.classList.toggle('is-open', isMenuOpen);
+                menuToggle.setAttribute('aria-expanded', isMenuOpen);
+                sidePanel.classList.toggle('is-open', isMenuOpen);
+                menuOverlay.classList.toggle('is-active', isMenuOpen);
+                document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            menuOverlay.addEventListener('click', toggleMenu);
+            closeLinks.forEach(link => link.addEventListener('click', () => { if (isMenuOpen) toggleMenu(); }));
+
+            // --- 2. GALLERY INITIALIZATION ---
+            const grid = document.getElementById('gallery-grid');
+            const filterContainer = document.getElementById('gallery-filters');
+            const counterEl = document.getElementById('photo-counter');
+            
+            let currentFilter = 'All';
+            let lightboxIndex = 0;
+            let currentFilteredImages = []; // Stores indices of currently visible images for lightbox
+
+            // Update Counter
+            counterEl.textContent = galleryImages.length;
+
+            // Generate Categories dynamically
+            const categories = ['All'];
+            galleryImages.forEach(img => {
+                if (img.category && !categories.includes(img.category)) {
+                    categories.push(img.category);
+                }
+            });
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${cat === 'All' ? 'active' : ''}`;
+                btn.textContent = cat;
+                btn.addEventListener('click', () => applyFilter(cat, btn));
+                filterContainer.appendChild(btn);
+            });
+
+            // Layout Algorithm (Editorial Masonry Simulator)
+            const layoutPattern = ['item-normal', 'item-tall', 'item-wide', 'item-normal', 'item-normal', 'item-tall'];
+
+            galleryImages.forEach((imgData, index) => {
+                // Determine size class
+                let sizeClass = 'item-normal';
+                if (imgData.featured) {
+                    sizeClass = 'item-large';
+                } else {
+                    sizeClass = layoutPattern[index % layoutPattern.length];
+                }
+
+                // Add slight editorial imperfections (Subtle radius shifts)
+                const radiusVariations = ['4px', '6px', '2px'];
+                const randRadius = radiusVariations[index % 3];
+
+                // Create Card
+                const card = document.createElement('div');
+                card.className = `gallery-item ${sizeClass}`;
+                card.dataset.category = imgData.category || 'Uncategorized';
+                card.dataset.index = index;
+                card.style.borderRadius = randRadius;
+
+                // High-End Magazine Hover Inner HTML
+                card.innerHTML = `
+                    <img src="${imgData.src}" alt="${imgData.title}" class="gallery-img" loading="lazy" onload="this.classList.add('loaded')" onerror="handleImageError(this)">
+                    <div class="item-overlay">
+                        <div class="overlay-top">
+                            <span class="overlay-category">${imgData.category}</span>
+                            <span class="overlay-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                            </span>
+                        </div>
+                        <div class="overlay-bottom">
+                            <div class="overlay-title">${imgData.title}</div>
+                        </div>
+                    </div>
+                `;
+
+                // Lightbox Trigger
+                card.addEventListener('click', () => openLightbox(index));
+                
+                grid.appendChild(card);
+            });
+
+            // Fallback for broken images
+            window.handleImageError = function(imgEl) {
+                imgEl.parentElement.classList.add('is-broken');
+                imgEl.style.display = 'none';
+            };
+
+            // --- 3. FILTERING LOGIC ---
+            function applyFilter(category, btn) {
+                if (currentFilter === category) return;
+                currentFilter = category;
+
+                // Update Buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update Grid
+                const items = document.querySelectorAll('.gallery-item');
+                
+                items.forEach(item => {
+                    const itemCat = item.dataset.category;
+                    if (category === 'All' || itemCat === category) {
+                        item.classList.remove('is-hiding');
+                        item.classList.remove('is-hidden');
+                        setTimeout(() => { item.style.opacity = ''; item.style.transform = ''; }, 50);
+                    } else {
+                        item.classList.add('is-hiding');
+                        setTimeout(() => {
+                            if (item.classList.contains('is-hiding')) {
+                                item.classList.add('is-hidden');
+                            }
+                        }, 400); 
+                    }
+                });
+
+                updateLightboxArray();
+            }
+
+            // --- 4. SCROLL ANIMATIONS (Intersection Observer) ---
+            const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach((entry, i) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('in-view');
+                        }, i * 100);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.gallery-item').forEach(item => observer.observe(item));
+
+            // --- 5. LIGHTBOX LOGIC ---
+            const lightbox = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lb-img');
+            const lbTitle = document.getElementById('lb-title');
+            const lbCategory = document.getElementById('lb-category');
+            const lbCounter = document.getElementById('lb-counter');
+            const lbClose = document.getElementById('lb-close');
+            const lbPrev = document.getElementById('lb-prev');
+            const lbNext = document.getElementById('lb-next');
+
+            function updateLightboxArray() {
+                currentFilteredImages = [];
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    if (!item.classList.contains('is-hiding') && !item.classList.contains('is-hidden')) {
+                        currentFilteredImages.push(parseInt(item.dataset.index));
+                    }
+                });
+            }
+            updateLightboxArray(); 
+
+            function openLightbox(originalIndex) {
+                lightboxIndex = currentFilteredImages.indexOf(originalIndex);
+                if(lightboxIndex === -1) lightboxIndex = 0; 
+                
+                updateLightboxView();
+                lightbox.classList.add('is-active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('is-active');
+                document.body.style.overflow = '';
+            }
+
+            function prevImage() {
+                if (lightboxIndex > 0) {
+                    lightboxIndex--;
+                    updateLightboxView();
+                } else {
+                    lightboxIndex = currentFilteredImages.length - 1;
+                    updateLightboxView();
+                }
+            }
+
+            function nextImage() {
+                if (lightboxIndex < currentFilteredImages.length - 1) {
+                    lightboxIndex++;
+                    updateLightboxView();
+                } else {
+                    lightboxIndex = 0;
+                    updateLightboxView();
+                }
+            }
+
+            function updateLightboxView() {
+                if(currentFilteredImages.length === 0) return;
+                
+                const realIndex = currentFilteredImages[lightboxIndex];
+                const data = galleryImages[realIndex];
+
+                lbImg.style.opacity = 0;
+                lbImg.style.transform = 'scale(0.96) translateY(20px)';
+                
+                setTimeout(() => {
+                    lbImg.src = data.src;
+                    lbTitle.textContent = data.title;
+                    lbCategory.textContent = data.category;
+                    // Format counter elegantly like 01 / 15
+                    const curNum = (lightboxIndex + 1).toString().padStart(2, '0');
+                    const totalNum = currentFilteredImages.length.toString().padStart(2, '0');
+                    lbCounter.textContent = `${curNum} / ${totalNum}`;
+                    
+                    lbImg.onload = () => {
+                        lbImg.style.opacity = 1;
+                        lbImg.style.transform = 'scale(1) translateY(0)';
+                    };
+                }, 300);
+            }
+
+            // Lightbox Event Listeners
+            lbClose.addEventListener('click', closeLightbox);
+            lbPrev.addEventListener('click', prevImage);
+            lbNext.addEventListener('click', nextImage);
+            lightbox.addEventListener('click', (e) => {
+                if(e.target === lightbox || e.target === document.getElementById('lb-content')) {
+                    closeLightbox();
+                }
+            });
+
+            // Keyboard
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (lightbox.classList.contains('is-active')) closeLightbox();
+                    if (isMenuOpen) toggleMenu();
+                }
+                if (lightbox.classList.contains('is-active')) {
+                    if (e.key === 'ArrowLeft') prevImage();
+                    if (e.key === 'ArrowRight') nextImage();
+                }
+            });
+
+            // Simple Swipe for Mobile
+            let touchstartX = 0;
+            let touchendX = 0;
+            
+            lightbox.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            lightbox.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchendX < touchstartX - swipeThreshold) nextImage(); 
+                if (touchendX > touchstartX + swipeThreshold) prevImage(); 
+            }
+
+        });
+    </script>
+</body>
+</html>

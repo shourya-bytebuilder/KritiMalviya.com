@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Consultation - Adv. Kriti Malviya</title>
+    
+    <!-- Google Fonts: DM Serif Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================================================
+           GLOBAL VARIABLES & THEME
+           ================================================== */
+        :root {
+            --bg-color: #FAFAFA;
+            --surface-color: #F1F1F3;
+            --text-primary: #111111;
+            --text-secondary: #6B6B6B;
+            --text-light: #A0A0A0;
+            
+            /* Premium Editorial Palette */
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3; 
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --black: #111111;
+            --muted: #6E6A60;
+            --border-color: rgba(184, 155, 82, 0.2); 
+            --white: #FFFFFF;
+            --error: #D32F2F;
+
+            /* Typography */
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            /* Sizing & Animation */
+            --radius-md: 4px;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.5s var(--ease-out-expo);
+            
+            /* Subtle Noise Texture */
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: var(--font-sans); 
+            background-color: var(--off-white); 
+            color: var(--black); 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        body::before { 
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            pointer-events: none; z-index: 9999; opacity: 0.03; background-image: var(--noise-fine); 
+        }
+
+        /* Scroll Reveal Utility Classes */
+        .reveal-up {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            will-change: opacity, transform;
+        }
+        .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+
+        /* ==================================================
+           HEADER & NAVIGATION (UNTOUCHED)
+           ================================================== */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 200; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--black); z-index: 201; }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+        .brand-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: contain; }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link, .nav-btn { text-decoration: none; color: var(--black); font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; padding: 8px 0; display: inline-flex; align-items: center; gap: 6px; transition: color var(--transition-smooth); }
+        .nav-link::after, .nav-btn::after { content: ''; position: absolute; width: 100%; height: 6px; background-color: var(--pastel-yellow); bottom: 4px; left: 0; opacity: 0; z-index: -1; transform: translateY(10px); transition: all var(--transition-smooth); }
+        .nav-link:hover::after, .nav-btn:hover::after, .nav-btn[aria-expanded="true"]::after { opacity: 1; transform: translateY(0); }
+        .nav-link.active::after { opacity: 1; transform: translateY(0); }
+
+        .dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px); background: rgba(250, 250, 250, 0.98); backdrop-filter: blur(12px); min-width: 280px; border-radius: var(--radius-md); box-shadow: 0 24px 48px rgba(0,0,0,0.06); border: 1px solid var(--border-color); padding: 16px 0; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo); z-index: 100; display: flex; flex-direction: column; }
+        .dropdown-menu.is-active { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(8px); }
+        .dropdown-item { display: block; padding: 10px 24px; color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; position: relative; }
+        .dropdown-item::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--gold); opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: scaleY(0.5); }
+        .dropdown-item:hover { color: var(--black); background: rgba(0,0,0,0.02); padding-left: 28px; }
+        .dropdown-item:hover::before { opacity: 1; transform: scaleY(1); }
+
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .menu-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; position: relative; z-index: 250; border-radius: 50%; transition: background var(--transition-smooth); }
+        .menu-toggle:hover { background: rgba(184, 155, 82, 0.1); }
+        .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--black); transition: all 0.4s var(--ease-out-expo); transform-origin: center; }
+        .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* Mobile Menu */
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(4px); z-index: 205; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        .menu-overlay.is-active { opacity: 1; pointer-events: auto; }
+        .side-menu-panel { position: fixed; top: 0; right: 0; width: 440px; max-width: 92vw; height: 100vh; background-color: var(--cream); border-left: 1px solid var(--border-color); padding: 50px; z-index: 210; transform: translateX(100%); opacity: 0; transition: transform 0.6s var(--ease-out-expo), opacity 0.4s ease; overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .side-menu-panel.is-open { transform: translateX(0); opacity: 1; }
+        .menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .menu-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); font-weight: 600; }
+        .menu-close { background: none; border: none; font-size: 2.4rem; color: var(--black); cursor: pointer; transition: transform 0.4s var(--ease-out-expo); font-family: var(--font-sans); font-weight: 300; width: 44px; height: 44px; }
+        .menu-close:hover { transform: rotate(90deg) scale(1.1); color: var(--gold); }
+        .menu-divider { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.3; margin-bottom: 40px; }
+        .side-nav-links { display: flex; flex-direction: column; gap: 24px; }
+        .side-link { display: flex; align-items: center; text-decoration: none; padding-bottom: 6px; position: relative; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo); }
+        .side-menu-panel.is-open .side-link { opacity: 1; transform: translateY(0); }
+        .menu-num { font-size: 0.85rem; color: var(--muted); margin-right: 20px; font-weight: 500; transition: color 0.3s; }
+        .menu-text { font-family: var(--font-serif); font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--black); line-height: 1.2; transition: transform 0.4s var(--ease-out-expo), color 0.3s; }
+        .side-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-out-expo); }
+        .side-link:hover .menu-text, .side-link.active .menu-text { transform: translateX(6px); color: var(--black); }
+        .side-link:hover .menu-num, .side-link.active .menu-num { color: var(--gold); }
+        .side-link:hover::after, .side-link.active::after { transform: scaleX(1); }
+        .side-link.active .menu-text { font-style: italic; color: var(--gold); }
+
+        /* ==================================================
+           BOOKING HERO
+           ================================================== */
+        .bk-hero { padding: 80px 5% 40px; max-width: 1400px; margin: 0 auto; text-align: center; }
+        .bk-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--gold); font-weight: 600; margin-bottom: 24px; }
+        .bk-title { font-family: var(--font-serif); font-size: clamp(3rem, 7vw, 6rem); color: var(--black); line-height: 1; letter-spacing: -0.02em; margin-bottom: 24px; text-transform: uppercase; }
+        .bk-desc { font-size: 1.15rem; color: var(--muted); line-height: 1.6; max-width: 600px; margin: 0 auto 32px; }
+        .bk-sub-line { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold-light); font-weight: 600; border-top: 1px solid var(--border-color); padding-top: 24px; max-width: 800px; margin: 0 auto; }
+
+        /* ==================================================
+           PROGRESS INDICATOR
+           ================================================== */
+        .bk-progress-wrap { max-width: 1200px; margin: 0 auto 60px; padding: 0 5%; }
+        .bk-progress { display: flex; justify-content: space-between; position: relative; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .bk-step-ind { font-family: var(--font-sans); font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; position: relative; transition: color 0.4s ease; display: flex; align-items: center; gap: 8px; }
+        .bk-step-ind span { color: var(--gold-light); font-weight: 600; transition: color 0.4s ease; }
+        .bk-step-ind.active { color: var(--black); font-weight: 600; }
+        .bk-step-ind.active span { color: var(--gold); }
+        .bk-step-ind.active::after { content: ''; position: absolute; bottom: -21px; left: 0; width: 100%; height: 2px; background: var(--gold); transition: all 0.4s ease; }
+
+        .mobile-progress { display: none; text-align: center; font-family: var(--font-sans); font-size: 0.85rem; color: var(--gold); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 40px; padding: 0 5%; }
+        @media (max-width: 768px) { .bk-progress { display: none; } .mobile-progress { display: block; } }
+
+        /* ==================================================
+           LAYOUT: BOOKING CONTAINER
+           ================================================== */
+        .bk-container { max-width: 1200px; margin: 0 auto 100px; padding: 0 5%; display: flex; gap: 60px; align-items: flex-start; scroll-margin-top: 100px; }
+        .bk-main { flex: 1; min-width: 0; }
+        .bk-sidebar { flex: 0 0 350px; background: var(--cream); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 40px; position: sticky; top: 120px; transition: transform 0.4s ease; }
+        
+        @media (max-width: 1024px) {
+            .bk-container { flex-direction: column-reverse; gap: 40px; }
+            .bk-sidebar { width: 100%; flex: none; position: relative; top: 0; padding: 30px; }
+        }
+
+        /* ==================================================
+           STEP CONTAINERS & ANIMATIONS
+           ================================================== */
+        .bk-step { display: none; opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s var(--ease-out-expo); }
+        .bk-step.active { display: block; opacity: 1; transform: translateY(0); animation: softFadeIn 0.5s var(--ease-out-expo) forwards; }
+        
+        @keyframes softFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-heading { font-family: var(--font-serif); font-size: 2.2rem; color: var(--black); margin-bottom: 40px; }
+
+        /* General Forms & Interactions */
+        .bk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+        @media (max-width: 600px) { .bk-grid { grid-template-columns: 1fr; } }
+        
+        .bk-label { display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+        
+        .bk-input, .bk-select, .bk-textarea { width: 100%; background: var(--white); border: 1px solid var(--border-color); padding: 16px 20px; border-radius: var(--radius-md); font-family: var(--font-sans); font-size: 1rem; color: var(--black); transition: all 0.3s ease; outline: none; }
+        .bk-input:focus, .bk-select:focus, .bk-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(184, 155, 82, 0.1); }
+        .bk-textarea { resize: vertical; min-height: 120px; }
+
+        .bk-btn { background: var(--black); color: var(--white); border: 1px solid var(--black); padding: 16px 32px; border-radius: 100px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .bk-btn:hover { background: var(--charcoal); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .bk-btn-outline { background: transparent; color: var(--black); border-color: var(--border-color); }
+        .bk-btn-outline:hover { border-color: var(--black); background: rgba(0,0,0,0.03); box-shadow: none; transform: none; }
+        .bk-btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+        .bk-actions { display: flex; justify-content: space-between; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color); }
+
+        .bk-error { color: var(--error); font-size: 0.8rem; margin-top: 8px; display: none; font-weight: 500; }
+        .bk-error.active { display: block; animation: softFadeIn 0.3s ease forwards; }
+        .has-error .bk-input, .has-error .bk-select, .has-error .bk-textarea { border-color: var(--error); background: #FFFAFA; }
+
+        /* ==================================================
+           STEP 1: CONSULTATION SELECTION
+           ================================================== */
+        .cat-group { margin-bottom: 60px; }
+        .cat-title { font-family: var(--font-serif); font-size: 1.8rem; color: var(--black); margin-bottom: 12px; }
+        .cat-desc { font-size: 1rem; color: var(--muted); line-height: 1.5; margin-bottom: 24px; }
+        
+        .opt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+        
+        .opt-card { border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; cursor: pointer; transition: all 0.3s ease; background: var(--white); display: flex; align-items: center; justify-content: space-between; }
+        .opt-card:hover { border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .opt-card.selected { border-color: var(--gold); background: rgba(184, 155, 82, 0.05); box-shadow: 0 4px 12px rgba(184, 155, 82, 0.1); }
+        .opt-title { font-size: 0.95rem; font-weight: 500; color: var(--black); }
+        .opt-radio { width: 18px; height: 18px; border: 1px solid var(--muted); border-radius: 50%; display: inline-block; position: relative; transition: all 0.3s; flex-shrink: 0; margin-left: 10px; }
+        .opt-card.selected .opt-radio { border-color: var(--gold); }
+        .opt-card.selected .opt-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+
+        .bk-sub-options { margin-top: 40px; padding: 30px; background: var(--cream); border-radius: var(--radius-md); border: 1px solid var(--border-color); display: none; scroll-margin-top: 100px; }
+        .bk-sub-options.active { display: block; animation: softFadeIn 0.6s var(--ease-out-expo) forwards; }
+
+        .sub-opt-group { margin-bottom: 24px; }
+        .sub-opt-group:last-child { margin-bottom: 0; }
+        .so-options { display: flex; flex-wrap: wrap; gap: 12px; }
+        
+        .so-chip { padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 100px; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: all 0.3s; background: var(--white); font-family: var(--font-sans); font-weight: 500; }
+        .so-chip:hover { border-color: var(--gold-light); color: var(--black); }
+        .so-chip.selected { background: var(--black); border-color: var(--black); color: var(--white); }
+        .so-info { font-size: 0.85rem; color: var(--muted); margin-top: 12px; font-style: italic; }
+
+        /* ==================================================
+           STEP 2: DATE & TIME
+           ================================================== */
+        .calendar-wrap { border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--white); overflow: hidden; margin-bottom: 40px; }
+        .cal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); background: var(--cream); }
+        .cal-month { font-family: var(--font-serif); font-size: 1.4rem; color: var(--black); }
+        .cal-nav { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--muted); transition: color 0.3s; padding: 4px 12px; }
+        .cal-nav:hover:not(:disabled) { color: var(--gold); }
+        .cal-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+        .cal-day-name { padding: 12px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+        
+        .cal-dates { display: grid; grid-template-columns: repeat(7, 1fr); padding: 12px; gap: 8px; }
+        .cal-date { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--black); border-radius: 50%; cursor: pointer; transition: all 0.3s; border: 1px solid transparent; margin: 0 auto; width: 100%; max-width: 44px; }
+        .cal-date:hover:not(.disabled):not(.empty) { border-color: var(--gold-light); color: var(--gold); }
+        .cal-date.selected { background: var(--gold); color: var(--white); border-color: var(--gold); font-weight: 600; box-shadow: 0 4px 10px rgba(184, 155, 82, 0.3); }
+        .cal-date.disabled { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; }
+        .cal-date.empty { pointer-events: none; border: none; }
+
+        .time-wrap { display: none; scroll-margin-top: 100px; }
+        .time-wrap.active { display: block; animation: softFadeIn 0.6s var(--ease-out-expo) forwards; }
+        .time-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
+        
+        .time-slot { padding: 14px 0; text-align: center; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.95rem; color: var(--black); cursor: pointer; transition: all 0.3s; background: var(--white); font-weight: 500; }
+        .time-slot:hover:not(.disabled) { border-color: var(--gold-light); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .time-slot.selected { border-color: var(--black); background: var(--black); color: var(--white); box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .time-slot.disabled { opacity: 0.5; cursor: not-allowed; background: var(--surface-color); border-color: transparent; position: relative; }
+        .time-slot.disabled::after { content: 'BOOKED'; display: block; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); margin-top: 4px; }
+
+        /* ==================================================
+           STEP 3: CLIENT DETAILS
+           ================================================== */
+        .checkbox-group { display: flex; align-items: flex-start; gap: 16px; margin-top: 32px; padding: 20px; background: rgba(184, 155, 82, 0.05); border-radius: var(--radius-md); border: 1px solid rgba(184, 155, 82, 0.2); }
+        .bk-checkbox { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; flex-shrink: 0; }
+        .checkbox-label { font-size: 0.9rem; color: var(--charcoal); line-height: 1.5; cursor: pointer; }
+        .privacy-note { font-size: 0.85rem; color: var(--muted); font-style: italic; margin-top: 12px; line-height: 1.5; }
+
+        /* ==================================================
+           STEP 4: SUMMARY
+           ================================================== */
+        .sum-block { border-bottom: 1px solid var(--border-color); padding-bottom: 30px; margin-bottom: 30px; position: relative; }
+        .sum-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .sum-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+        .sum-data { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 20px; }
+        .sum-data:last-child { margin-bottom: 0; }
+        .sum-label { font-size: 0.95rem; color: var(--muted); flex-shrink: 0; }
+        .sum-val { font-size: 1rem; color: var(--black); font-weight: 500; text-align: right; word-break: break-word; }
+        
+        .btn-edit { position: absolute; top: 0; right: 0; background: none; border: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); cursor: pointer; transition: color 0.3s; text-decoration: underline; font-weight: 600; }
+        .btn-edit:hover { color: var(--black); }
+
+        /* ==================================================
+           SUCCESS SCREEN
+           ================================================== */
+        .success-screen { text-align: center; padding: 60px 0; }
+        .sc-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(184, 155, 82, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; color: var(--gold); }
+        .sc-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--black); margin-bottom: 16px; }
+        .sc-desc { font-size: 1.1rem; color: var(--muted); line-height: 1.6; max-width: 500px; margin: 0 auto 40px; }
+        
+        .sc-ref-box { background: var(--cream); border: 1px dashed var(--gold); border-radius: var(--radius-md); padding: 30px; max-width: 500px; margin: 0 auto 40px; }
+        .sc-ref-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
+        .sc-ref-val { font-family: var(--font-sans); font-size: 2rem; color: var(--black); font-weight: 600; letter-spacing: 0.05em; }
+        .sc-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        /* ==================================================
+           SIDEBAR SUMMARY (DESKTOP)
+           ================================================== */
+        .sb-title { font-family: var(--font-serif); font-size: 1.6rem; color: var(--black); margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .sb-item { margin-bottom: 24px; display: none; }
+        .sb-item.active { display: block; animation: softFadeIn 0.5s ease forwards; }
+        .sb-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
+        .sb-val { font-size: 1.05rem; color: var(--black); line-height: 1.4; font-weight: 500; }
+        
+        .sb-fee { display: none; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+        .sb-fee.active { display: flex; justify-content: space-between; align-items: center; }
+        .sb-fee-label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+        .sb-fee-val { font-family: var(--font-serif); font-size: 1.8rem; color: var(--black); }
+
+        /* ==================================================
+           EDITORIAL SECTIONS
+           ================================================== */
+        .ed-divider { background-color: var(--pastel-yellow); padding: 80px 5%; text-align: center; }
+        .ed-div-quote { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); color: var(--black); max-width: 800px; margin: 0 auto 20px; line-height: 1.2; }
+        .ed-div-sub { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; }
+
+        .trust-section { max-width: 800px; margin: 0 auto 100px; text-align: center; padding: 0 5%; }
+        .ts-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+        .ts-desc { font-family: var(--font-serif); font-size: 1.5rem; color: var(--charcoal); font-style: italic; margin-bottom: 24px; }
+        .ts-disclaimer { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        /* ==================================================
+           FOOTER
+           ================================================== */
+        .footer { padding: 80px 5%; text-align: center; background: var(--cream); border-top: 1px solid var(--border-color); margin-top: auto; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); margin-bottom: 10px; }
+        .footer-nav { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+        .footer-link { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); text-decoration: none; transition: color 0.3s; font-weight: 500; }
+        .footer-link:hover { color: var(--gold); }
+        .footer-copy { font-size: 0.85rem; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+    <header class="header">
+        <a href="hero.html" class="brand">
+            <img src="lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <nav class="nav-links">
+            <div class="nav-item">
+                <a href="hero.html" class="nav-link">HOME</a>
+            </div>
+            <!-- RELATIONSHIP COUNSELLING DROPDOWN -->
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="rel-dropdown">
+                    RELATIONSHIP CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 2px;"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="rel-dropdown">
+                    <a href="#" class="dropdown-item">ADHD</a>
+                    <a href="#" class="dropdown-item">LBI CBT</a>
+                    <a href="#" class="dropdown-item">BREAK-UP COUNSELLING</a>
+                    <a href="#" class="dropdown-item">COUPLE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">TEENAGE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">EMOTIONAL INTELLIGENCE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">LOW ESTEEM COUNSELLING</a>
+                    <a href="#" class="dropdown-item">TRAUMA RECOVERY COUNSELLING</a>
+                    <a href="#" class="dropdown-item">PROCRASTINATION</a>
+                    <a href="#" class="dropdown-item">PSYCHOTHERAPY</a>
+                    <a href="#" class="dropdown-item">GEN-Z COUNSELLING</a>
+                    <a href="#" class="dropdown-item">PARENTING</a>
+                </div>
+            </div>
+
+            <!-- LEGAL COUNSELLING DROPDOWN -->
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="leg-dropdown">
+                    LEGAL CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 2px;"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="leg-dropdown">
+                    <a href="#" class="dropdown-item">DIVORCE GUIDANCE</a>
+                    <a href="#" class="dropdown-item">PROPERTY PURCHASE</a>
+                    <a href="#" class="dropdown-item">CIVIL CASES</a>
+                    <a href="#" class="dropdown-item">HUMAN RIGHTS</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HAMBURGER MENU PANEL -->
+    <div class="menu-overlay"></div>
+    <aside class="side-menu-panel">
+        <div class="menu-top">
+            <span class="menu-label">MENU</span>
+            <button class="menu-close close-on-click" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+        <nav class="side-nav-links">
+            <a href="hero.html" class="side-link close-on-click"><span class="menu-text">Home</span></a>
+            <a href="hero.html#advocate" class="side-link close-on-click"><span class="menu-text">Advocate Kritimalviya</span></a>
+            <a href="gallery.html" class="side-link close-on-click"><span class="menu-text">Photo Gallery</span></a>
+            <a href="awards.html" class="side-link close-on-click"><span class="menu-text">Awards And Achivements</span></a>
+            <a href="vlog.html" class="side-link close-on-click"><span class="menu-text">Vlog</span></a>
+            <a href="blog.html" class="side-link close-on-click"><span class="menu-text">Blog</span></a>
+            <a href="hero.html#about-us" class="side-link close-on-click"><span class="menu-text">About US</span></a>
+            <a href="consultation.html" class="side-link active close-on-click" style="margin-top: 20px;"><span class="menu-text" style="color:var(--gold);">Book a Consultation</span></a>
+        </nav>
+    </aside>
+
+    <main>
+        <!-- ==================================================
+             HERO
+             ================================================== -->
+        <section class="bk-hero reveal-up">
+            <div class="bk-label">PRIVATE CONSULTATION</div>
+            <h1 class="bk-title">BOOK A CONSULTATION</h1>
+            <p class="bk-desc">Choose the consultation that best fits your situation and select a convenient time to speak with Adv. Kriti Malviya.</p>
+            <div class="bk-sub-line">LEGAL GUIDANCE · RELATIONSHIP COUNSELLING · PERSONAL SUPPORT</div>
+        </section>
+
+        <!-- ==================================================
+             PROGRESS INDICATOR
+             ================================================== -->
+        <div class="bk-progress-wrap reveal-up">
+            <div class="bk-progress">
+                <div class="bk-step-ind active" id="ind-1"><span>01</span> CONSULTATION</div>
+                <div class="bk-step-ind" id="ind-2"><span>02</span> DATE & TIME</div>
+                <div class="bk-step-ind" id="ind-3"><span>03</span> YOUR DETAILS</div>
+                <div class="bk-step-ind" id="ind-4"><span>04</span> CONFIRM</div>
+            </div>
+            <div class="mobile-progress" id="mobile-progress">STEP 1 OF 4: CONSULTATION</div>
+        </div>
+
+        <!-- ==================================================
+             BOOKING CONTAINER
+             ================================================== -->
+        <div class="bk-container reveal-up" id="booking-container">
+            
+            <!-- LEFT: MAIN FORM STEPS -->
+            <div class="bk-main">
+                
+                <!-- STEP 1: CONSULTATION SELECTION -->
+                <div class="bk-step active" id="step-1">
+                    <h2 class="step-heading">What do you need help with?</h2>
+                    
+                    <div id="services-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Appears after selection -->
+                    <div class="bk-sub-options" id="sub-options">
+                        <div class="sub-opt-group">
+                            <label class="bk-label">Consultation Duration</label>
+                            <div class="so-options" id="duration-options">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <div class="sub-opt-group" style="margin-top: 30px;">
+                            <label class="bk-label">Consultation Mode</label>
+                            <div class="so-options" id="mode-options">
+                                <button class="so-chip" data-mode="Online Consultation">Online Consultation</button>
+                                <button class="so-chip" data-mode="In-person Consultation">In-person Consultation</button>
+                            </div>
+                            <div class="so-info" id="mode-info"></div>
+                        </div>
+                    </div>
+
+                    <div class="bk-actions">
+                        <div></div> <!-- Empty for flex spacing -->
+                        <button class="bk-btn" id="btn-next-1" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: DATE & TIME -->
+                <div class="bk-step" id="step-2">
+                    <h2 class="step-heading">Choose a Date & Time</h2>
+                    
+                    <div class="calendar-wrap">
+                        <div class="cal-header">
+                            <button class="cal-nav" id="cal-prev">&larr;</button>
+                            <div class="cal-month" id="cal-month">Month Year</div>
+                            <button class="cal-nav" id="cal-next">&rarr;</button>
+                        </div>
+                        <div class="cal-grid">
+                            <div class="cal-day-name">Sun</div><div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div><div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div><div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+                        </div>
+                        <div class="cal-dates" id="cal-dates">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="time-wrap" id="time-wrap">
+                        <label class="bk-label" style="margin-bottom: 16px;">Available Time Slots</label>
+                        <div class="time-grid" id="time-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="bk-error" id="err-time">Please select a time slot.</div>
+                    </div>
+
+                    <div class="bk-actions">
+                        <button class="bk-btn bk-btn-outline" onclick="goToStep(1)">&larr; Back</button>
+                        <button class="bk-btn" id="btn-next-2" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: CLIENT DETAILS -->
+                <div class="bk-step" id="step-3">
+                    <h2 class="step-heading">Your Details</h2>
+                    
+                    <div class="bk-grid">
+                        <div class="input-wrap">
+                            <label class="bk-label">Full Name *</label>
+                            <input type="text" class="bk-input" id="f-name" placeholder="Enter your full name">
+                            <div class="bk-error" id="err-name">Please enter your name.</div>
+                        </div>
+                        <div class="input-wrap">
+                            <label class="bk-label">Email Address *</label>
+                            <input type="email" class="bk-input" id="f-email" placeholder="email@example.com">
+                            <div class="bk-error" id="err-email">Please enter a valid email address.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bk-grid">
+                        <div class="input-wrap">
+                            <label class="bk-label">Phone Number *</label>
+                            <input type="tel" class="bk-input" id="f-phone" placeholder="+91 00000 00000">
+                            <div class="bk-error" id="err-phone">Please enter your phone number.</div>
+                        </div>
+                        <div class="input-wrap">
+                            <label class="bk-label">WhatsApp Number (Optional)</label>
+                            <input type="tel" class="bk-input" id="f-whatsapp" placeholder="Same as phone or different">
+                        </div>
+                    </div>
+
+                    <div class="bk-grid">
+                        <div class="input-wrap">
+                            <label class="bk-label">Country</label>
+                            <input type="text" class="bk-input" id="f-country" placeholder="e.g. India">
+                        </div>
+                        <div class="input-wrap">
+                            <label class="bk-label">Preferred Contact Method</label>
+                            <select class="bk-select" id="f-contact">
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone Call</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-wrap" style="margin-bottom: 24px;">
+                        <label class="bk-label">Short description of your concern *</label>
+                        <textarea class="bk-textarea" id="f-concern" placeholder="Briefly describe what you'd like to discuss..."></textarea>
+                        <div class="bk-error" id="err-concern">Please provide a brief description.</div>
+                        <div class="privacy-note">Please avoid sharing highly sensitive or confidential information in this initial form. Detailed information can be discussed securely during the consultation.</div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" class="bk-checkbox" id="f-consent">
+                        <label class="checkbox-label" for="f-consent">I understand that submitting this form is a consultation request and does not by itself create an advocate-client relationship. *</label>
+                    </div>
+                    <div class="bk-error" id="err-consent" style="margin-left: 20px;">You must agree to continue.</div>
+
+                    <div class="checkbox-group" style="margin-top: 16px;">
+                        <input type="checkbox" class="bk-checkbox" id="f-consent-contact" checked>
+                        <label class="checkbox-label" for="f-consent-contact">I agree to be contacted regarding this consultation via the provided details.</label>
+                    </div>
+
+                    <div class="bk-actions">
+                        <button class="bk-btn bk-btn-outline" onclick="goToStep(2)">&larr; Back</button>
+                        <button class="bk-btn" id="btn-next-3">Review Booking &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: SUMMARY & CONFIRMATION -->
+                <div class="bk-step" id="step-4">
+                    <h2 class="step-heading">Booking Summary</h2>
+                    
+                    <div class="sum-block">
+                        <button class="btn-edit" onclick="goToStep(1)">Edit</button>
+                        <div class="sum-title">Consultation</div>
+                        <div class="sum-data"><span class="sum-label">Category</span><span class="sum-val" id="sum-cat"></span></div>
+                        <div class="sum-data"><span class="sum-label">Service</span><span class="sum-val" id="sum-type"></span></div>
+                        <div class="sum-data"><span class="sum-label">Duration</span><span class="sum-val" id="sum-dur"></span></div>
+                        <div class="sum-data"><span class="sum-label">Mode</span><span class="sum-val" id="sum-mode"></span></div>
+                    </div>
+
+                    <div class="sum-block">
+                        <button class="btn-edit" onclick="goToStep(2)">Edit</button>
+                        <div class="sum-title">Date & Time</div>
+                        <div class="sum-data"><span class="sum-label">Date</span><span class="sum-val" id="sum-date"></span></div>
+                        <div class="sum-data"><span class="sum-label">Time</span><span class="sum-val" id="sum-time"></span></div>
+                    </div>
+
+                    <div class="sum-block">
+                        <button class="btn-edit" onclick="goToStep(3)">Edit</button>
+                        <div class="sum-title">Client Details</div>
+                        <div class="sum-data"><span class="sum-label">Name</span><span class="sum-val" id="sum-name"></span></div>
+                        <div class="sum-data"><span class="sum-label">Email</span><span class="sum-val" id="sum-email"></span></div>
+                        <div class="sum-data"><span class="sum-label">Phone</span><span class="sum-val" id="sum-phone"></span></div>
+                        <div class="sum-data"><span class="sum-label">Contact Via</span><span class="sum-val" id="sum-contact"></span></div>
+                    </div>
+
+                    <div class="bk-actions">
+                        <button class="bk-btn bk-btn-outline" onclick="goToStep(3)">&larr; Back</button>
+                        <!-- FUTURE SUPABASE INTEGRATION POINT: Check double booking here -->
+                        <button class="bk-btn" id="btn-submit">Request Consultation</button>
+                    </div>
+                </div>
+
+                <!-- SUCCESS SCREEN -->
+                <div class="bk-step" id="step-success">
+                    <div class="success-screen">
+                        <div class="sc-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <h2 class="sc-title">Request Received</h2>
+                        <p class="sc-desc">Your consultation request has been successfully received. We will contact you using the details provided to confirm the appointment.</p>
+                        
+                        <div class="sc-ref-box">
+                            <div class="sc-ref-label">Booking Reference</div>
+                            <div class="sc-ref-val" id="sc-ref">KM-XXXXXX</div>
+                        </div>
+
+                        <div class="sc-actions">
+                            <a href="hero.html" class="bk-btn bk-btn-outline">Back to Home</a>
+                            <button class="bk-btn" onclick="location.reload()">Book Another</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: STICKY SIDEBAR -->
+            <div class="bk-sidebar" id="sidebar">
+                <div class="sb-title">Your Consultation</div>
+                
+                <div class="sb-item" id="sb-cat-wrap">
+                    <div class="sb-label">Category</div>
+                    <div class="sb-val" id="sb-cat"></div>
+                </div>
+                <div class="sb-item" id="sb-type-wrap">
+                    <div class="sb-label">Service</div>
+                    <div class="sb-val" id="sb-type"></div>
+                </div>
+                <div class="sb-item" id="sb-dur-wrap">
+                    <div class="sb-label">Duration</div>
+                    <div class="sb-val" id="sb-dur"></div>
+                </div>
+                <div class="sb-item" id="sb-mode-wrap">
+                    <div class="sb-label">Mode</div>
+                    <div class="sb-val" id="sb-mode"></div>
+                </div>
+                <div class="sb-item" id="sb-date-wrap">
+                    <div class="sb-label">Date & Time</div>
+                    <div class="sb-val" id="sb-datetime"></div>
+                </div>
+
+                <div class="sb-fee" id="sb-fee-wrap">
+                    <span class="sb-fee-label">Consultation Fee</span>
+                    <span class="sb-fee-val" id="sb-fee-val">₹0</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==================================================
+         EDITORIAL SECTIONS
+         ================================================== -->
+    <section class="ed-divider reveal-up">
+        <div class="ed-div-quote">"Understanding your situation is often the first step toward making the right decision."</div>
+        <div class="ed-div-sub">Clarity Before Action</div>
+    </section>
+
+    <section class="trust-section reveal-up">
+        <div class="ts-title">PRIVATE & CONFIDENTIAL</div>
+        <div class="ts-desc">"Consultations are approached with professionalism, discretion and respect for your privacy."</div>
+        <div class="ts-disclaimer">Please do not use this form for emergencies or situations requiring immediate assistance.<br>Submitting a consultation request does not by itself create an advocate-client relationship. Any engagement will be subject to applicable terms and confirmation.</div>
+    </section>
+
+    <!-- ==================================================
+         FOOTER
+         ================================================== -->
+    <footer class="footer">
+        <div class="footer-brand">KRITIMALVIYA</div>
+        <div class="footer-nav">
+            <a href="hero.html" class="footer-link">Home</a>
+            <a href="hero.html#advocate" class="footer-link">Advocate Kritimalviya</a>
+            <a href="gallery.html" class="footer-link">Photo Gallery</a>
+            <a href="awards.html" class="footer-link">Awards & Achievements</a>
+            <a href="vlog.html" class="footer-link">Vlog</a>
+            <a href="blog.html" class="footer-link">Blog</a>
+            <a href="hero.html#about-us" class="footer-link">About Us</a>
+        </div>
+        <div class="footer-copy">Premium Legal & Relationship Counselling</div>
+    </footer>
+
+    <!-- ==================================================
+         JAVASCRIPT
+         ================================================== -->
+    <script>
+        // ==========================================
+        // BOOKING SETTINGS — EDIT THIS SECTION
+        // ==========================================
+        const bookingSettings = {
+            advanceBookingDays: 30, // How far in advance user can book
+            availableDays: [1, 2, 3, 4, 5, 6], // 0=Sun, 1=Mon, ..., 6=Sat
+            blockedDates: ["2026-10-25"], // YYYY-MM-DD
+            
+            // Standard slots shown if no specific date overrides exist
+            defaultTimeSlots: [
+                "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM",
+                "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM"
+            ],
+            
+            durations: [30, 60],
+            
+            // Future configuration for payment (0 = disabled)
+            bookingFee: 0 
+        };
+
+        // Simulated Backend Availability (FUTURE SUPABASE INTEGRATION POINT)
+        const mockBackendAvailability = {
+            "2026-10-15": { "10:30 AM": "booked", "05:00 PM": "booked" },
+            "2026-10-20": { "11:00 AM": "booked" }
+        };
+
+        // ==========================================
+        // CONSULTATION DATA
+        // ==========================================
+        const consultationTypes = [
+            {
+                category: "Legal Consultation",
+                desc: "Professional guidance for legal matters, documentation, disputes and important legal decisions.",
+                services: ["Divorce Guidance", "Property Purchase", "Civil Cases", "Human Rights", "General Legal Consultation"]
+            },
+            {
+                category: "Relationship & Personal Counselling",
+                desc: "Confidential support for relationship, family and personal situations.",
+                services: ["Couple Counselling", "Relationship Concerns", "Family Concerns", "Break-up / Separation", "Teenage Counselling", "Emotional Well-being", "General Counselling"]
+            }
+        ];
+
+        // ==========================================
+        // MASTER BOOKING STATE
+        // ==========================================
+        const booking = {
+            consultationCategory: "",
+            consultationType: "",
+            duration: "",
+            mode: "",
+            date: "",
+            time: "",
+            name: "",
+            email: "",
+            phone: "",
+            whatsapp: "",
+            country: "",
+            concern: "",
+            preferredContact: "Email",
+            consent: false,
+            contactConsent: true,
+            reference: ""
+        };
+
+        let currentStep = 1;
+        
+        // Use discrete year/month to prevent Date object rollover bugs during navigation
+        let calYear = new Date().getFullYear();
+        let calMonth = new Date().getMonth();
+        let selectedDateObj = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* --- MENU LOGIC --- */
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidePanel = document.querySelector('.side-menu-panel');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const dropdownToggles = document.querySelectorAll('.js-dropdown-toggle');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+
+            menuToggle.addEventListener('click', () => {
+                const isOpen = sidePanel.classList.contains('is-open');
+                menuToggle.classList.toggle('is-open', !isOpen);
+                sidePanel.classList.toggle('is-open', !isOpen);
+                menuOverlay.classList.toggle('is-active', !isOpen);
+                document.body.style.overflow = !isOpen ? 'hidden' : '';
+            });
+
+            menuOverlay.addEventListener('click', () => {
+                menuToggle.classList.remove('is-open');
+                sidePanel.classList.remove('is-open');
+                menuOverlay.classList.remove('is-active');
+                document.body.style.overflow = '';
+            });
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetMenu = document.getElementById(toggle.getAttribute('data-target'));
+                    const isOpen = targetMenu.classList.contains('is-active');
+                    allDropdowns.forEach(m => m.classList.remove('is-active'));
+                    if (!isOpen) targetMenu.classList.add('is-active');
+                });
+            });
+            document.addEventListener('click', (e) => { if (!e.target.closest('.nav-item')) allDropdowns.forEach(m => m.classList.remove('is-active')); });
+
+            /* --- SCROLL REVEAL --- */
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+            /* --- INIT UI --- */
+            renderConsultationOptions();
+            renderDurations();
+            renderCalendar();
+            
+            if(bookingSettings.bookingFee > 0) {
+                const feeWrap = document.getElementById('sb-fee-wrap');
+                feeWrap.classList.add('active');
+                document.getElementById('sb-fee-val').textContent = `₹${bookingSettings.bookingFee}`;
+            }
+
+            /* --- STEP 1 LOGIC --- */
+            function renderConsultationOptions() {
+                const container = document.getElementById('services-container');
+                consultationTypes.forEach((group) => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'cat-group';
+                    groupDiv.innerHTML = `<h3 class="cat-title">${group.category}</h3><p class="cat-desc">${group.desc}</p>`;
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'opt-grid';
+                    
+                    group.services.forEach((service) => {
+                        const card = document.createElement('div');
+                        card.className = 'opt-card js-srv-card';
+                        card.innerHTML = `<div class="opt-title"><span>${service}</span><span class="opt-radio"></span></div>`;
+                        
+                        card.addEventListener('click', () => {
+                            document.querySelectorAll('.js-srv-card').forEach(c => c.classList.remove('selected'));
+                            card.classList.add('selected');
+                            
+                            booking.consultationCategory = group.category;
+                            booking.consultationType = service;
+                            
+                            const subOpts = document.getElementById('sub-options');
+                            subOpts.classList.add('active');
+                            
+                            // Auto scroll slightly to reveal options
+                            setTimeout(() => {
+                                subOpts.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }, 100);
+
+                            updateSidebar();
+                            checkStep1();
+                        });
+                        grid.appendChild(card);
+                    });
+                    groupDiv.appendChild(grid);
+                    container.appendChild(groupDiv);
+                });
+            }
+
+            function renderDurations() {
+                const container = document.getElementById('duration-options');
+                bookingSettings.durations.forEach(dur => {
+                    const btn = document.createElement('button');
+                    btn.className = 'so-chip js-dur-chip';
+                    btn.textContent = `${dur} Minutes`;
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.js-dur-chip').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        booking.duration = dur;
+                        updateSidebar();
+                        checkStep1();
+                    });
+                    container.appendChild(btn);
+                });
+            }
+
+            document.querySelectorAll('#mode-options .so-chip').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#mode-options .so-chip').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    booking.mode = btn.dataset.mode;
+                    
+                    const info = document.getElementById('mode-info');
+                    info.textContent = booking.mode === 'Online Consultation' 
+                        ? "Meeting details will be provided after the appointment is confirmed."
+                        : "Location details will be shared with the confirmed appointment.";
+                    
+                    updateSidebar();
+                    checkStep1();
+                });
+            });
+
+            function checkStep1() {
+                const isValid = booking.consultationType !== "" && booking.duration !== "" && booking.mode !== "";
+                document.getElementById('btn-next-1').disabled = !isValid;
+            }
+
+            document.getElementById('btn-next-1').addEventListener('click', () => goToStep(2));
+
+
+            /* --- STEP 2: CALENDAR & TIME LOGIC --- */
+            function renderCalendar() {
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                document.getElementById('cal-month').textContent = `${monthNames[calMonth]} ${calYear}`;
+                
+                const grid = document.getElementById('cal-dates');
+                grid.innerHTML = '';
+                
+                const firstDayIndex = new Date(calYear, calMonth, 1).getDay();
+                const lastDate = new Date(calYear, calMonth + 1, 0).getDate();
+                
+                // Empty slots
+                for(let i=0; i<firstDayIndex; i++) {
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'cal-date empty';
+                    grid.appendChild(emptyDiv);
+                }
+
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                
+                const maxDate = new Date();
+                maxDate.setDate(today.getDate() + bookingSettings.advanceBookingDays);
+                maxDate.setHours(0,0,0,0);
+
+                for(let i=1; i<=lastDate; i++) {
+                    const cellDate = new Date(calYear, calMonth, i);
+                    
+                    // Format YYYY-MM-DD
+                    const yyyy = cellDate.getFullYear();
+                    const mm = String(cellDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(cellDate.getDate()).padStart(2, '0');
+                    const dateStr = `${yyyy}-${mm}-${dd}`;
+                    
+                    const dayOfWeek = cellDate.getDay();
+                    
+                    const isPast = cellDate < today;
+                    const isTooFar = cellDate > maxDate;
+                    const isBlockedDay = !bookingSettings.availableDays.includes(dayOfWeek);
+                    const isBlockedDate = bookingSettings.blockedDates.includes(dateStr);
+                    
+                    const isDisabled = isPast || isTooFar || isBlockedDay || isBlockedDate;
+                    
+                    const div = document.createElement('div');
+                    div.className = `cal-date ${isDisabled ? 'disabled' : ''}`;
+                    if(selectedDateObj && selectedDateObj.getTime() === cellDate.getTime()) {
+                        div.classList.add('selected');
+                    }
+                    div.textContent = i;
+                    
+                    if(!isDisabled) {
+                        div.addEventListener('click', () => {
+                            document.querySelectorAll('.cal-date').forEach(d => d.classList.remove('selected'));
+                            div.classList.add('selected');
+                            selectedDateObj = cellDate;
+                            booking.date = dateStr;
+                            booking.time = ""; // reset time when date changes
+                            
+                            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                            booking.dateDisplay = cellDate.toLocaleDateString('en-GB', options);
+                            
+                            renderTimeSlots(dateStr);
+                            updateSidebar();
+                            checkStep2();
+                        });
+                    }
+                    grid.appendChild(div);
+                }
+
+                // Nav states
+                const prevBtn = document.getElementById('cal-prev');
+                if(calMonth === today.getMonth() && calYear === today.getFullYear()) {
+                    prevBtn.disabled = true;
+                } else {
+                    prevBtn.disabled = false;
+                }
+            }
+
+            document.getElementById('cal-prev').addEventListener('click', () => {
+                if(calMonth === 0) { calMonth = 11; calYear--; }
+                else { calMonth--; }
+                renderCalendar();
+            });
+            
+            document.getElementById('cal-next').addEventListener('click', () => {
+                if(calMonth === 11) { calMonth = 0; calYear++; }
+                else { calMonth++; }
+                renderCalendar();
+            });
+
+            async function renderTimeSlots(dateStr) {
+                const wrap = document.getElementById('time-wrap');
+                const grid = document.getElementById('time-grid');
+                grid.innerHTML = '';
+                document.getElementById('err-time').classList.remove('active');
+                
+                wrap.classList.add('active');
+                
+                setTimeout(() => {
+                    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+
+                // Simulate backend fetch
+                const slots = bookingSettings.defaultTimeSlots;
+                const backendStatus = mockBackendAvailability[dateStr] || {};
+
+                slots.forEach(time => {
+                    const isBooked = backendStatus[time] === "booked";
+                    const btn = document.createElement('div');
+                    btn.className = `time-slot ${isBooked ? 'disabled' : ''}`;
+                    btn.textContent = time;
+
+                    if(!isBooked) {
+                        btn.addEventListener('click', () => {
+                            document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+                            btn.classList.add('selected');
+                            booking.time = time;
+                            document.getElementById('err-time').classList.remove('active');
+                            updateSidebar();
+                            checkStep2();
+                        });
+                    }
+                    grid.appendChild(btn);
+                });
+            }
+
+            function checkStep2() {
+                const isValid = booking.date !== "" && booking.time !== "";
+                document.getElementById('btn-next-2').disabled = !isValid;
+            }
+
+            document.getElementById('btn-next-2').addEventListener('click', () => {
+                if(!booking.time) {
+                    document.getElementById('err-time').classList.add('active');
+                    return;
+                }
+                goToStep(3);
+            });
+
+
+            /* --- STEP 3: DETAILS & VALIDATION --- */
+            function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+            // Active Validation listeners
+            const fields = ['f-name', 'f-email', 'f-phone', 'f-concern'];
+            fields.forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    this.parentElement.classList.remove('has-error');
+                    this.nextElementSibling.classList.remove('active');
+                });
+            });
+            document.getElementById('f-consent').addEventListener('change', function() {
+                document.getElementById('err-consent').classList.remove('active');
+            });
+
+            document.getElementById('btn-next-3').addEventListener('click', () => {
+                let isValid = true;
+                let firstErrorEl = null;
+                
+                // Name
+                const elName = document.getElementById('f-name');
+                const errName = document.getElementById('err-name');
+                if(!elName.value.trim()) { elName.parentElement.classList.add('has-error'); errName.classList.add('active'); isValid = false; if(!firstErrorEl) firstErrorEl = elName; }
+                else { booking.name = elName.value.trim(); }
+
+                // Email
+                const elEmail = document.getElementById('f-email');
+                const errEmail = document.getElementById('err-email');
+                if(!validateEmail(elEmail.value.trim())) { elEmail.parentElement.classList.add('has-error'); errEmail.classList.add('active'); isValid = false; if(!firstErrorEl) firstErrorEl = elEmail; }
+                else { booking.email = elEmail.value.trim(); }
+
+                // Phone
+                const elPhone = document.getElementById('f-phone');
+                const errPhone = document.getElementById('err-phone');
+                if(!elPhone.value.trim() || elPhone.value.trim().length < 6) { elPhone.parentElement.classList.add('has-error'); errPhone.classList.add('active'); isValid = false; if(!firstErrorEl) firstErrorEl = elPhone; }
+                else { booking.phone = elPhone.value.trim(); }
+
+                // Concern
+                const elConcern = document.getElementById('f-concern');
+                const errConcern = document.getElementById('err-concern');
+                if(!elConcern.value.trim()) { elConcern.parentElement.classList.add('has-error'); errConcern.classList.add('active'); isValid = false; if(!firstErrorEl) firstErrorEl = elConcern; }
+                else { booking.concern = elConcern.value.trim(); }
+
+                // Consent
+                const elConsent = document.getElementById('f-consent');
+                const errConsent = document.getElementById('err-consent');
+                if(!elConsent.checked) { errConsent.classList.add('active'); isValid = false; if(!firstErrorEl) firstErrorEl = elConsent; }
+                else { booking.consent = true; }
+
+                // Optionals
+                booking.whatsapp = document.getElementById('f-whatsapp').value.trim();
+                booking.country = document.getElementById('f-country').value.trim();
+                booking.preferredContact = document.getElementById('f-contact').value;
+                booking.contactConsent = document.getElementById('f-consent-contact').checked;
+
+                if(isValid) {
+                    populateSummary();
+                    goToStep(4);
+                } else if(firstErrorEl) {
+                    firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstErrorEl.focus();
+                }
+            });
+
+
+            /* --- STEP 4: SUMMARY & SUBMISSION --- */
+            function populateSummary() {
+                document.getElementById('sum-cat').textContent = booking.consultationCategory;
+                document.getElementById('sum-type').textContent = booking.consultationType;
+                document.getElementById('sum-dur').textContent = `${booking.duration} Minutes`;
+                document.getElementById('sum-mode').textContent = booking.mode;
+                document.getElementById('sum-date').textContent = booking.dateDisplay;
+                document.getElementById('sum-time').textContent = booking.time;
+                document.getElementById('sum-name').textContent = booking.name;
+                document.getElementById('sum-email').textContent = booking.email;
+                document.getElementById('sum-phone').textContent = booking.phone;
+                document.getElementById('sum-contact').textContent = booking.preferredContact;
+            }
+
+            function generateReference() {
+                const d = booking.date.replace(/-/g, '');
+                const rand = Math.floor(1000 + Math.random() * 9000);
+                return `KM-${d}-${rand}`;
+            }
+
+            // FUTURE SUPABASE INTEGRATION POINT
+            async function submitBooking(bookingData) {
+                // Simulate network delay
+                return new Promise(resolve => setTimeout(resolve, 1500));
+            }
+            async function notifyBookingReceived(bookingData) {
+                // Simulate email trigger
+                return new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            document.getElementById('btn-submit').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-submit');
+                btn.textContent = "Processing...";
+                btn.disabled = true;
+
+                try {
+                    booking.reference = generateReference();
+                    
+                    // Future: check slot availability atomically here
+                    await submitBooking(booking);
+                    await notifyBookingReceived(booking);
+
+                    document.getElementById('sc-ref').textContent = booking.reference;
+                    document.getElementById('sidebar').style.display = 'none'; // Hide sidebar on success
+                    
+                    goToStep('success');
+                } catch (error) {
+                    alert("An error occurred. Please try again.");
+                    btn.textContent = "Request Consultation";
+                    btn.disabled = false;
+                }
+            });
+
+
+            /* --- NAVIGATION HELPERS --- */
+            window.goToStep = function(step) {
+                document.querySelectorAll('.bk-step').forEach(el => el.classList.remove('active'));
+                
+                if (step === 'success') {
+                    document.getElementById('step-success').classList.add('active');
+                    document.querySelector('.bk-progress-wrap').style.display = 'none';
+                } else {
+                    currentStep = step;
+                    document.getElementById(`step-${step}`).classList.add('active');
+                    
+                    for(let i=1; i<=4; i++) {
+                        const ind = document.getElementById(`ind-${i}`);
+                        if(ind) {
+                            if(i <= step) ind.classList.add('active');
+                            else ind.classList.remove('active');
+                        }
+                    }
+                    
+                    const titles = ["Consultation", "Date & Time", "Your Details", "Confirmation"];
+                    document.getElementById('mobile-progress').textContent = `STEP ${step} OF 4: ${titles[step-1]}`;
+                }
+
+                // Smooth scroll to top of form
+                document.getElementById('booking-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            function updateSidebar() {
+                if(booking.consultationCategory) {
+                    document.getElementById('sb-cat-wrap').classList.add('active');
+                    document.getElementById('sb-cat').textContent = booking.consultationCategory;
+                }
+                if(booking.consultationType) {
+                    document.getElementById('sb-type-wrap').classList.add('active');
+                    document.getElementById('sb-type').textContent = booking.consultationType;
+                }
+                if(booking.duration) {
+                    document.getElementById('sb-dur-wrap').classList.add('active');
+                    document.getElementById('sb-dur').textContent = `${booking.duration} Minutes`;
+                }
+                if(booking.mode) {
+                    document.getElementById('sb-mode-wrap').classList.add('active');
+                    document.getElementById('sb-mode').textContent = booking.mode;
+                }
+                if(booking.date && booking.time) {
+                    document.getElementById('sb-date-wrap').classList.add('active');
+                    document.getElementById('sb-datetime').innerHTML = `${booking.dateDisplay}<br><span style="color:var(--gold); margin-top:4px; display:inline-block;">${booking.time}</span>`;
+                } else if (booking.date) {
+                    document.getElementById('sb-date-wrap').classList.add('active');
+                    document.getElementById('sb-datetime').textContent = booking.dateDisplay;
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>

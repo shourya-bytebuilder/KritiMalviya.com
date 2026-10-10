@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Control Center — Adv. Kriti Malviya</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Unified Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="admin" class="admin-body">
+
+    <!-- STEP 4 MASTER CONTROL CENTER BANNER -->
+    <div class="test-banner" style="position:relative; z-index:10; background:var(--pastel-yellow); letter-spacing:0.05em; font-size:0.75rem; padding:8px 16px; text-align:center;">
+        MASTER ADMIN CONTROL CENTER — OFFICIAL OPERATIONAL PORTAL · SUPABASE AUTH & POSTGRESQL RLS (STEP 4)
+    </div>
+
+    <!-- 01. AUTH LOADING STATE -->
+    <div id="admin-auth-loading" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:85vh; text-align:center; padding:40px 20px;">
+        <span class="eyebrow" style="color:var(--gold); margin-bottom:12px;">SECURITY PROTOCOL</span>
+        <h2 style="font-family:var(--font-serif); font-size:2rem; margin:0 0 16px 0;">Verifying Administrative Clearance...</h2>
+        <p class="text-muted" style="max-width:440px; font-size:0.9rem;">Connecting to Supabase PostgreSQL Auth session & enforcing Row Level Security (RLS) policies.</p>
+    </div>
+
+    <!-- 02. AUTH LOGIN VIEW (UNAUTHENTICATED) -->
+    <div id="admin-login-view" style="display:none; min-height:85vh; align-items:center; justify-content:center; padding:60px 20px;">
+        <div style="background:var(--white); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:44px; max-width:480px; width:100%; box-shadow:0 24px 48px rgba(0,0,0,0.06);">
+            <div style="text-align:center; margin-bottom:32px;">
+                <span class="eyebrow" style="color:var(--gold);">SECURE SUPABASE AUTH</span>
+                <h1 style="font-family:var(--font-serif); font-size:2.2rem; margin:12px 0 8px 0;">Master Control Center</h1>
+                <p class="text-muted" style="font-size:0.85rem;">Adv. Kriti Malviya Chambers · Official Administrative Portal</p>
+            </div>
+            <form id="admin-login-form">
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label class="form-label" for="admin-email">Admin Email Address</label>
+                    <input type="email" id="admin-email" class="form-control" placeholder="advocate@kritimalviya.com" required autocomplete="username">
+                </div>
+                <div class="form-group" style="margin-bottom:24px;">
+                    <label class="form-label" for="admin-password">Password</label>
+                    <input type="password" id="admin-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+                </div>
+                <div id="admin-login-error" style="display:none; padding:12px; margin-bottom:20px; background:rgba(211,47,47,0.08); border:1px solid #d32f2f; color:#d32f2f; font-size:0.85rem; border-radius:var(--radius-sm);"></div>
+                <button type="submit" id="admin-login-submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+                    <span>Sign In to Control Center</span>
+                </button>
+            </form>
+            <div style="margin-top:24px; text-align:center; font-size:0.75rem; color:var(--text-muted); line-height:1.5;">
+                Protected by PostgreSQL Row Level Security (RLS) & JWT authentication.
+            </div>
+            <div style="margin-top:16px; text-align:center;">
+                <a href="../index.html" style="font-size:0.8rem; color:var(--charcoal); text-decoration:underline;">← Return to Public Website</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 03. ACCESS DENIED / UNAUTHORIZED STATE -->
+    <div id="admin-unauthorized-view" style="display:none; min-height:85vh; align-items:center; justify-content:center; padding:60px 20px;">
+        <div style="background:var(--white); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:40px; max-width:480px; width:100%; text-align:center;">
+            <span class="eyebrow" style="color:#d32f2f;">ACCESS DENIED</span>
+            <h2 style="font-family:var(--font-serif); font-size:1.8rem; margin:16px 0;">Insufficient Clearance</h2>
+            <p class="text-muted" style="margin-bottom:24px; font-size:0.9rem;">Your authenticated account does not possess administrative clearance in the <code>profiles</code> table.</p>
+            <div style="display:flex; gap:12px; justify-content:center;">
+                <button type="button" id="admin-unauth-logout-btn" class="btn btn-primary btn-sm"><span>Sign Out</span></button>
+                <a href="../index.html" class="btn btn-outline btn-sm"><span>Return to Website</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 04. AUTHENTICATED MASTER DASHBOARD LAYOUT -->
+    <div class="admin-layout" id="admin-layout" style="display:none;">
+        
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <a href="../index.html" class="admin-brand">KRITIMALVIYA</a>
+                <div class="admin-subtitle">Master Control Center</div>
+            </div>
+
+            <nav class="admin-nav">
+                <div class="admin-nav-group">
+                    <div class="admin-nav-title">Overview & Intelligence</div>
+                    <div class="admin-nav-item active" data-view="dashboard">01 Dashboard Overview</div>
+                    <div class="admin-nav-item" data-view="analytics">02 Analytics & Funnels</div>
+                    <div class="admin-nav-item" data-view="reports">03 Daily Business Reports</div>
+                    <div class="admin-nav-item" data-view="notifications">04 Notifications Center</div>
+                </div>
+
+                <div class="admin-nav-group">
+                    <div class="admin-nav-title">Operational Core</div>
+                    <div class="admin-nav-item" data-view="bookings">05 Consultations & Bookings</div>
+                    <div class="admin-nav-item" data-view="customers">06 Client Directory</div>
+                    <div class="admin-nav-item" data-view="payments">07 PhonePe Payments</div>
+                    <div class="admin-nav-item" data-view="services">08 Services Catalog</div>
+                    <div class="admin-nav-item" data-view="availability">09 Calendar & Blocked Dates</div>
+                </div>
+
+                <div class="admin-nav-group">
+                    <div class="admin-nav-title">Content Management</div>
+                    <div class="admin-nav-item" data-view="cms-content">10 Site Copy & Sections</div>
+                    <div class="admin-nav-item" data-view="cms-gallery">11 Photo Gallery CMS</div>
+                    <div class="admin-nav-item" data-view="cms-awards">12 Achievements CMS</div>
+                    <div class="admin-nav-item" data-view="cms-vlog">13 Vlog Archive CMS</div>
+                    <div class="admin-nav-item" data-view="cms-blog">14 Blog & Articles CMS</div>
+                </div>
+
+                <div class="admin-nav-group">
+                    <div class="admin-nav-title">Security & Governance</div>
+                    <div class="admin-nav-item" data-view="settings">15 Platform Settings</div>
+                    <div class="admin-nav-item" data-view="users">16 Admin Users & Roles</div>
+                    <div class="admin-nav-item" data-view="logs">17 Audit & Error Logs</div>
+                </div>
+            </nav>
+
+            <div style="padding: 20px; border-top: 1px solid var(--border-subtle); display:flex; flex-direction:column; gap:8px;">
+                <button type="button" id="admin-quick-export-btn" class="btn btn-outline btn-sm" style="width:100%; justify-content:center; font-size:0.75rem;">
+                    <span>📥 Quick CSV Export</span>
+                </button>
+                <a href="../index.html" class="btn btn-outline btn-sm" style="width:100%; justify-content:center; font-size:0.75rem;">
+                    <span>Exit to Website</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN OPERATIONAL AREA -->
+        <main class="admin-main">
+            
+            <!-- TOP BAR -->
+            <header class="admin-topbar">
+                <div class="admin-topbar-left">
+                    <button type="button" id="admin-mobile-toggle" class="admin-toggle-btn" aria-label="Toggle navigation">☰</button>
+                    <div class="admin-topbar-title-wrap">
+                        <h1 class="heading-card admin-view-heading" id="admin-view-title">Dashboard Overview</h1>
+                        <span class="text-muted admin-topbar-sub">Adv. Kriti Malviya Chambers · Centralized Administrative Workspace</span>
+                    </div>
+                </div>
+
+                <div class="admin-topbar-right">
+                    <div class="admin-session-indicator">
+                        <span class="admin-session-dot"></span>
+                        <span id="admin-user-email">ADMIN SESSION ACTIVE</span>
+                        <span id="admin-role-badge" class="admin-badge badge-completed">SUPER_ADMIN</span>
+                    </div>
+                    <div class="admin-topbar-buttons">
+                        <button type="button" id="admin-notif-bell-btn" class="btn btn-outline btn-sm admin-bell-btn" title="Notifications">
+                            <span>🔔</span>
+                            <span id="admin-unread-badge" style="display:none;" class="admin-bell-counter">0</span>
+                        </button>
+                        <button type="button" id="admin-logout-btn" class="btn btn-outline btn-sm admin-btn-signout"><span>Sign Out</span></button>
+                        <a href="../index.html" target="_blank" class="btn btn-outline btn-sm admin-btn-site-link"><span>View Public Site ↗</span></a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- DYNAMIC VIEW PANELS (All 17 Administrative Modules) -->
+            <div class="admin-content-area">
+                
+                <!-- VIEW 01: DASHBOARD OVERVIEW -->
+                <div class="admin-view-panel active" id="view-dashboard">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">LIVE EXECUTIVE SNAPSHOT</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Operational Health & Performance</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.refreshCurrentView()"><span>🔄 Refresh Data</span></button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('bookings')"><span>Export Bookings CSV</span></button>
+                        </div>
+                    </div>
+
+                    <!-- METRIC CARDS (Excludes Pending/Failed from Revenue) -->
+                    <div class="admin-stats-grid">
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="margin-bottom:8px; font-size:0.7rem;">CONFIRMED CONSULTATIONS</span>
+                            <div class="metric-counter" id="stat-bookings" style="font-size:2.6rem;">0</div>
+                            <span class="text-muted" style="font-size:0.8rem;">PostgreSQL verified bookings</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="margin-bottom:8px; font-size:0.7rem;">SETTLED REVENUE (INR)</span>
+                            <div class="metric-counter" id="stat-revenue" style="font-size:2.6rem; color:var(--gold);">₹0</div>
+                            <span class="text-muted" style="font-size:0.8rem;">Strictly verified PAID payments</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="margin-bottom:8px; font-size:0.7rem;">PENDING REQUESTS</span>
+                            <div class="metric-counter" id="stat-pending" style="font-size:2.6rem; color:#E65100;">0</div>
+                            <span class="text-muted" style="font-size:0.8rem;">Awaiting gateway/review</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="margin-bottom:8px; font-size:0.7rem;">CLIENT BASE</span>
+                            <div class="metric-counter" id="stat-customers" style="font-size:2.6rem;">0</div>
+                            <span class="text-muted" style="font-size:0.8rem;">Registered unique clients</span>
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM OPERATIONAL HEALTH MONITOR -->
+                    <div class="admin-stat-card" style="margin-bottom:28px; background:#FAF9F5;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                            <div>
+                                <span class="eyebrow" style="font-size:0.68rem; margin-bottom:4px;">SYSTEM STATUS</span>
+                                <h3 style="font-size:1.05rem; margin:0;">Platform Integration Health</h3>
+                            </div>
+                            <div style="display:flex; gap:16px; font-size:0.8rem;">
+                                <div><span style="color:#2E7D32;">●</span> Supabase PostgreSQL: <strong>Healthy (RLS Active)</strong></div>
+                                <div><span style="color:#2E7D32;">●</span> PhonePe Gateway: <strong>Live API Ready</strong></div>
+                                <div><span style="color:#2E7D32;">●</span> Resend Email: <strong>Configured</strong></div>
+                                <div><span id="health-unresolved-errors" style="color:#2E7D32;">●</span> Unresolved Errors: <strong id="stat-errors-count">0</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT BOOKINGS TABLE -->
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-header-bar">
+                            <div>
+                                <h3 style="font-size:1.1rem; font-weight:600; margin:0;">Recent Consultation Bookings</h3>
+                                <span class="text-muted" style="font-size:0.78rem;">Latest appointment records from PostgreSQL</span>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.navigateView('bookings')"><span>View All Bookings →</span></button>
+                            </div>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Client Name</th>
+                                        <th>Service</th>
+                                        <th>Date & Time</th>
+                                        <th>Mode</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-bookings-tbody">
+                                    <tr>
+                                        <td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">
+                                            Synchronizing live database records...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- RECENT ACTIVITY AUDIT STREAM -->
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-header-bar">
+                            <div>
+                                <h3 style="font-size:1.1rem; font-weight:600; margin:0;">Recent System Activity & Audit Trail</h3>
+                                <span class="text-muted" style="font-size:0.78rem;">Chronological log of administrative actions</span>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.navigateView('logs')"><span>Open Full Logs →</span></button>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Administrator</th>
+                                        <th>Action</th>
+                                        <th>Target</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-dashboard-activity-tbody">
+                                    <tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">Loading audit history...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 02: ANALYTICS & TRAFFIC -->
+                <div class="admin-view-panel" id="view-analytics" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">PRIVACY-CONSCIOUS TELEMETRY</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Website Traffic & Consultation Funnel</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <select id="analytics-date-range" class="admin-filter-select" onchange="window.KM_ADMIN?.loadAnalytics()">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30" selected>Last 30 Days</option>
+                                <option value="90">Last 90 Days</option>
+                            </select>
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.loadAnalytics()"><span>🔄 Refresh</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-stats-grid">
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="font-size:0.68rem; margin-bottom:6px;">TOTAL PAGE VIEWS</span>
+                            <div class="metric-counter" id="analytics-total-views" style="font-size:2.4rem;">0</div>
+                            <span class="text-muted" style="font-size:0.78rem;">Telemetry events recorded</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="font-size:0.68rem; margin-bottom:6px;">ANONYMOUS SESSIONS</span>
+                            <div class="metric-counter" id="analytics-unique-sessions" style="font-size:2.4rem;">0</div>
+                            <span class="text-muted" style="font-size:0.78rem;">Distinct session identifiers</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="font-size:0.68rem; margin-bottom:6px;">BOOKING INITIATIONS</span>
+                            <div class="metric-counter" id="analytics-booking-starts" style="font-size:2.4rem; color:var(--gold);">0</div>
+                            <span class="text-muted" style="font-size:0.78rem;">Consultation flow started</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="eyebrow" style="font-size:0.68rem; margin-bottom:6px;">VERIFIED PAYMENTS</span>
+                            <div class="metric-counter" id="analytics-verified-conversions" style="font-size:2.4rem; color:#2E7D32;">0</div>
+                            <span class="text-muted" style="font-size:0.78rem;">Completed consultations</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-header-bar">
+                            <h3 style="font-size:1.05rem; margin:0;">Top Visited Website Pages</h3>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Page Path</th>
+                                        <th>Views</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analytics-pages-tbody">
+                                    <tr><td colspan="3" style="text-align:center; padding:24px; color:var(--text-muted);">Analyzing events...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 03: DAILY BUSINESS REPORTS -->
+                <div class="admin-view-panel" id="view-reports" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">HISTORICAL AUDIT</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Daily Business Summaries</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.triggerDailyReportGeneration()"><span>⚡ Generate Report For Today</span></button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('reports')"><span>Export Reports CSV</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Report Date</th>
+                                        <th>Sessions</th>
+                                        <th>Page Views</th>
+                                        <th>New Clients</th>
+                                        <th>Consultations</th>
+                                        <th>Confirmed</th>
+                                        <th>Completed</th>
+                                        <th>Revenue (PAID)</th>
+                                        <th>Errors</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-reports-tbody">
+                                    <tr><td colspan="9" style="text-align:center; padding:32px; color:var(--text-muted);">Loading stored reports...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 04: NOTIFICATIONS CENTER -->
+                <div class="admin-view-panel" id="view-notifications" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">CHAMBER ALERTS</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Notifications Center</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.markAllNotificationsRead()"><span>✓ Mark All As Read</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Type</th>
+                                        <th>Title</th>
+                                        <th>Message</th>
+                                        <th>Received At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-notifications-tbody">
+                                    <tr><td colspan="6" style="text-align:center; padding:32px; color:var(--text-muted);">Loading notifications...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 05: CONSULTATIONS & BOOKINGS MANAGEMENT -->
+                <div class="admin-view-panel" id="view-bookings" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">APPOINTMENTS REGISTRY</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Consultations & Bookings</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('bookings')"><span>Export Bookings CSV</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Controls -->
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-filter-bar">
+                            <input type="text" id="bookings-search-input" class="admin-filter-input" placeholder="Search by Order ID, Client, or Service..." style="flex:1; min-width:240px;" oninput="window.KM_ADMIN?.filterBookings()">
+                            <select id="bookings-filter-status" class="admin-filter-select" onchange="window.KM_ADMIN?.filterBookings()">
+                                <option value="">All Statuses</option>
+                                <option value="CONFIRMED">CONFIRMED</option>
+                                <option value="PENDING">PENDING</option>
+                                <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
+                                <option value="COMPLETED">COMPLETED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                            </select>
+                            <select id="bookings-filter-mode" class="admin-filter-select" onchange="window.KM_ADMIN?.filterBookings()">
+                                <option value="">All Modes</option>
+                                <option value="Online">Online Consultation</option>
+                                <option value="In-Person">In-Person Consultation</option>
+                            </select>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Client Name</th>
+                                        <th>Service</th>
+                                        <th>Date & Slot</th>
+                                        <th>Fee</th>
+                                        <th>Booking Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookings-full-tbody">
+                                    <tr><td colspan="8" style="text-align:center; padding:36px; color:var(--text-muted);">Synchronizing consultations...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 06: CLIENT DIRECTORY -->
+                <div class="admin-view-panel" id="view-customers" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">PROTECTED DIRECTORY</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Client Database</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('customers')"><span>Export Clients CSV</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-filter-bar">
+                            <input type="text" id="customers-search-input" class="admin-filter-input" placeholder="Search by name, email, or phone..." style="flex:1; min-width:240px;" oninput="window.KM_ADMIN?.filterCustomers()">
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <th>Email Address</th>
+                                        <th>Phone</th>
+                                        <th>Country</th>
+                                        <th>Status</th>
+                                        <th>Registered Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted);">Loading client records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 07: PHONEPE PAYMENTS MANAGEMENT -->
+                <div class="admin-view-panel" id="view-payments" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">FINANCIAL TRANSACTIONS</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">PhonePe Payments Registry</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('payments')"><span>Export Payments CSV</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-filter-bar">
+                            <input type="text" id="payments-search-input" class="admin-filter-input" placeholder="Search by Merchant Order ID or Booking Ref..." style="flex:1; min-width:240px;" oninput="window.KM_ADMIN?.filterPayments()">
+                            <select id="payments-filter-status" class="admin-filter-select" onchange="window.KM_ADMIN?.filterPayments()">
+                                <option value="">All Payment Statuses</option>
+                                <option value="PAID">PAID (Settled)</option>
+                                <option value="PENDING">PENDING</option>
+                                <option value="VERIFICATION_PENDING">VERIFICATION_PENDING</option>
+                                <option value="FAILED">FAILED</option>
+                            </select>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Ref</th>
+                                        <th>Merchant Tx ID</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Gateway Tx ID</th>
+                                        <th>Created Date</th>
+                                        <th>Verified Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-tbody">
+                                    <tr><td colspan="8" style="text-align:center; padding:36px; color:var(--text-muted);">Loading transaction ledger...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 08: SERVICES CATALOG -->
+                <div class="admin-view-panel" id="view-services" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">CONSULTATION CATALOG</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Legal & Counselling Services</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openServiceModal()"><span>+ Add New Service</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Slug</th>
+                                        <th>Category</th>
+                                        <th>Duration</th>
+                                        <th>Fee (INR)</th>
+                                        <th>Visibility</th>
+                                        <th>Sort Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="services-tbody">
+                                    <tr><td colspan="8" style="text-align:center; padding:36px; color:var(--text-muted);">Loading services catalog...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 09: CALENDAR & BLOCKED DATES -->
+                <div class="admin-view-panel" id="view-availability" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">CHAMBER AVAILABILITY</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Working Hours & Blocked Dates</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openBlockedDateModal()"><span>+ Block Chamber Date</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Schedule Grid -->
+                    <div class="admin-stat-card" style="margin-bottom:28px;">
+                        <h3 style="font-size:1.1rem; margin-bottom:16px;">Weekly Consultation Windows (Asia/Kolkata IST)</h3>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Day of Week</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Slot Duration</th>
+                                        <th>Active State</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="availability-tbody">
+                                    <tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">Loading schedule rules...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Blocked Dates Registry -->
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-header-bar">
+                            <h3 style="font-size:1.1rem; margin:0;">Blocked Dates (Court Vacations / Holidays)</h3>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Blocked Date</th>
+                                        <th>Reason / Holiday</th>
+                                        <th>Created At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blocked-dates-tbody">
+                                    <tr><td colspan="4" style="text-align:center; padding:24px; color:var(--text-muted);">No blocked dates configured.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 10: SITE COPY & SECTIONS CMS -->
+                <div class="admin-view-panel" id="view-cms-content" style="display:none;">
+                    <div style="margin-bottom:24px;">
+                        <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">EDITORIAL CMS</span>
+                        <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Website Copy & Section Manager</h2>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:24px;">
+                        <!-- Homepage Hero -->
+                        <div class="admin-stat-card">
+                            <h3 style="font-size:1.1rem; margin-bottom:12px;">Homepage Hero Section (<code>homepage_hero</code>)</h3>
+                            <form id="form-cms-hero" onsubmit="window.KM_ADMIN?.saveHeroContent(event)">
+                                <div class="form-grid" style="margin-bottom:16px;">
+                                    <div class="form-group">
+                                        <label class="form-label">Hero Title (Dark Accent)</label>
+                                        <input type="text" id="cms-hero-dark" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Hero Title (Light Accent)</label>
+                                        <input type="text" id="cms-hero-light" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:16px;">
+                                    <label class="form-label">Hero Description</label>
+                                    <textarea id="cms-hero-desc" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm"><span>Save Hero Copy</span></button>
+                            </form>
+                        </div>
+
+                        <!-- Homepage About -->
+                        <div class="admin-stat-card">
+                            <h3 style="font-size:1.1rem; margin-bottom:12px;">Homepage About Section (<code>homepage_about</code>)</h3>
+                            <form id="form-cms-about" onsubmit="window.KM_ADMIN?.saveAboutContent(event)">
+                                <div class="form-group" style="margin-bottom:16px;">
+                                    <label class="form-label">Headline</label>
+                                    <input type="text" id="cms-about-headline" class="form-control" required>
+                                </div>
+                                <div class="form-group" style="margin-bottom:16px;">
+                                    <label class="form-label">Lead Paragraph</label>
+                                    <textarea id="cms-about-lead" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group" style="margin-bottom:16px;">
+                                    <label class="form-label">Sublead Paragraph</label>
+                                    <textarea id="cms-about-sublead" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm"><span>Save About Copy</span></button>
+                            </form>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="admin-stat-card">
+                            <h3 style="font-size:1.1rem; margin-bottom:12px;">Office & Chamber Coordinates (<code>contact_information</code>)</h3>
+                            <form id="form-cms-contact" onsubmit="window.KM_ADMIN?.saveContactContent(event)">
+                                <div class="form-grid" style="margin-bottom:16px;">
+                                    <div class="form-group">
+                                        <label class="form-label">Chamber Name</label>
+                                        <input type="text" id="cms-contact-chamber" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Official Email</label>
+                                        <input type="email" id="cms-contact-email" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" id="cms-contact-phone" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Working Hours</label>
+                                        <input type="text" id="cms-contact-hours" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:16px;">
+                                    <label class="form-label">Physical Address</label>
+                                    <input type="text" id="cms-contact-address" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm"><span>Save Contact Coordinates</span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 11: PHOTO GALLERY CMS -->
+                <div class="admin-view-panel" id="view-cms-gallery" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">MEDIA ARCHIVE</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Photo Gallery Manager</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openGalleryModal()"><span>+ Add Photograph URL</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Preview</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Featured</th>
+                                        <th>Visibility</th>
+                                        <th>Sort Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gallery-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted);">Loading gallery items...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 12: ACHIEVEMENTS CMS -->
+                <div class="admin-view-panel" id="view-cms-awards" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">PROFESSIONAL RECORD</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Achievements & Factual Milestones</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openAchievementModal()"><span>+ Add Milestone</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Year</th>
+                                        <th>Description</th>
+                                        <th>Visibility</th>
+                                        <th>Sort Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="achievements-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted);">Loading milestones...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 13: VLOG ARCHIVE CMS -->
+                <div class="admin-view-panel" id="view-cms-vlog" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">VIDEO JOURNAL</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Vlog & Video Manager</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openVideoModal()"><span>+ Add YouTube Video</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Video Title</th>
+                                        <th>YouTube Video ID</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Visibility</th>
+                                        <th>Sort Order</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="videos-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted);">Loading video records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 14: BLOG & ARTICLES CMS -->
+                <div class="admin-view-panel" id="view-cms-blog" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">LEGAL INSIGHTS</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Editorial Blog & Articles CMS</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.openBlogModal()"><span>+ Create New Article</span></button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Article Title</th>
+                                        <th>Slug</th>
+                                        <th>Category</th>
+                                        <th>Read Time</th>
+                                        <th>Status</th>
+                                        <th>Published Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blog-tbody">
+                                    <tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted);">Loading articles archive...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 15: PLATFORM SETTINGS -->
+                <div class="admin-view-panel" id="view-settings" style="display:none;">
+                    <div style="margin-bottom:24px;">
+                        <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">SYSTEM CONFIGURATION</span>
+                        <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Platform Settings</h2>
+                    </div>
+
+                    <div class="admin-stat-card" style="max-width:800px;">
+                        <form id="admin-settings-form" onsubmit="window.KM_ADMIN?.saveSettings(event)">
+                            <div class="form-grid" style="margin-bottom:20px;">
+                                <div class="form-group">
+                                    <label class="form-label">Brand / Site Name</label>
+                                    <input type="text" id="settings-site-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Contact Email</label>
+                                    <input type="email" id="settings-email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" id="settings-phone" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">WhatsApp Number</label>
+                                    <input type="text" id="settings-whatsapp" class="form-control">
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom:24px;">
+                                <label class="form-label" style="margin-bottom:12px; display:block;">Functional Subsystem Toggles</label>
+                                <div style="display:flex; flex-direction:column; gap:10px;">
+                                    <label style="display:flex; align-items:center; gap:10px; font-size:0.86rem; cursor:pointer;">
+                                        <input type="checkbox" id="settings-booking-enabled"> Consultation Booking Engine Enabled
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; font-size:0.86rem; cursor:pointer;">
+                                        <input type="checkbox" id="settings-payment-enabled"> PhonePe Payment Gateway Enabled
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; font-size:0.86rem; cursor:pointer;">
+                                        <input type="checkbox" id="settings-blog-enabled"> Public Articles / Blog Enabled
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; font-size:0.86rem; cursor:pointer;">
+                                        <input type="checkbox" id="settings-gallery-enabled"> Public Gallery Enabled
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:10px; font-size:0.86rem; color:#D32F2F; font-weight:600; cursor:pointer;">
+                                        <input type="checkbox" id="settings-maintenance-mode"> Maintenance Mode (Emergency Only)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary"><span>Save Platform Settings</span></button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- VIEW 16: ADMIN USERS & ROLES -->
+                <div class="admin-view-panel" id="view-users" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">ROLE-BASED ACCESS CONTROL</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Administrative Users & Clearance</h2>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Clearance Level</th>
+                                        <th>Created Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody">
+                                    <tr><td colspan="6" style="text-align:center; padding:36px; color:var(--text-muted);">Loading admin accounts...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 17: AUDIT & ERROR LOGS -->
+                <div class="admin-view-panel" id="view-logs" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <span class="eyebrow" style="margin-bottom:4px; font-size:0.7rem;">SYSTEM OBSERVABILITY</span>
+                            <h2 style="font-family:var(--font-serif); font-size:1.6rem; margin:0;">Audit Trail & Error Telemetry</h2>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="window.KM_ADMIN?.triggerExport('activity_logs')"><span>Export Audit Logs CSV</span></button>
+                        </div>
+                    </div>
+
+                    <!-- System Errors -->
+                    <div class="admin-table-wrap" style="margin-bottom:28px;">
+                        <div class="admin-table-header-bar">
+                            <h3 style="font-size:1.1rem; margin:0;">System Error Telemetry</h3>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Severity</th>
+                                        <th>Module</th>
+                                        <th>Message</th>
+                                        <th>Timestamp</th>
+                                        <th>Resolved</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="error-logs-tbody">
+                                    <tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">Loading error records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Full Activity Logs -->
+                    <div class="admin-table-wrap">
+                        <div class="admin-table-header-bar">
+                            <h3 style="font-size:1.1rem; margin:0;">Administrative Audit Trail (Immutable)</h3>
+                        </div>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Admin</th>
+                                        <th>Action</th>
+                                        <th>Target</th>
+                                        <th>Metadata</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-logs-tbody">
+                                    <tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">Loading audit records...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- GENERIC EDIT / ADD MODAL -->
+    <div class="admin-modal-overlay" id="admin-modal" aria-hidden="true">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <h3 id="admin-modal-title" style="margin:0; font-size:1.2rem;">Edit Item</h3>
+                <button type="button" class="menu-close" onclick="window.KM_ADMIN?.closeModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="admin-modal-body">
+                <!-- Injected Form Fields -->
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="btn btn-outline btn-sm" onclick="window.KM_ADMIN?.closeModal()"><span>Cancel</span></button>
+                <button type="button" id="admin-modal-save-btn" class="btn btn-primary btn-sm"><span>Save Changes</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECORD INSPECTOR DRAWER -->
+    <div class="menu-overlay" id="admin-drawer-overlay" style="z-index:9000;" aria-hidden="true"></div>
+    <aside class="side-menu-panel" id="admin-drawer" style="z-index:9001; width:520px; max-width:100vw;" aria-label="Record Details">
+        <div class="menu-top">
+            <span class="menu-label">RECORD INSPECTOR</span>
+            <button class="menu-close" id="admin-drawer-close" aria-label="Close inspector">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+
+        <div id="drawer-content-body">
+            <span class="eyebrow" id="drawer-record-id">KM-20261009-8821</span>
+            <h2 class="heading-card" id="drawer-record-title" style="margin-bottom:20px;">Consultation Dossier</h2>
+
+            <div id="drawer-details-area">
+                <!-- Dynamically populated -->
+            </div>
+
+            <div id="drawer-actions-area" style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+                <!-- Actions -->
+            </div>
+        </div>
+    </aside>
+
+    <!-- TOAST CONTAINER -->
+    <div class="admin-toast-container" id="admin-toast-container"></div>
+
+    <!-- Supabase JS Client & Integration Layer -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

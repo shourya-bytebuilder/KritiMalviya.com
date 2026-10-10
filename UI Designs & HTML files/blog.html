@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Journal - Adv. Kriti Malviya</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================================================
+           GLOBAL VARIABLES & THEME
+           ================================================== */
+        :root {
+            --bg-color: #FAFAFA;
+            --text-primary: #111111;
+            --text-secondary: #6B6B6B;
+            --text-light: #A0A0A0;
+            
+            /* Premium Editorial Palette */
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3; 
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --black: #111111;
+            --muted: #6E6A60;
+            --border-color: rgba(184, 155, 82, 0.15); 
+            --white: #FFFFFF;
+
+            /* Typography */
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            /* Sizing & Animation */
+            --radius-md: 4px;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.5s var(--ease-out-expo);
+            
+            /* Subtle Noise Texture */
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: var(--font-sans); background-color: var(--off-white); color: var(--black); 
+            overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        
+        body::before { 
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            pointer-events: none; z-index: 9999; opacity: 0.03; background-image: var(--noise-fine); 
+        }
+
+        /* Scroll Reveal Utility Classes */
+        .reveal-up {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            will-change: opacity, transform;
+        }
+        .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+
+        /* ==================================================
+           HEADER & NAVIGATION
+           ================================================== */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 200; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--black); z-index: 201; }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+        .brand-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: contain; }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link, .nav-btn { text-decoration: none; color: var(--black); font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; padding: 8px 0; display: inline-flex; align-items: center; gap: 6px; transition: color var(--transition-smooth); }
+        .nav-link::after, .nav-btn::after { content: ''; position: absolute; width: 100%; height: 6px; background-color: var(--pastel-yellow); bottom: 4px; left: 0; opacity: 0; z-index: -1; transform: translateY(10px); transition: all var(--transition-smooth); }
+        .nav-link:hover::after, .nav-btn:hover::after { opacity: 1; transform: translateY(0); }
+        .nav-link.active::after { opacity: 1; transform: translateY(0); }
+
+        .dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px); background: rgba(250, 250, 250, 0.98); backdrop-filter: blur(12px); min-width: 280px; border-radius: var(--radius-md); box-shadow: 0 24px 48px rgba(0,0,0,0.06); border: 1px solid var(--border-color); padding: 16px 0; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo); z-index: 100; display: flex; flex-direction: column; }
+        .dropdown-menu.is-active { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(8px); }
+        .dropdown-item { display: block; padding: 10px 24px; color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; position: relative; }
+        .dropdown-item::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--gold); opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: scaleY(0.5); }
+        .dropdown-item:hover { color: var(--black); background: rgba(0,0,0,0.02); padding-left: 28px; }
+        .dropdown-item:hover::before { opacity: 1; transform: scaleY(1); }
+
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .menu-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; position: relative; z-index: 250; border-radius: 50%; transition: background var(--transition-smooth); }
+        .menu-toggle:hover { background: rgba(184, 155, 82, 0.1); }
+        .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--black); transition: all 0.4s var(--ease-out-expo); transform-origin: center; }
+        .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* Mobile Menu */
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(4px); z-index: 205; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        .menu-overlay.is-active { opacity: 1; pointer-events: auto; }
+        .side-menu-panel { position: fixed; top: 0; right: 0; width: 440px; max-width: 92vw; height: 100vh; background-color: var(--cream); border-left: 1px solid var(--border-color); padding: 50px; z-index: 210; transform: translateX(100%); opacity: 0; transition: transform 0.6s var(--ease-out-expo), opacity 0.4s ease; overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .side-menu-panel.is-open { transform: translateX(0); opacity: 1; }
+        .menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .menu-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); font-weight: 600; }
+        .menu-close { background: none; border: none; font-size: 2.4rem; color: var(--black); cursor: pointer; transition: transform 0.4s var(--ease-out-expo); font-family: var(--font-sans); font-weight: 300; width: 44px; height: 44px; }
+        .menu-close:hover { transform: rotate(90deg) scale(1.1); color: var(--gold); }
+        .menu-divider { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.3; margin-bottom: 40px; }
+        .side-nav-links { display: flex; flex-direction: column; gap: 24px; }
+        .side-link { display: flex; align-items: center; text-decoration: none; padding-bottom: 6px; position: relative; }
+        .menu-num { font-size: 0.85rem; color: var(--muted); margin-right: 20px; font-weight: 500; transition: color 0.3s; }
+        .menu-text { font-family: var(--font-serif); font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--black); line-height: 1.2; transition: transform 0.4s var(--ease-out-expo), color 0.3s; }
+        .side-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-out-expo); }
+        .side-link:hover .menu-text, .side-link.active .menu-text { transform: translateX(6px); color: var(--black); }
+        .side-link:hover .menu-num, .side-link.active .menu-num { color: var(--gold); }
+        .side-link:hover::after, .side-link.active::after { transform: scaleX(1); }
+        .side-link.active .menu-text { font-style: italic; color: var(--gold); }
+
+        /* ==================================================
+           BLOG HERO
+           ================================================== */
+        .blog-hero { padding: 100px 5% 60px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .bh-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--gold); font-weight: 600; margin-bottom: 24px; }
+        .bh-title { font-family: var(--font-serif); font-size: clamp(4rem, 8vw, 7rem); color: var(--black); line-height: 1; letter-spacing: -0.02em; margin-bottom: 32px; text-transform: uppercase; }
+        .bh-desc { font-size: 1.15rem; color: var(--muted); line-height: 1.6; max-width: 600px; margin: 0 auto; }
+
+        /* ==================================================
+           FEATURED ARTICLE
+           ================================================== */
+        .featured-section { padding: 40px 5% 80px; max-width: 1400px; margin: 0 auto; }
+        .featured-wrapper { display: flex; background: var(--cream); border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.03); border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s var(--ease-out-expo); }
+        .featured-wrapper:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
+        .feat-img-col { flex: 1.2; position: relative; min-height: 400px; background: var(--off-white); overflow: hidden; }
+        .feat-img-col img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out-expo); }
+        .featured-wrapper:hover .feat-img-col img { transform: scale(1.03); }
+        .feat-content { flex: 1; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .feat-tag { display: inline-block; background: var(--gold); color: var(--white); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; margin-bottom: 24px; align-self: flex-start; }
+        .feat-meta { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; display: flex; gap: 12px; }
+        .feat-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; color: var(--black); margin-bottom: 24px; transition: color 0.3s; }
+        .featured-wrapper:hover .feat-title { color: var(--gold); }
+        .feat-excerpt { font-size: 1.05rem; color: var(--muted); line-height: 1.6; margin-bottom: 40px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .read-btn { font-size: 0.85rem; font-weight: 600; color: var(--black); text-transform: uppercase; letter-spacing: 0.1em; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .read-btn::after { content: '→'; font-size: 1.2em; transition: transform 0.4s var(--ease-out-expo); }
+        .featured-wrapper:hover .read-btn { color: var(--gold); }
+        .featured-wrapper:hover .read-btn::after { transform: translateX(6px); }
+
+        @media (max-width: 900px) {
+            .featured-wrapper { flex-direction: column; }
+            .feat-img-col { min-height: 300px; }
+            .feat-content { padding: 40px 30px; }
+        }
+
+        /* ==================================================
+           EDITORIAL DIVIDER
+           ================================================== */
+        .ed-divider { background-color: var(--pastel-yellow); padding: 80px 5%; margin: 40px 0; text-align: center; }
+        .ed-div-quote { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); color: var(--black); max-width: 800px; margin: 0 auto 30px; line-height: 1.2; }
+        .ed-div-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+        .ed-div-list span { display: flex; align-items: center; gap: 24px; }
+        .ed-div-list span:not(:last-child)::after { content: ''; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
+
+        /* ==================================================
+           TOOLBAR (FILTERS, SEARCH, COUNT)
+           ================================================== */
+        .archive-header { max-width: 1400px; margin: 80px auto 40px; padding: 0 5%; }
+        .ah-title { font-family: var(--font-serif); font-size: 2.5rem; color: var(--black); margin-bottom: 12px; }
+        .ah-count { font-size: 0.85rem; color: var(--gold); font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
+
+        .toolbar { padding: 0 5% 40px; max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 30px; border-bottom: 1px solid var(--border-color); margin-bottom: 60px; }
+        .filters { display: flex; flex-wrap: wrap; gap: 16px; flex: 1 1 auto; }
+        .filter-btn { background: transparent; border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 100px; font-family: var(--font-sans); font-size: 0.8rem; font-weight: 500; color: var(--muted); cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+        .filter-btn:hover { border-color: var(--gold-light); color: var(--black); }
+        .filter-btn.active { background: var(--black); border-color: var(--black); color: var(--white); }
+
+        .search-wrap { position: relative; flex: 0 1 300px; width: 100%; }
+        .search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-color); padding: 10px 30px 10px 0; font-family: var(--font-sans); font-size: 0.9rem; color: var(--black); outline: none; transition: border-color 0.3s; }
+        .search-input:focus { border-color: var(--gold); }
+        .search-input::placeholder { color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.75rem; }
+        .search-icon { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--gold); }
+
+        @media (max-width: 768px) {
+            .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+            .filters::-webkit-scrollbar { display: none; }
+            .search-wrap { flex: 1 1 100%; }
+        }
+
+        /* ==================================================
+           ARTICLE ARCHIVE GRID
+           ================================================== */
+        .archive-container { padding: 0 5% 100px; max-width: 1400px; margin: 0 auto; flex: 1; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
+
+        .blog-card { display: flex; flex-direction: column; cursor: pointer; transition: transform 0.5s ease; animation: fadeIn 0.6s var(--ease-out-expo) forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* Dynamic Asymmetry handled via JS class .span-2 */
+        .blog-card.span-2 { grid-column: span 2; display: flex; flex-direction: row; align-items: center; gap: 40px; }
+        .blog-card.span-2 .bc-img-wrap { flex: 1; height: 100%; min-height: 300px; }
+        .blog-card.span-2 .bc-content { flex: 1; padding: 40px 40px 40px 0; }
+        .blog-card.span-2 .bc-title { font-size: 2.2rem; }
+
+        @media (max-width: 900px) {
+            .blog-grid { grid-template-columns: 1fr; }
+            .blog-card.span-2 { grid-column: span 1; flex-direction: column; gap: 0; }
+            .blog-card.span-2 .bc-img-wrap { min-height: 250px; }
+            .blog-card.span-2 .bc-content { padding: 30px 0 0 0; }
+        }
+
+        .bc-img-wrap { width: 100%; height: 260px; overflow: hidden; border-radius: var(--radius-md); background: var(--cream); position: relative; border: 1px solid var(--border-color); }
+        .bc-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-out-expo); opacity: 0; }
+        .bc-img-wrap img.loaded { opacity: 1; }
+        .blog-card:hover .bc-img-wrap img { transform: scale(1.03); }
+        
+        .bc-content { padding: 24px 0 0 0; display: flex; flex-direction: column; flex: 1; }
+        .bc-meta { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: flex; gap: 12px; font-weight: 600; }
+        .bc-cat { color: var(--gold); }
+        .bc-title { font-family: var(--font-serif); font-size: 1.8rem; color: var(--black); line-height: 1.2; margin-bottom: 12px; transition: transform 0.4s ease, color 0.3s; }
+        .blog-card:hover .bc-title { color: var(--gold); transform: translateY(-2px); }
+        .bc-excerpt { font-size: 1rem; color: var(--muted); line-height: 1.6; margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+        
+        .empty-state { text-align: center; padding: 100px 0; display: none; }
+        .es-title { font-family: var(--font-serif); font-size: 2rem; color: var(--black); margin-bottom: 12px; }
+        .es-desc { font-size: 1rem; color: var(--muted); }
+
+        .load-more-wrap { text-align: center; margin-top: 60px; display: none; }
+        .btn-load { background: transparent; border: 1px solid var(--black); padding: 12px 32px; border-radius: 100px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600; color: var(--black); cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.1em; }
+        .btn-load:hover { background: var(--black); color: var(--white); }
+
+        /* ==================================================
+           ARTICLE READER (OVERLAY)
+           ================================================== */
+        .reader-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--off-white); z-index: 9999;
+            overflow-y: auto; overflow-x: hidden; opacity: 0; pointer-events: none; transform: translateY(30px);
+            transition: opacity 0.5s ease, transform 0.6s var(--ease-out-expo);
+        }
+        .reader-overlay.is-active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        
+        .reader-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gold); width: 0%; z-index: 10000; transition: width 0.1s; }
+
+        .reader-header-bar { display: flex; justify-content: flex-end; padding: 24px 5%; position: sticky; top: 0; background: rgba(252, 251, 247, 0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.02); }
+        .btn-close-reader { background: none; border: none; font-size: 0.85rem; font-weight: 600; color: var(--black); text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+        .btn-close-reader:hover { color: var(--gold); }
+        .btn-close-reader::after { content: '×'; font-size: 1.5rem; line-height: 1; margin-bottom: 2px; }
+
+        .reader-content { padding: 40px 5% 100px; max-width: 800px; margin: 0 auto; opacity: 0; transition: opacity 0.4s ease 0.2s; }
+        .reader-overlay.is-active .reader-content { opacity: 1; }
+        
+        .rd-meta { text-align: center; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; font-weight: 600; }
+        .rd-cat { color: var(--gold); margin-right: 12px; }
+        .rd-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 6vw, 4rem); color: var(--black); line-height: 1.1; text-align: center; margin-bottom: 40px; }
+        
+        .rd-img-wrap { width: 100%; margin-bottom: 60px; border-radius: var(--radius-md); overflow: hidden; background: var(--cream); }
+        .rd-img-wrap img { width: 100%; height: auto; display: block; max-height: 600px; object-fit: cover; }
+
+        /* Rich Text Formatting */
+        .rd-body { font-size: 1.15rem; line-height: 1.8; color: var(--charcoal); }
+        .rd-body p { margin-bottom: 24px; }
+        .rd-body h2 { font-family: var(--font-serif); font-size: 2.2rem; color: var(--black); margin: 48px 0 24px; line-height: 1.2; }
+        .rd-body h3 { font-family: var(--font-serif); font-size: 1.6rem; color: var(--black); margin: 32px 0 16px; }
+        .rd-body ul, .rd-body ol { margin: 0 0 24px 24px; }
+        .rd-body li { margin-bottom: 12px; }
+        .rd-body blockquote { font-family: var(--font-serif); font-size: 1.5rem; font-style: italic; color: var(--gold); border-left: 3px solid var(--gold); padding-left: 24px; margin: 40px 0; }
+
+        .rd-footer { border-top: 1px solid var(--border-color); margin-top: 80px; padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .rd-nav-btn { background: none; border: none; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600; color: var(--black); text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: color 0.3s; display: flex; align-items: center; gap: 8px; }
+        .rd-nav-btn:hover { color: var(--gold); }
+        .rd-nav-btn.hidden { visibility: hidden; pointer-events: none; }
+
+        .rd-related { margin-top: 80px; padding-top: 80px; border-top: 1px solid var(--border-color); }
+        .rd-related-title { font-family: var(--font-serif); font-size: 2rem; color: var(--black); margin-bottom: 40px; text-align: center; }
+        .rd-related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+
+        /* ==================================================
+           FOOTER
+           ================================================== */
+        .footer { padding: 80px 5%; text-align: center; background: var(--cream); border-top: 1px solid var(--border-color); margin-top: auto; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); margin-bottom: 10px; }
+        .footer-copy { font-size: 0.85rem; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+    <header class="header">
+        <a href="hero.html" class="brand">
+            <img src="lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <nav class="nav-links">
+            <div class="nav-item"><a href="hero.html" class="nav-link">HOME</a></div>
+            
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="rel-dropdown">
+                    RELATIONSHIP CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 2px;"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="rel-dropdown">
+                    <a href="#" class="dropdown-item">ADHD</a>
+                    <a href="#" class="dropdown-item">LBI CBT</a>
+                    <a href="#" class="dropdown-item">BREAK-UP COUNSELLING</a>
+                    <a href="#" class="dropdown-item">COUPLE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">TEENAGE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">EMOTIONAL INTELLIGENCE COUNSELLING</a>
+                    <a href="#" class="dropdown-item">LOW ESTEEM COUNSELLING</a>
+                    <a href="#" class="dropdown-item">TRAUMA RECOVERY COUNSELLING</a>
+                    <a href="#" class="dropdown-item">PROCRASTINATION</a>
+                    <a href="#" class="dropdown-item">PSYCHOTHERAPY</a>
+                    <a href="#" class="dropdown-item">GEN-Z COUNSELLING</a>
+                    <a href="#" class="dropdown-item">PARENTING</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="leg-dropdown">
+                    LEGAL CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 2px;"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="leg-dropdown">
+                    <a href="#" class="dropdown-item">DIVORCE GUIDANCE</a>
+                    <a href="#" class="dropdown-item">PROPERTY PURCHASE</a>
+                    <a href="#" class="dropdown-item">CIVIL CASES</a>
+                    <a href="#" class="dropdown-item">HUMAN RIGHTS</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HAMBURGER MENU PANEL -->
+    <div class="menu-overlay"></div>
+    <aside class="side-menu-panel">
+        <div class="menu-top">
+            <span class="menu-label">MENU</span>
+            <button class="menu-close close-on-click" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+        <nav class="side-nav-links">
+            <a href="hero.html" class="side-link close-on-click"><span class="menu-text">Home</span></a>
+            <a href="hero.html#advocate" class="side-link close-on-click"><span class="menu-text">Advocate Kritimalviya</span></a>
+            <a href="gallery.html" class="side-link close-on-click"><span class="menu-text">Photo Gallery</span></a>
+            <a href="awards.html" class="side-link close-on-click"><span class="menu-text">Awards And Achivements</span></a>
+            <a href="vlog.html" class="side-link close-on-click"><span class="menu-text">Vlog</span></a>
+            <a href="blog.html" class="side-link active close-on-click"><span class="menu-text">Blog</span></a>
+            <a href="hero.html#about-us" class="side-link close-on-click"><span class="menu-text">About US</span></a>
+        </nav>
+    </aside>
+
+    <main>
+        <!-- ==================================================
+             BLOG HERO
+             ================================================== -->
+        <section class="blog-hero reveal-up">
+            <div class="bh-label">THE JOURNAL</div>
+            <h1 class="bh-title">BLOG</h1>
+            <p class="bh-desc">Thoughts, guidance and practical perspectives on law, relationships and everyday decisions.</p>
+        </section>
+
+        <!-- ==================================================
+             FEATURED ARTICLE
+             ================================================== -->
+        <section class="featured-section reveal-up" id="featured-container" style="display: none;">
+            <div class="bh-label" style="margin-bottom: 16px;">FEATURED</div>
+            <div class="featured-wrapper" id="featured-card">
+                <!-- Injected via JS to prevent layout breaking -->
+            </div>
+        </section>
+
+        <!-- ==================================================
+             EDITORIAL DIVIDER
+             ================================================== -->
+        <section class="ed-divider reveal-up">
+            <div class="ed-div-quote">"Good decisions often begin with understanding the situation clearly."</div>
+            <div class="ed-div-list">
+                <span>Legal Guidance</span>
+                <span>Relationship Guidance</span>
+                <span>Practical Perspectives</span>
+            </div>
+        </section>
+
+        <!-- ==================================================
+             TOOLBAR & ARCHIVE
+             ================================================== -->
+        <div class="archive-header reveal-up">
+            <h2 class="ah-title">LATEST ARTICLES</h2>
+            <div class="ah-count" id="article-count">0 ARTICLES</div>
+        </div>
+
+        <div class="toolbar reveal-up">
+            <div class="filters" id="category-filters">
+                <button class="filter-btn active" data-filter="All">ALL</button>
+                <!-- Categories injected via JS -->
+            </div>
+            <div class="search-wrap">
+                <input type="text" class="search-input" id="search-input" placeholder="SEARCH THE JOURNAL...">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+        </div>
+
+        <div class="archive-container">
+            <div class="blog-grid" id="blog-grid">
+                <!-- Cards injected dynamically via JS -->
+            </div>
+            
+            <div class="empty-state" id="empty-state">
+                <div class="es-title">NO ARTICLES FOUND</div>
+                <div class="es-desc">Try another search or category.</div>
+            </div>
+
+            <div class="load-more-wrap" id="load-more-wrap">
+                <button class="btn-load" id="btn-load-more">LOAD MORE</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================================================
+         FOOTER
+         ================================================== -->
+    <footer class="footer">
+        <div class="footer-brand">KRITIMALVIYA</div>
+        <div class="footer-copy">Premium Legal & Relationship Counselling</div>
+    </footer>
+
+    <!-- ==================================================
+         ARTICLE READER OVERLAY
+         ================================================== -->
+    <div class="reader-overlay" id="article-reader">
+        <div class="reader-progress" id="reader-progress"></div>
+        
+        <div class="reader-header-bar">
+            <button class="btn-close-reader" id="btn-close-reader">CLOSE ARTICLE</button>
+        </div>
+
+        <article class="reader-content">
+            <div class="rd-meta">
+                <span class="rd-cat" id="rd-cat">CATEGORY</span>
+                <span id="rd-date-time">DATE • TIME</span>
+            </div>
+            <h1 class="rd-title" id="rd-title">Article Title</h1>
+            
+            <div class="rd-img-wrap" id="rd-img-wrap">
+                <img src="" alt="" id="rd-img" onerror="this.style.display='none'">
+            </div>
+
+            <div class="rd-body" id="rd-body">
+                <!-- Content injected via JS -->
+            </div>
+
+            <div class="rd-footer">
+                <button class="rd-nav-btn" id="rd-prev">&larr; PREVIOUS ARTICLE</button>
+                <button class="rd-nav-btn" id="rd-back" style="margin: 0 auto;">BACK TO JOURNAL</button>
+                <button class="rd-nav-btn" id="rd-next">NEXT ARTICLE &rarr;</button>
+            </div>
+
+            <div class="rd-related" id="rd-related-wrap" style="display: none;">
+                <h3 class="rd-related-title">YOU MAY ALSO LIKE</h3>
+                <div class="rd-related-grid" id="rd-related-grid">
+                    <!-- Related cards injected via JS -->
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- ==================================================
+         JAVASCRIPT
+         ================================================== -->
+    <script>
+        // ==========================================
+        // BLOG CONTENT — EDIT THIS SECTION
+        // ==========================================
+        /*
+          NOTE ON IMAGES: To use Google Drive images, ensure permissions are set to "Anyone with the link can view".
+          Format: https://drive.google.com/uc?export=view&id=FILE_ID
+        */
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Understanding Your Legal Position Before Taking Action",
+                excerpt: "A practical guide to understanding why clarity matters before making an important legal decision in family or property disputes.",
+                content: `
+                    <p>When facing a complex legal situation, the immediate impulse is often to take rapid action. However, jumping into legal proceedings without a clear understanding of your position can lead to unintended consequences, unnecessary stress, and elevated costs.</p>
+                    <h2>The Importance of Clarity</h2>
+                    <p>Clarity is your most valuable asset. It allows you to approach disputes objectively rather than emotionally. We constantly see clients who have signed agreements or sent notices without fully grasping the long-term implications.</p>
+                    <blockquote>"Good decisions often begin with understanding the situation clearly."</blockquote>
+                    <p>Before making any moves, consider the following:</p>
+                    <ul>
+                        <li>Have you gathered all relevant documentation?</li>
+                        <li>Do you understand the financial implications?</li>
+                        <li>Have you explored mediation as an alternative to litigation?</li>
+                    </ul>
+                    <p>Seeking professional guidance early on doesn't just prepare you for a legal battle; it often helps you avoid one entirely.</p>
+                `,
+                category: "Legal Awareness",
+                date: "October 04, 2026",
+                image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=1200",
+                featured: true,
+                readTime: "5 min read"
+            },
+            {
+                id: 2,
+                title: "Navigating Communication Breakdown in Relationships",
+                excerpt: "Recognizing the signs of communication failure and practical steps to rebuild trust and understanding.",
+                content: `
+                    <p>Communication breakdown is rarely sudden. It is usually a slow erosion of listening, patience, and empathy over time. Couples often find themselves having the same arguments repeatedly without ever reaching a resolution.</p>
+                    <h2>Listening to Understand, Not to Respond</h2>
+                    <p>One of the core principles of effective relationship counselling is shifting the paradigm from 'winning' an argument to understanding your partner's perspective.</p>
+                    <p>Here are a few practical steps:</p>
+                    <ol>
+                        <li>Pause before reacting.</li>
+                        <li>Ask clarifying questions rather than making assumptions.</li>
+                        <li>Validate feelings even if you disagree with the facts.</li>
+                    </ol>
+                    <p>Professional counselling provides a safe, neutral space to practice these skills and rebuild a foundation of trust.</p>
+                `,
+                category: "Relationships",
+                date: "September 28, 2026",
+                image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=800",
+                featured: false,
+                readTime: "4 min read"
+            },
+            {
+                id: 3,
+                title: "Property Due Diligence: What You Need to Know",
+                excerpt: "Key documents and precautions every buyer should consider before signing a property agreement.",
+                content: `
+                    <p>Real estate transactions are significant financial commitments. Without proper due diligence, buyers can find themselves entangled in title disputes or facing undisclosed liabilities.</p>
+                    <h2>Title Verification</h2>
+                    <p>Always trace the title back at least 30 years. Ensure there are no encumbrances, pending litigation, or unreleased mortgages on the property.</p>
+                    <p>Our banking and property documentation experience shows that rigorous search reports are the best defense against future disputes.</p>
+                `,
+                category: "Legal",
+                date: "September 15, 2026",
+                image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800",
+                featured: false,
+                readTime: "6 min read"
+            },
+            {
+                id: 4,
+                title: "The Role of Emotional Intelligence in Dispute Resolution",
+                excerpt: "Why understanding emotions is just as critical as understanding the law during a dispute.",
+                content: `
+                    <p>In many legal disputes, especially family matters, the law is only half the equation. The other half is deeply rooted in human emotion, pride, and history.</p>
+                    <p>Applying Emotional Intelligence (EQ) in mediation allows us to de-escalate tensions and find mutually agreeable solutions that rigid legal frameworks might miss.</p>
+                `,
+                category: "Counselling",
+                date: "August 22, 2026",
+                image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=800",
+                featured: false,
+                readTime: "3 min read"
+            },
+            {
+                id: 5,
+                title: "Mediation vs. Litigation: Choosing the Right Path",
+                excerpt: "Comparing the benefits, costs, and emotional toll of settling disputes in and out of court.",
+                content: `
+                    <p>Litigation is inherently adversarial. It pits parties against each other, often destroying whatever relationship remains. Mediation, on the other hand, is collaborative.</p>
+                    <h2>Why Choose Mediation?</h2>
+                    <p>Mediation offers confidentiality, control over the outcome, reduced costs, and significantly faster resolutions.</p>
+                `,
+                category: "Legal Awareness",
+                date: "August 10, 2026",
+                image: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=800",
+                featured: false,
+                readTime: "5 min read"
+            },
+            {
+                id: 6,
+                title: "Preparing for a Healthy Separation",
+                excerpt: "A compassionate approach to handling separation practically and emotionally.",
+                content: `<p>Separation is never easy, but handling it with clarity and mutual respect can save families from years of resentment.</p>`,
+                category: "Relationships",
+                date: "July 05, 2026",
+                image: "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=800",
+                featured: false,
+                readTime: "4 min read"
+            }
+        ];
+        // ==========================================
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* --- MENU LOGIC --- */
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidePanel = document.querySelector('.side-menu-panel');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const closeLinks = document.querySelectorAll('.close-on-click');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                menuToggle.classList.toggle('is-open', isMenuOpen);
+                sidePanel.classList.toggle('is-open', isMenuOpen);
+                menuOverlay.classList.toggle('is-active', isMenuOpen);
+                document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            menuOverlay.addEventListener('click', toggleMenu);
+            closeLinks.forEach(link => link.addEventListener('click', () => { if (isMenuOpen) toggleMenu(); }));
+
+            const dropdownToggles = document.querySelectorAll('.js-dropdown-toggle');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+            
+            function closeDropdowns() {
+                allDropdowns.forEach(menu => menu.classList.remove('is-active'));
+                dropdownToggles.forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+            }
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetId = toggle.getAttribute('data-target');
+                    const targetMenu = document.getElementById(targetId);
+                    const isOpen = targetMenu.classList.contains('is-active');
+                    closeDropdowns(); 
+                    if (!isOpen) {
+                        targetMenu.classList.add('is-active');
+                        toggle.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+            document.addEventListener('click', (e) => { if (!e.target.closest('.nav-item')) closeDropdowns(); });
+
+            /* --- SCROLL ANIMATIONS --- */
+            const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        scrollObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-up').forEach(el => scrollObserver.observe(el));
+
+            /* --- DATA INITIALIZATION --- */
+            // Ensure posts are sorted by user intent, assuming the array order is the desired display order
+            const grid = document.getElementById('blog-grid');
+            const filterContainer = document.getElementById('category-filters');
+            const searchInput = document.getElementById('search-input');
+            const countEl = document.getElementById('article-count');
+            const emptyState = document.getElementById('empty-state');
+            const loadMoreWrap = document.getElementById('load-more-wrap');
+            const btnLoadMore = document.getElementById('btn-load-more');
+            const featuredContainer = document.getElementById('featured-container');
+            const featuredCard = document.getElementById('featured-card');
+            
+            let currentFilter = 'All';
+            let searchQuery = '';
+            let filteredPosts = [];
+            let displayedCount = 0;
+            const POSTS_PER_PAGE = 9;
+
+            // Generate Categories dynamically
+            const categories = ['All'];
+            blogPosts.forEach(post => {
+                if (post.category && !categories.includes(post.category)) {
+                    categories.push(post.category);
+                }
+            });
+
+            categories.forEach(cat => {
+                if(cat === 'All') return; 
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.filter = cat;
+                btn.textContent = cat;
+                filterContainer.appendChild(btn);
+            });
+
+            // Featured Article Logic
+            let featuredPost = blogPosts.find(p => p.featured);
+            if (!featuredPost && blogPosts.length > 0) featuredPost = blogPosts[0]; // Fallback to newest/first
+            
+            function renderFeatured() {
+                if (!featuredPost) return;
+                featuredContainer.style.display = 'block';
+                featuredCard.innerHTML = `
+                    <div class="feat-img-col">
+                        <img src="${featuredPost.image}" alt="${featuredPost.title}" onerror="this.style.display='none'">
+                    </div>
+                    <div class="feat-content">
+                        <span class="feat-tag">${featuredPost.category}</span>
+                        <div class="feat-meta">
+                            <span>${featuredPost.date}</span>
+                            <span>${featuredPost.readTime}</span>
+                        </div>
+                        <h2 class="feat-title">${featuredPost.title}</h2>
+                        <p class="feat-excerpt">${featuredPost.excerpt}</p>
+                        <span class="read-btn">READ ARTICLE</span>
+                    </div>
+                `;
+                featuredCard.onclick = () => openArticle(featuredPost.id);
+            }
+
+            // Create HTML string for cards to avoid memory leaks on heavy re-renders
+            function getCardHTML(post, isSpan2) {
+                const spanClass = isSpan2 ? 'span-2' : '';
+                return `
+                    <div class="blog-card reveal-up ${spanClass}" onclick="openArticle(${post.id})">
+                        <div class="bc-img-wrap">
+                            <img src="${post.image}" alt="${post.title}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+                        </div>
+                        <div class="bc-content">
+                            <div class="bc-meta">
+                                <span class="bc-cat">${post.category}</span>
+                                <span>${post.date}</span>
+                            </div>
+                            <h3 class="bc-title">${post.title}</h3>
+                            <p class="bc-excerpt">${post.excerpt}</p>
+                            <div class="bc-meta" style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px; margin-bottom: 0;">
+                                <span>${post.readTime}</span>
+                                <span style="color: var(--black); margin-left: auto;">READ ARTICLE &rarr;</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Core Render Logic (Rebuilt for Stability)
+            function updateGrid(reset = true) {
+                if(reset) {
+                    displayedCount = 0;
+                    grid.innerHTML = '';
+                    
+                    const lowerQuery = searchQuery.toLowerCase();
+                    // Keep featured post in the grid logic so it's searchable, 
+                    // or remove it to avoid duplication. We'll exclude it from the grid 
+                    // IF it's not being filtered, but include it if searching/filtering.
+                    const isFiltering = currentFilter !== 'All' || lowerQuery !== '';
+                    
+                    filteredPosts = blogPosts.filter(post => {
+                        // Don't show featured post in regular grid unless we are filtering
+                        if (!isFiltering && post.id === featuredPost?.id) return false;
+
+                        const matchCat = currentFilter === 'All' || post.category === currentFilter;
+                        const matchSearch = post.title.toLowerCase().includes(lowerQuery) || 
+                                            post.excerpt.toLowerCase().includes(lowerQuery) || 
+                                            post.category.toLowerCase().includes(lowerQuery) ||
+                                            post.content.toLowerCase().includes(lowerQuery);
+                        return matchCat && matchSearch;
+                    });
+
+                    countEl.textContent = `${filteredPosts.length} ARTICLES`;
+
+                    if (filteredPosts.length === 0) {
+                        emptyState.style.display = 'block';
+                        loadMoreWrap.style.display = 'none';
+                        return;
+                    } else {
+                        emptyState.style.display = 'none';
+                    }
+                }
+
+                // Chunk append safely
+                const batch = filteredPosts.slice(displayedCount, displayedCount + POSTS_PER_PAGE);
+                let htmlString = '';
+                
+                batch.forEach((post, index) => {
+                    const globalIndex = displayedCount + index;
+                    // Every 5th item visually spans 2 cols if on desktop
+                    const isSpan2 = (globalIndex % 5 === 4); 
+                    htmlString += getCardHTML(post, isSpan2);
+                });
+
+                grid.insertAdjacentHTML('beforeend', htmlString);
+                
+                // Observe new cards
+                const newCards = Array.from(grid.children).slice(displayedCount);
+                newCards.forEach(card => {
+                    // Small delay ensures smooth layout reflow
+                    setTimeout(() => scrollObserver.observe(card), 50);
+                });
+
+                displayedCount += batch.length;
+
+                // Load More visibility
+                if (displayedCount < filteredPosts.length) {
+                    loadMoreWrap.style.display = 'block';
+                } else {
+                    loadMoreWrap.style.display = 'none';
+                }
+            }
+
+            // Bind Events
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentFilter = e.target.dataset.filter;
+                    updateGrid(true);
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                updateGrid(true);
+            });
+
+            btnLoadMore.addEventListener('click', () => {
+                updateGrid(false);
+            });
+
+            // Initial Kickoff
+            renderFeatured();
+            updateGrid(true);
+
+
+            /* --- ARTICLE READER LOGIC --- */
+            const readerOverlay = document.getElementById('article-reader');
+            const readerProgress = document.getElementById('reader-progress');
+            const btnCloseReader = document.getElementById('btn-close-reader');
+            const btnBack = document.getElementById('rd-back');
+            const btnPrev = document.getElementById('rd-prev');
+            const btnNext = document.getElementById('rd-next');
+            const rdRelatedGrid = document.getElementById('rd-related-grid');
+            const rdRelatedWrap = document.getElementById('rd-related-wrap');
+
+            let currentArticleId = null;
+
+            window.openArticle = function(id) {
+                const post = blogPosts.find(p => p.id === id);
+                if (!post) return;
+                currentArticleId = id;
+
+                // Populate Content
+                document.getElementById('rd-cat').textContent = post.category;
+                document.getElementById('rd-date-time').textContent = `${post.date} • ${post.readTime}`;
+                document.getElementById('rd-title').textContent = post.title;
+                const rdImg = document.getElementById('rd-img');
+                rdImg.src = post.image;
+                rdImg.style.display = 'block'; // Reset display if it previously errored
+                
+                document.getElementById('rd-body').innerHTML = post.content;
+
+                // Build Related Posts safely
+                const related = blogPosts.filter(p => p.category === post.category && p.id !== post.id).slice(0, 2);
+                if (related.length > 0) {
+                    rdRelatedGrid.innerHTML = related.map(rp => getCardHTML(rp, false)).join('');
+                    rdRelatedWrap.style.display = 'block';
+                    // Re-observe these specific inner cards so they fade in 
+                    rdRelatedGrid.querySelectorAll('.blog-card').forEach(c => scrollObserver.observe(c));
+                } else {
+                    rdRelatedWrap.style.display = 'none';
+                    rdRelatedGrid.innerHTML = '';
+                }
+
+                updateReaderNav();
+
+                readerOverlay.classList.add('is-active');
+                document.body.style.overflow = 'hidden';
+                readerOverlay.scrollTop = 0;
+                readerProgress.style.width = '0%';
+            };
+
+            function closeArticle() {
+                readerOverlay.classList.remove('is-active');
+                document.body.style.overflow = '';
+            }
+
+            function updateReaderNav() {
+                // Using the full blogPosts array for prev/next context, not filtered
+                const currentIndex = blogPosts.findIndex(p => p.id === currentArticleId);
+                
+                if (currentIndex > 0) {
+                    btnPrev.classList.remove('hidden');
+                    btnPrev.onclick = () => openArticle(blogPosts[currentIndex - 1].id);
+                } else {
+                    btnPrev.classList.add('hidden');
+                }
+
+                if (currentIndex < blogPosts.length - 1) {
+                    btnNext.classList.remove('hidden');
+                    btnNext.onclick = () => openArticle(blogPosts[currentIndex + 1].id);
+                } else {
+                    btnNext.classList.add('hidden');
+                }
+            }
+
+            // Scroll Progress Line
+            readerOverlay.addEventListener('scroll', () => {
+                const scrollTop = readerOverlay.scrollTop;
+                const scrollHeight = readerOverlay.scrollHeight - readerOverlay.clientHeight;
+                if(scrollHeight > 0) {
+                    const progress = (scrollTop / scrollHeight) * 100;
+                    readerProgress.style.width = `${progress}%`;
+                }
+            });
+
+            btnCloseReader.addEventListener('click', closeArticle);
+            btnBack.addEventListener('click', closeArticle);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (readerOverlay.classList.contains('is-active')) closeArticle();
+                    if (isMenuOpen) toggleMenu();
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

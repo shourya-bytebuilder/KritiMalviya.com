@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - Adv. Kriti Malviya</title>
+    
+    <!-- Google Fonts: DM Serif Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================================================
+           GLOBAL VARIABLES & THEME
+           ================================================== */
+        :root {
+            --bg-color: #FAFAFA;
+            --surface-color: #F1F1F3;
+            --text-primary: #111111;
+            --text-secondary: #6B6B6B;
+            --text-light: #A0A0A0;
+            
+            /* Premium Editorial Palette */
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3; 
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --black: #111111;
+            --charcoal: #242424;
+            --muted: #6E6A60;
+            --border-color: rgba(184, 155, 82, 0.2); 
+            --white: #FFFFFF;
+            --error: #D32F2F;
+            --success: #2E7D32;
+            --phonepe-brand: #5f259f; /* PhonePe Brand Color for subtle accents if needed */
+
+            /* Typography */
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            /* Sizing & Animation */
+            --radius-md: 4px;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.5s var(--ease-out-expo);
+            
+            /* Subtle Noise Texture */
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: var(--font-sans); 
+            background-color: var(--off-white); 
+            color: var(--black); 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        body::before { 
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            pointer-events: none; z-index: 9999; opacity: 0.03; background-image: var(--noise-fine); 
+        }
+
+        /* Scroll Reveal Utility Classes */
+        .reveal-up {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            will-change: opacity, transform;
+        }
+        .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+
+        /* ==================================================
+           HEADER
+           ================================================== */
+        .header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; 
+            position: relative; z-index: 200; border-bottom: 1px solid rgba(0,0,0,0.05); 
+        }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--black); }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .secure-badge { 
+            font-family: var(--font-sans); font-size: 0.8rem; font-weight: 600; 
+            letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); 
+            display: flex; align-items: center; gap: 8px; 
+        }
+        .back-link {
+            font-size: 0.85rem; font-weight: 600; color: var(--muted); text-decoration: none;
+            transition: color 0.3s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: var(--black); }
+
+        /* ==================================================
+           TEST MODE BANNER
+           ================================================== */
+        .test-banner {
+            background-color: var(--pastel-yellow);
+            color: var(--black);
+            text-align: center;
+            padding: 12px 5%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            display: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ==================================================
+           PAYMENT HERO
+           ================================================== */
+        .py-hero { padding: 60px 5% 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .py-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); color: var(--black); line-height: 1.1; margin-bottom: 16px; text-transform: uppercase; }
+        .py-desc { font-size: 1.1rem; color: var(--muted); line-height: 1.6; max-width: 600px; }
+        .py-line { width: 60px; height: 2px; background: var(--gold); margin-top: 24px; }
+
+        /* ==================================================
+           MAIN CHECKOUT LAYOUT (Golden Ratio Inspired 1.618 : 1)
+           ================================================== */
+        .py-container {
+            max-width: 1400px; margin: 0 auto 100px; padding: 0 5%; width: 100%;
+            display: grid; grid-template-columns: 1.618fr 1fr; gap: 80px;
+            align-items: flex-start;
+        }
+        
+        @media (max-width: 1024px) {
+            .py-container { grid-template-columns: 1fr; gap: 60px; flex-direction: column-reverse; display: flex; }
+            .py-main { width: 100%; }
+            .py-sidebar { width: 100%; }
+        }
+
+        /* ==================================================
+           LEFT: PAYMENT INTERFACE
+           ================================================== */
+        .py-section-title { font-family: var(--font-serif); font-size: 1.8rem; color: var(--black); margin-bottom: 30px; }
+        
+        .py-methods-box {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            background: var(--white);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        }
+
+        .pg-brand-row {
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; margin-bottom: 30px;
+        }
+        .pg-brand-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); font-weight: 600; }
+        .pg-brand-logo { font-family: var(--font-sans); font-size: 1.2rem; font-weight: 700; color: var(--phonepe-brand); letter-spacing: -0.02em; display: flex; align-items: center; gap: 6px;}
+        /* Simulating PhonePe icon slightly */
+        .pg-brand-logo::before { content: 'पे'; font-size: 1.4rem; font-weight: 800; }
+
+        .py-methods-icons { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 30px; }
+        .py-method-badge {
+            padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 100px;
+            font-size: 0.85rem; font-weight: 500; color: var(--black); background: var(--surface-color);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .py-secure-note {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 24px; background: rgba(184, 155, 82, 0.05); border-left: 2px solid var(--gold);
+            font-size: 0.95rem; color: var(--muted); line-height: 1.6;
+        }
+
+        .py-btn {
+            width: 100%; background: var(--black); color: var(--white); border: 1px solid var(--black);
+            padding: 24px; border-radius: var(--radius-md); font-family: var(--font-sans);
+            font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+            cursor: pointer; transition: all 0.4s var(--ease-out-expo); display: flex; align-items: center; justify-content: center; gap: 12px;
+            margin-bottom: 16px;
+        }
+        .py-btn:hover:not(:disabled) { background: var(--charcoal); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-color: var(--charcoal); }
+        .py-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        .py-privacy { text-align: center; font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        /* Test Mode Controls */
+        .test-controls {
+            margin-top: 30px; padding: 24px; border: 1px dashed var(--gold); border-radius: var(--radius-md);
+            display: none; background: var(--cream);
+        }
+        .tc-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 600; margin-bottom: 16px; text-align: center; }
+        .tc-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .tc-btn { padding: 12px 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--white); border-radius: 4px; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.1em; color: var(--black); }
+        .tc-btn:hover { border-color: var(--black); }
+
+        /* Status Messages */
+        .py-status { margin-top: 24px; padding: 20px; border-radius: var(--radius-md); font-size: 0.95rem; line-height: 1.6; display: none; text-align: center; font-weight: 500; }
+        .py-status.error { background: #FFFAFA; border: 1px solid var(--error); color: var(--error); display: block; animation: fadeIn 0.4s ease; }
+        .py-status.pending { background: rgba(184, 155, 82, 0.1); border: 1px solid var(--gold); color: var(--gold); display: block; animation: fadeIn 0.4s ease; }
+
+        /* ==================================================
+           RIGHT: BOOKING SUMMARY
+           ================================================== */
+        .py-sidebar {
+            background: var(--cream);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            position: sticky;
+            top: 40px;
+        }
+
+        .sum-block { border-bottom: 1px solid var(--border-color); padding-bottom: 24px; margin-bottom: 24px; }
+        .sum-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .sum-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); font-weight: 600; margin-bottom: 20px; }
+        
+        .sum-item { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 20px; }
+        .sum-item:last-child { margin-bottom: 0; }
+        .sum-label { font-size: 0.95rem; color: var(--muted); }
+        .sum-val { font-size: 1rem; color: var(--black); font-weight: 500; text-align: right; }
+        
+        .sum-ref { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); background: var(--white); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); }
+
+        .sum-total-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .sum-total-label { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); }
+        .sum-total-val { font-family: var(--font-serif); font-size: 2.2rem; color: var(--black); }
+
+        /* ==================================================
+           SUCCESS / RECEIPT SCREEN
+           ================================================== */
+        #success-state { display: none; padding: 60px 5% 100px; max-width: 800px; margin: 0 auto; text-align: center; width: 100%; }
+        .sc-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(184, 155, 82, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; color: var(--gold); }
+        .sc-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--black); margin-bottom: 16px; }
+        .sc-desc { font-size: 1.1rem; color: var(--muted); line-height: 1.6; max-width: 500px; margin: 0 auto 40px; }
+
+        .receipt-box {
+            background: var(--white); border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: 50px; text-align: left; margin-bottom: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+            position: relative; overflow: hidden;
+        }
+        .receipt-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gold);
+        }
+        
+        .rt-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; margin-bottom: 30px; }
+        .rt-brand { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); }
+        .rt-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); font-weight: 600; }
+        
+        .rt-row { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 0.95rem; align-items: flex-start; gap: 20px; }
+        .rt-label { color: var(--muted); }
+        .rt-val { color: var(--black); font-weight: 500; text-align: right; word-break: break-word; }
+        .rt-val.highlight { color: var(--gold); font-weight: 600; font-size: 1.1rem; }
+
+        .sc-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .sc-btn { padding: 16px 32px; border-radius: 100px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .sc-btn-primary { background: var(--black); color: var(--white); border: 1px solid var(--black); }
+        .sc-btn-primary:hover { background: var(--charcoal); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .sc-btn-outline { background: transparent; color: var(--black); border: 1px solid var(--border-color); }
+        .sc-btn-outline:hover { border-color: var(--black); background: rgba(0,0,0,0.02); }
+
+        /* ==================================================
+           UNAVAILABLE STATE
+           ================================================== */
+        #unavailable-state { display: none; padding: 100px 5%; text-align: center; max-width: 700px; margin: 0 auto; flex: 1; width: 100%; }
+        .un-title { font-family: var(--font-serif); font-size: 3rem; color: var(--black); margin-bottom: 16px; }
+        .un-desc { font-size: 1.1rem; color: var(--muted); line-height: 1.6; margin-bottom: 40px; }
+        .dev-mock-btn { margin-top: 60px; font-size: 0.8rem; color: var(--muted); text-decoration: underline; background: none; border: none; cursor: pointer; display: none; letter-spacing: 0.1em; text-transform: uppercase; }
+
+        /* ==================================================
+           EDITORIAL SECTION
+           ================================================== */
+        .ed-divider { background-color: var(--pastel-yellow); padding: 80px 5%; text-align: center; border-top: 1px solid var(--border-color); }
+        .ed-div-quote { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); color: var(--black); max-width: 800px; margin: 0 auto 20px; line-height: 1.2; }
+        .ed-div-sub { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; }
+
+        /* ==================================================
+           FOOTER
+           ================================================== */
+        .footer { padding: 60px 5%; text-align: center; background: var(--cream); border-top: 1px solid var(--border-color); margin-top: auto; }
+        .footer-brand { font-family: var(--font-serif); font-size: 1.5rem; color: var(--black); margin-bottom: 10px; }
+        .footer-nav { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+        .footer-link { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); text-decoration: none; transition: color 0.3s; font-weight: 500; }
+        .footer-link:hover { color: var(--gold); }
+        .footer-copy { font-size: 0.85rem; color: var(--muted); }
+
+        /* ==================================================
+           PRINT STYLES
+           ================================================== */
+        @media print {
+            body { background: white; }
+            .header, .py-hero, .ed-divider, .footer, .sc-actions, .test-banner { display: none !important; }
+            #success-state { padding: 0; max-width: 100%; margin: 0; display: block !important; }
+            .receipt-box { border: none; box-shadow: none; padding: 0; margin: 0; }
+            .sc-icon, .sc-title, .sc-desc { display: none; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- TEST MODE BANNER -->
+    <div class="test-banner" id="test-banner">
+        TEST MODE — NO REAL PAYMENT WILL BE PROCESSED
+    </div>
+
+    <!-- HEADER -->
+    <header class="header no-print">
+        <a href="hero.html" class="brand">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+        <div class="header-actions">
+            <a href="consultation.html" class="back-link">&larr; Back to Booking</a>
+            <div class="secure-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                SECURE CHECKOUT
+            </div>
+        </div>
+    </header>
+
+    <!-- STATE 1: UNAVAILABLE -->
+    <div id="unavailable-state" class="reveal-up">
+        <h1 class="un-title">Booking Information Unavailable</h1>
+        <p class="un-desc">We could not find your consultation details. Please return to the booking page and select your appointment details to proceed with payment.</p>
+        <a href="consultation.html" class="sc-btn sc-btn-primary" style="margin-top: 20px;">Return to Consultation</a>
+        <button class="dev-mock-btn" id="dev-mock-btn">Test Mode: Load Sample Booking Data</button>
+    </div>
+
+    <!-- STATE 2: CHECKOUT -->
+    <div id="checkout-state" style="display: none;">
+        <section class="py-hero reveal-up">
+            <h1 class="py-title">Consultation Payment</h1>
+            <p class="py-desc">Complete your payment to proceed with your consultation request.</p>
+            <div class="py-line"></div>
+        </section>
+
+        <div class="py-container reveal-up">
+            
+            <!-- LEFT: PAYMENT INTERFACE -->
+            <div class="py-main">
+                <h2 class="py-section-title">Payment Method</h2>
+                
+                <div class="py-methods-box">
+                    <div class="pg-brand-row">
+                        <div class="pg-brand-label">Powered By</div>
+                        <div class="pg-brand-logo">PhonePe</div>
+                    </div>
+                    
+                    <div class="py-methods-label">Supported Methods</div>
+                    <div class="py-methods-icons">
+                        <span class="py-method-badge">UPI</span>
+                        <span class="py-method-badge">Credit / Debit Card</span>
+                        <span class="py-method-badge">Net Banking</span>
+                        <span class="py-method-badge">Wallets</span>
+                    </div>
+
+                    <div class="py-secure-note">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; color:var(--gold);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <div>
+                            <strong>Encrypted & Secure</strong><br>
+                            You will be securely redirected to the PhonePe payment gateway. We do not store your card numbers, CVV, or UPI PIN on our servers.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="py-btn" id="btn-pay">
+                    PAY <span id="btn-amt">₹1,000</span>
+                </button>
+                <p class="py-privacy">Your payment information is processed securely by PhonePe. By proceeding, you agree to our consultation terms and privacy policy.</p>
+
+                <!-- Status Messages -->
+                <div class="py-status" id="py-status"></div>
+
+                <!-- Test Controls (Hidden in LIVE mode) -->
+                <div class="test-controls" id="test-controls">
+                    <div class="tc-title">Simulate PhonePe Callback (Test Mode)</div>
+                    <div class="tc-buttons">
+                        <button class="tc-btn" id="btn-sim-success">Simulate Success</button>
+                        <button class="tc-btn" id="btn-sim-fail">Simulate Failure</button>
+                        <button class="tc-btn" id="btn-sim-cancel">Simulate Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: SUMMARY -->
+            <aside class="py-sidebar">
+                <div class="sum-block">
+                    <div class="sum-title">Your Consultation</div>
+                    <div class="sum-item">
+                        <span class="sum-label">Category</span>
+                        <span class="sum-val" id="sum-cat">--</span>
+                    </div>
+                    <div class="sum-item">
+                        <span class="sum-label">Service</span>
+                        <span class="sum-val" id="sum-type">--</span>
+                    </div>
+                    <div class="sum-item">
+                        <span class="sum-label">Date</span>
+                        <span class="sum-val" id="sum-date">--</span>
+                    </div>
+                    <div class="sum-item">
+                        <span class="sum-label">Time</span>
+                        <span class="sum-val" id="sum-time">--</span>
+                    </div>
+                    <div class="sum-item">
+                        <span class="sum-label">Duration</span>
+                        <span class="sum-val" id="sum-dur">--</span>
+                    </div>
+                    <div class="sum-item">
+                        <span class="sum-label">Mode</span>
+                        <span class="sum-val" id="sum-mode">--</span>
+                    </div>
+                    <div class="sum-item" style="margin-top: 24px;">
+                        <span class="sum-label">Booking Ref</span>
+                        <span class="sum-val sum-ref" id="sum-ref">--</span>
+                    </div>
+                </div>
+
+                <div class="sum-block">
+                    <div class="sum-title">Payment Summary</div>
+                    <div class="sum-item">
+                        <span class="sum-label">Consultation Fee</span>
+                        <span class="sum-val" id="sum-fee">₹1,000</span>
+                    </div>
+                    <div class="sum-item" id="sum-tax-row" style="display: none;">
+                        <span class="sum-label">Taxes</span>
+                        <span class="sum-val" id="sum-tax">₹0</span>
+                    </div>
+                    <div class="sum-total-row">
+                        <span class="sum-total-label">Total</span>
+                        <span class="sum-total-val" id="sum-total">₹1,000</span>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- STATE 3: SUCCESS / RECEIPT -->
+    <div id="success-state">
+        <div class="sc-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <h2 class="sc-title">Payment Successful</h2>
+        <p class="sc-desc">Your consultation payment has been received and verified. Your appointment request is now complete.</p>
+        
+        <!-- Printable Receipt Area -->
+        <div class="receipt-box" id="receipt-area">
+            <div class="rt-header">
+                <div class="rt-brand">KRITIMALVIYA</div>
+                <div class="rt-title">PAYMENT RECEIPT</div>
+            </div>
+            <div class="rt-row"><span class="rt-label">Booking Reference</span><span class="rt-val" id="rt-ref">--</span></div>
+            <div class="rt-row"><span class="rt-label">Payment ID (PhonePe)</span><span class="rt-val" id="rt-pay-ref">--</span></div>
+            <div class="rt-row"><span class="rt-label">Client Name</span><span class="rt-val" id="rt-name">--</span></div>
+            <div class="rt-row" style="margin-top:24px;"><span class="rt-label">Consultation</span><span class="rt-val" id="rt-type">--</span></div>
+            <div class="rt-row"><span class="rt-label">Date & Time</span><span class="rt-val" id="rt-datetime">--</span></div>
+            <div class="rt-row"><span class="rt-label">Mode</span><span class="rt-val" id="rt-mode">--</span></div>
+            <div class="rt-row" style="margin-top:24px; border-top:1px solid var(--border-color); padding-top:24px;">
+                <span class="rt-label">Amount Paid</span><span class="rt-val highlight" id="rt-amt">--</span>
+            </div>
+            <div class="rt-row"><span class="rt-label">Payment Status</span><span class="rt-val highlight">PAID</span></div>
+        </div>
+
+        <div class="sc-actions no-print">
+            <button class="sc-btn sc-btn-primary" onclick="window.print()">Download / Print Receipt</button>
+            <a href="hero.html" class="sc-btn sc-btn-outline">Return to Home</a>
+        </div>
+    </div>
+
+    <!-- EDITORIAL SECTION -->
+    <section class="ed-divider reveal-up no-print" id="ed-divider">
+        <div class="ed-div-quote">"Review your consultation details carefully before completing your payment."</div>
+        <div class="ed-div-sub">Clarity Before Confirmation</div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer no-print">
+        <div class="footer-brand">KRITIMALVIYA</div>
+        <div class="footer-nav">
+            <a href="hero.html" class="footer-link">Home</a>
+            <a href="hero.html#advocate" class="footer-link">Advocate Kritimalviya</a>
+            <a href="gallery.html" class="footer-link">Photo Gallery</a>
+            <a href="awards.html" class="footer-link">Awards & Achievements</a>
+            <a href="vlog.html" class="footer-link">Vlog</a>
+            <a href="blog.html" class="footer-link">Blog</a>
+            <a href="hero.html#about-us" class="footer-link">About Us</a>
+        </div>
+        <div class="footer-copy">Premium Legal & Relationship Counselling</div>
+    </footer>
+
+    <!-- ==================================================
+         JAVASCRIPT
+         ================================================== -->
+    <script>
+        // ==========================================
+        // PAYMENT SETTINGS — EDIT THIS SECTION
+        // ==========================================
+        const paymentSettings = {
+            currency: "INR",
+            currencySymbol: "₹",
+            bookingFee: 1000, // Explicitly fixed to 1000 as requested
+            taxEnabled: false,
+            taxRate: 0, 
+            gateway: "PHONEPE",
+            paymentMode: "TEST", // Set to "LIVE" for production
+            requirePaymentBeforeConfirmation: true
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            /* --- SCROLL REVEAL --- */
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+
+            /* --- DOM ELEMENTS --- */
+            const stateUnavailable = document.getElementById('unavailable-state');
+            const stateCheckout = document.getElementById('checkout-state');
+            const stateSuccess = document.getElementById('success-state');
+            const edDivider = document.getElementById('ed-divider');
+            
+            const btnPay = document.getElementById('btn-pay');
+            const btnAmt = document.getElementById('btn-amt');
+            const statusBox = document.getElementById('py-status');
+            
+            // Payment State Model: PENDING, REDIRECTING, PROCESSING, PAID, FAILED, CANCELLED, VERIFICATION_PENDING
+            let paymentState = "PENDING";
+            let activeBooking = null;
+            let paymentTotals = { subtotal: 0, tax: 0, total: 0 };
+
+
+            /* --- INITIALIZATION & DATA LOADING --- */
+            function init() {
+                // Test Mode Setup
+                if(paymentSettings.paymentMode === "TEST") {
+                    document.getElementById('test-banner').style.display = 'block';
+                    document.getElementById('dev-mock-btn').style.display = 'inline-block';
+                }
+
+                // Load booking data
+                const storedData = sessionStorage.getItem('km_booking_data');
+                
+                if(!storedData) {
+                    showUnavailableState();
+                } else {
+                    try {
+                        activeBooking = JSON.parse(storedData);
+                        // Prevent re-paying an already paid booking
+                        if(activeBooking.status === "PAID") {
+                            showUnavailableState(); 
+                            return;
+                        }
+                        setupCheckout();
+                    } catch(e) {
+                        showUnavailableState();
+                    }
+                }
+            }
+
+            function showUnavailableState() {
+                stateCheckout.style.display = 'none';
+                stateSuccess.style.display = 'none';
+                edDivider.style.display = 'none';
+                stateUnavailable.style.display = 'block';
+                setTimeout(() => stateUnavailable.classList.add('in-view'), 100);
+            }
+
+            // Developer helper for testing UI without consultation.html
+            document.getElementById('dev-mock-btn').addEventListener('click', () => {
+                const mockData = {
+                    bookingId: `KM-20261010-${Math.floor(1000 + Math.random() * 9000)}`,
+                    consultationCategory: "Legal Consultation",
+                    consultationType: "Property Dispute",
+                    duration: 30,
+                    mode: "Online Consultation",
+                    dateDisplay: "10 October 2026",
+                    time: "17:00 PM",
+                    name: "Rahul Sharma",
+                    email: "rahul@example.com",
+                    phone: "9876543210",
+                    status: "PENDING_PAYMENT"
+                };
+                sessionStorage.setItem('km_booking_data', JSON.stringify(mockData));
+                location.reload();
+            });
+
+
+            /* --- AMOUNT CALCULATION --- */
+            function calculatePaymentAmount() {
+                // Hardcoded to fixed 1000 per request, ignoring any previous dynamic duration calc
+                const subtotal = 1000; 
+                let tax = 0;
+                if(paymentSettings.taxEnabled) {
+                    tax = subtotal * paymentSettings.taxRate;
+                }
+                const total = subtotal + tax;
+                
+                return { subtotal, tax, total };
+            }
+
+            function formatCurrency(amount) {
+                return `${paymentSettings.currencySymbol}${amount.toLocaleString('en-IN')}`;
+            }
+
+
+            /* --- SETUP CHECKOUT UI --- */
+            function setupCheckout() {
+                stateUnavailable.style.display = 'none';
+                stateSuccess.style.display = 'none';
+                stateCheckout.style.display = 'block';
+
+                // Populate Summary from booking object
+                document.getElementById('sum-cat').textContent = activeBooking.consultationCategory || '--';
+                document.getElementById('sum-type').textContent = activeBooking.consultationType || '--';
+                document.getElementById('sum-date').textContent = activeBooking.dateDisplay || '--';
+                document.getElementById('sum-time').textContent = activeBooking.time || '--';
+                document.getElementById('sum-dur').textContent = activeBooking.duration ? `${activeBooking.duration} Minutes` : '--';
+                document.getElementById('sum-mode').textContent = activeBooking.mode || '--';
+                document.getElementById('sum-ref').textContent = activeBooking.bookingId || '--';
+
+                // Calculate Totals
+                paymentTotals = calculatePaymentAmount();
+                
+                document.getElementById('sum-fee').textContent = formatCurrency(paymentTotals.subtotal);
+                document.getElementById('sum-total').textContent = formatCurrency(paymentTotals.total);
+                btnAmt.textContent = formatCurrency(paymentTotals.total);
+
+                if(paymentSettings.taxEnabled) {
+                    document.getElementById('sum-tax-row').style.display = 'flex';
+                    document.getElementById('sum-tax').textContent = formatCurrency(paymentTotals.tax);
+                }
+            }
+
+
+            /* --- STATUS MANAGEMENT --- */
+            function updateStatusUI(message, type) {
+                statusBox.className = `py-status ${type}`;
+                statusBox.textContent = message;
+            }
+
+            function resetStatusUI() {
+                statusBox.style.display = 'none';
+                statusBox.className = 'py-status';
+            }
+
+
+            /* --- BACKEND INTEGRATION PLACEHOLDERS --- */
+            
+            // FUTURE SUPABASE EDGE FUNCTION: Create PhonePe Order & Get Redirect URL
+            async function createPaymentOrder(bookingData) {
+                /*
+                  Requires Server:
+                  1. Verify booking exists and is PENDING.
+                  2. Call PhonePe Pay API (S2S) to generate intent/redirect URL.
+                  3. Return the redirect URL and transaction ID to frontend.
+                */
+                return new Promise(resolve => {
+                    setTimeout(() => resolve({
+                        transactionId: `T${Date.now()}`,
+                        redirectUrl: "https://phonepe.com/simulated-redirect"
+                    }), 1200);
+                });
+            }
+
+            // FUTURE SERVER-SIDE VERIFICATION
+            async function verifyPayment(transactionId) {
+                /*
+                  Requires Server:
+                  1. PhonePe calls backend S2S callback with success status.
+                  2. Frontend pings backend to check if transactionId is marked PAID in database.
+                  NEVER trust frontend verification.
+                */
+                return new Promise((resolve) => {
+                    setTimeout(() => resolve(true), 1500);
+                });
+            }
+
+
+            /* --- MAIN PAYMENT FLOW --- */
+            btnPay.addEventListener('click', async () => {
+                if(paymentState === "REDIRECTING" || paymentState === "PROCESSING") return;
+
+                if(!activeBooking) {
+                    updateStatusUI("Booking data missing. Please restart.", "error");
+                    return;
+                }
+
+                paymentState = "REDIRECTING";
+                btnPay.disabled = true;
+                btnPay.innerHTML = `CONNECTING TO PHONEPE... <svg style="margin-left:8px; animation: spin 1s linear infinite;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v4"></path></svg>`;
+                resetStatusUI();
+
+                try {
+                    // 1. Request Order/Intent from Backend
+                    const orderData = await createPaymentOrder(activeBooking);
+
+                    // 2. Handle TEST Mode vs LIVE Mode
+                    if(paymentSettings.paymentMode === "TEST") {
+                        updateStatusUI("Test Mode: Redirect simulated. Choose a callback option below.", "pending");
+                        document.getElementById('test-controls').style.display = 'block';
+                        btnPay.innerHTML = `WAITING FOR PAYMENT...`;
+                        paymentState = "PROCESSING";
+                    } else {
+                        // LIVE MODE: Redirect user to PhonePe Gateway URL
+                        // window.location.href = orderData.redirectUrl;
+                        updateStatusUI("Live gateway integration required.", "error");
+                        resetPayButton();
+                    }
+
+                } catch(err) {
+                    paymentState = "FAILED";
+                    updateStatusUI("Could not initialize payment. Please try again.", "error");
+                    resetPayButton();
+                }
+            });
+
+
+            /* --- POST-PAYMENT HANDLERS (Simulated Callbacks) --- */
+            
+            async function handleGatewaySuccessCallback(transactionId) {
+                paymentState = "VERIFICATION_PENDING";
+                btnPay.innerHTML = `VERIFYING PAYMENT...`;
+                document.getElementById('test-controls').style.display = 'none';
+                updateStatusUI("Payment received by PhonePe. Verifying with server...", "pending");
+
+                try {
+                    const isValid = await verifyPayment(transactionId);
+                    if(isValid) {
+                        handleSuccess(transactionId);
+                    } else {
+                        paymentState = "FAILED";
+                        updateStatusUI("Payment verification failed. If money was deducted, contact support.", "error");
+                        resetPayButton();
+                    }
+                } catch(err) {
+                    paymentState = "VERIFICATION_PENDING";
+                    updateStatusUI("Verification delayed. Please check email for confirmation before retrying.", "error");
+                    resetPayButton();
+                }
+            }
+
+            function handleGatewayCancel() {
+                paymentState = "CANCELLED";
+                document.getElementById('test-controls').style.display = 'none';
+                updateStatusUI("Payment was cancelled or failed. You can try again.", "error");
+                resetPayButton();
+            }
+
+            function handleSuccess(paymentRefId) {
+                paymentState = "PAID";
+                activeBooking.status = "PAID";
+                sessionStorage.setItem('km_booking_data', JSON.stringify(activeBooking));
+
+                // Populate Receipt UI
+                document.getElementById('rt-ref').textContent = activeBooking.bookingId;
+                document.getElementById('rt-pay-ref').textContent = paymentRefId;
+                document.getElementById('rt-name').textContent = activeBooking.name || '--';
+                document.getElementById('rt-type').textContent = `${activeBooking.consultationCategory} - ${activeBooking.consultationType}`;
+                document.getElementById('rt-datetime').textContent = `${activeBooking.dateDisplay}, ${activeBooking.time}`;
+                document.getElementById('rt-mode').textContent = activeBooking.mode;
+                document.getElementById('rt-amt').textContent = formatCurrency(paymentTotals.total);
+
+                // Switch UI State smoothly
+                stateCheckout.style.display = 'none';
+                edDivider.style.display = 'none';
+                stateSuccess.style.display = 'block';
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                
+                // Trigger reveal for success elements
+                setTimeout(() => {
+                    document.querySelector('.receipt-box').style.animation = "fadeIn 0.8s var(--ease-out-expo)";
+                }, 100);
+            }
+
+            function resetPayButton() {
+                btnPay.disabled = false;
+                btnPay.innerHTML = `PAY ${formatCurrency(paymentTotals.total)}`;
+            }
+
+
+            /* --- TEST MODE SIMULATION CONTROLS --- */
+            document.getElementById('btn-sim-success').addEventListener('click', () => {
+                if(paymentState !== "PROCESSING") return;
+                handleGatewaySuccessCallback(`PP_TEST_${Math.floor(Math.random()*100000000)}`);
+            });
+
+            document.getElementById('btn-sim-fail').addEventListener('click', () => {
+                if(paymentState !== "PROCESSING") return;
+                paymentState = "FAILED";
+                document.getElementById('test-controls').style.display = 'none';
+                updateStatusUI("PhonePe reported payment failure. Please check your balance and try again.", "error");
+                resetPayButton();
+            });
+
+            document.getElementById('btn-sim-cancel').addEventListener('click', () => {
+                if(paymentState !== "PROCESSING") return;
+                handleGatewayCancel();
+            });
+
+            // Add CSS animation for spinning loading icon
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+            document.head.appendChild(styleSheet);
+
+            // Run Init
+            init();
+        });
+    </script>
+</body>
+</html>

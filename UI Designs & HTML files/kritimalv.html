@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adv. Kriti Malviya - Premium Legal & Relationship Counselling</title>
+    
+    <!-- Google Fonts: DM Serif Display (Editorial Serif) & Inter (Clean Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- =========================
+         STYLES
+    ========================= -->
+    <style>
+        /* GLOBAL VARIABLES */
+        :root {
+            /* Existing Hero Variables */
+            --bg-color: #FAFAFA;
+            --surface-color: #F1F1F3;
+            --text-primary: #121212;
+            --text-secondary: #6B6B6B;
+            --text-light: #A0A0A0;
+            --white: #FFFFFF;
+            --border-color: rgba(0, 0, 0, 0.08);
+
+            /* EDITORIAL PALETTE (Gold/Cream/Black) */
+            --gold: #B89B52;
+            --gold-light: #D8C27A;
+            --pastel-yellow: #F3E7A3; 
+            --cream: #F7F5EF;
+            --off-white: #FCFBF7;
+            --black: #111111;
+            --muted: #6E6A60;
+
+            --font-serif: 'DM Serif Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: 0.5s var(--ease-out-expo);
+            --transition-slow: 1.6s var(--ease-out-expo);
+            
+            --noise-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            --noise-rough: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-sans); background-color: var(--bg-color); color: var(--text-primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; position: relative; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.025; background-image: var(--noise-fine); }
+
+        /* =========================
+           EXISTING HEADER (UNTOUCHED)
+        ========================= */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 24px 5%; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 200; }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-primary); overflow: hidden; z-index: 201; }
+        .brand-logo { width: 32px; height: 32px; object-fit: contain; border-radius: 50%; }
+        .brand-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em; }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link, .nav-btn { text-decoration: none; color: var(--text-primary); font-size: 0.9rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; position: relative; padding: 8px 0; transition: color var(--transition-smooth); display: inline-flex; align-items: center; gap: 6px; }
+        .nav-link::after, .nav-btn::after { content: ''; position: absolute; width: 100%; height: 6px; background-color: var(--pastel-yellow); bottom: 4px; left: 0; opacity: 0; z-index: -1; transform: translateY(10px); transition: all var(--transition-smooth); }
+        .nav-link:hover::after, .nav-btn:hover::after, .nav-btn[aria-expanded="true"]::after { opacity: 1; transform: translateY(0); }
+
+        .dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px); background: rgba(250, 250, 250, 0.95); backdrop-filter: blur(12px); min-width: 260px; border-radius: var(--radius-md); box-shadow: 0 24px 48px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.02); border: 1px solid var(--border-color); padding: 16px 0; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo), filter 0.4s ease; filter: blur(8px); z-index: 100; display: flex; flex-direction: column; }
+        .dropdown-menu.is-active { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(8px); filter: blur(0); }
+        .dropdown-item { display: block; padding: 10px 24px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: all 0.3s ease; position: relative; z-index: 1; background: transparent; }
+        .dropdown-item::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--pastel-yellow); opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: scaleY(0.5); }
+        .dropdown-item:hover { color: var(--text-primary); background: rgba(0,0,0,0.02); padding-left: 28px; }
+        .dropdown-item:hover::before { opacity: 1; transform: scaleY(1); }
+
+        .header-actions { display: flex; align-items: center; gap: 24px; }
+        .header-cta { background: var(--text-primary); color: var(--white); text-decoration: none; padding: 12px 24px; border-radius: 100px; font-size: 0.9rem; font-weight: 500; position: relative; overflow: hidden; transition: transform var(--transition-smooth); }
+        .header-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: var(--noise-rough); opacity: 0.15; mix-blend-mode: overlay; pointer-events: none; }
+        .header-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .menu-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; position: relative; z-index: 250; border-radius: 50%; transition: background var(--transition-smooth); }
+        .menu-toggle:hover { background: rgba(243, 231, 163, 0.3); }
+        .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--text-primary); transition: all 0.4s var(--ease-out-expo); transform-origin: center; }
+        .menu-toggle.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-toggle.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* =========================
+           EXISTING PREMIUM EDITORIAL SIDE MENU (UNTOUCHED)
+        ========================= */
+        .menu-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(10, 10, 10, 0.25); 
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
+            z-index: 205; opacity: 0; pointer-events: none; 
+            transition: opacity 0.6s ease; 
+        }
+        .menu-overlay.is-active { opacity: 1; pointer-events: auto; }
+
+        .side-menu-panel { 
+            position: fixed; top: 0; right: 0; 
+            width: 440px; max-width: 92vw; height: 100vh; 
+            background-color: var(--cream); 
+            background-image: var(--noise-fine);
+            border-left: 1px solid rgba(184, 155, 82, 0.2);
+            padding: 50px; 
+            z-index: 210; 
+            transform: translateX(100%); 
+            opacity: 0; 
+            transition: transform 0.7s var(--ease-out-expo), opacity 0.5s ease; 
+            overflow-y: auto; 
+            box-shadow: -20px 0 60px rgba(0,0,0,0.08); 
+            display: flex; flex-direction: column; 
+        }
+        .side-menu-panel.is-open { transform: translateX(0); opacity: 1; }
+
+        .menu-bg-letter { position: absolute; bottom: -5%; right: -10%; font-family: var(--font-serif); font-size: 40rem; color: var(--black); opacity: 0.03; z-index: 0; pointer-events: none; line-height: 0.8; user-select: none; }
+        .menu-dec-plus { position: absolute; top: 52px; left: 20px; font-family: var(--font-sans); font-size: 1rem; color: var(--gold); opacity: 0.6; pointer-events: none; }
+
+        .menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 2; }
+        .menu-label { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); font-weight: 600; }
+        .menu-close { background: none; border: none; font-size: 2.4rem; line-height: 1; color: var(--black); cursor: pointer; transition: transform 0.4s var(--ease-out-expo), color 0.3s; font-family: var(--font-sans); font-weight: 300; padding: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+        .menu-close:hover { transform: rotate(90deg) scale(1.1); color: var(--gold); }
+        .menu-divider { width: 100%; height: 1px; background: var(--gold-light); opacity: 0.3; margin-bottom: 40px; position: relative; z-index: 2; }
+
+        .side-nav-links { display: flex; flex-direction: column; gap: 28px; position: relative; z-index: 2; }
+        .side-link { display: flex; align-items: center; text-decoration: none; position: relative; padding-bottom: 6px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo); }
+        .side-menu-panel.is-open .side-link { opacity: 1; transform: translateY(0); }
+        .side-menu-panel .side-link:nth-child(1) { transition-delay: 0.10s; }
+        .side-menu-panel .side-link:nth-child(2) { transition-delay: 0.15s; }
+        .side-menu-panel .side-link:nth-child(3) { transition-delay: 0.20s; }
+        .side-menu-panel .side-link:nth-child(4) { transition-delay: 0.25s; }
+        .side-menu-panel .side-link:nth-child(5) { transition-delay: 0.30s; }
+        .side-menu-panel .side-link:nth-child(6) { transition-delay: 0.35s; }
+        .side-menu-panel .side-link:nth-child(7) { transition-delay: 0.40s; }
+
+        .menu-num { font-family: var(--font-sans); font-size: 0.85rem; color: var(--muted); margin-right: 20px; transition: color 0.4s ease; font-weight: 500; }
+        .menu-text { font-family: var(--font-serif); font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--black); line-height: 1.2; transition: transform 0.4s var(--ease-out-expo), color 0.3s; }
+        .menu-arrow { position: absolute; right: 0; font-family: var(--font-sans); font-size: 1.2rem; color: var(--gold); opacity: 0; transform: translateX(-10px); transition: all 0.4s var(--ease-out-expo); }
+        .side-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-out-expo); }
+        .side-link:hover .menu-text { transform: translateX(6px); color: var(--black); }
+        .side-link:hover .menu-num { color: var(--gold); }
+        .side-link:hover .menu-arrow { opacity: 1; transform: translateX(0); }
+        .side-link:hover::after { transform: scaleX(1); }
+
+        .menu-footer { margin-top: auto; padding-top: 50px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease 0.45s, transform 0.5s var(--ease-out-expo) 0.45s; }
+        .side-menu-panel.is-open .menu-footer { opacity: 1; transform: translateY(0); }
+        .menu-footer-line { width: 40px; height: 2px; background: var(--gold); margin-bottom: 24px; }
+        .menu-footer-title { font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--black); font-weight: 600; margin-bottom: 6px; }
+        .menu-footer-desc { font-family: var(--font-serif); font-size: 1.1rem; color: var(--muted); line-height: 1.4; }
+
+        /* =========================
+           EXISTING HERO (UNTOUCHED)
+        ========================= */
+        .hero-section { padding: 20px 5% 0px; max-width: 1600px; margin: 0 auto; }
+        .hero-container { background-color: var(--surface-color); border-radius: var(--radius-lg); display: flex; flex-direction: row; min-height: 75vh; position: relative; padding: 80px 80px 80px 100px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4); }
+        .hero-content { flex: 1.1; display: flex; flex-direction: column; justify-content: center; z-index: 2; max-width: 650px; }
+        .hero-title { font-family: var(--font-serif); font-size: 5.5rem; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; font-weight: 400; }
+        .reveal-wrap { overflow: hidden; display: block; padding-bottom: 4px; }
+        .title-dark { color: var(--text-primary); display: inline-block; }
+        .title-light { color: var(--text-light); display: inline-block; }
+        .title-highlight { position: relative; display: inline-block; }
+        .title-highlight::after { content: ''; position: absolute; left: -2%; bottom: 12%; width: 104%; height: 35%; background-color: var(--pastel-yellow); z-index: -1; border-radius: 4px; opacity: 0.8; transform-origin: left; transform: scaleX(0); }
+        .is-visible .title-highlight::after { animation: highlightSweep 1s var(--ease-out-expo) forwards; animation-delay: 1s; }
+        .hero-desc { font-size: 1.125rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 40px; max-width: 85%; font-weight: 400; }
+        .hero-actions { display: flex; gap: 16px; margin-bottom: 60px; }
+        .btn { padding: 16px 32px; border-radius: 100px; font-size: 1rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all var(--transition-smooth); cursor: pointer; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: var(--noise-rough); pointer-events: none; z-index: 1; }
+        .btn span { position: relative; z-index: 2; }
+        .btn-primary { background-color: var(--text-primary); color: var(--white); border: 1px solid var(--text-primary); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); }
+        .btn-primary::before { opacity: 0.2; mix-blend-mode: color-dodge; }
+        .btn-primary:hover { background-color: #222; box-shadow: 0 12px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1); transform: translateY(-2px) scale(1.01); }
+        .btn-secondary { background-color: rgba(255,255,255,0.6); color: var(--text-primary); border: 1px solid rgba(0,0,0,0.1); backdrop-filter: blur(8px); }
+        .btn-secondary::before { opacity: 0.1; mix-blend-mode: multiply; }
+        .btn-secondary:hover { background-color: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.2); transform: translateY(-2px) scale(1.01); box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+        .hero-stats { display: flex; gap: 48px; border-top: 1px solid var(--border-color); padding-top: 32px; }
+        .stat-item { display: flex; flex-direction: column; gap: 8px; }
+        .stat-value { font-family: var(--font-serif); font-size: 2.2rem; color: var(--text-primary); line-height: 1; }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; line-height: 1.4; }
+        .hero-visual { flex: 0.9; position: relative; display: flex; align-items: flex-end; justify-content: flex-end; z-index: 1; }
+        .hero-image-wrapper { position: absolute; bottom: 0; right: -8%; width: 130%; height: 110%; pointer-events: none; display: flex; align-items: flex-end; justify-content: flex-end; transform-origin: bottom center; }
+        .hero-image-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; mix-blend-mode: multiply; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%); mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%); }
+        .floating-card { position: absolute; bottom: 24px; left: 20px; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 28px; border-radius: var(--radius-md); width: 320px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.8); text-decoration: none; color: var(--text-primary); transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s var(--ease-out-expo); z-index: 10; }
+        .floating-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: var(--noise-fine); opacity: 0.5; mix-blend-mode: multiply; border-radius: inherit; pointer-events: none; }
+        .floating-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 32px 64px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.8); }
+        .card-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; position: relative; }
+        .card-tag::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--pastel-yellow); }
+        .card-title, .card-desc { position: relative; z-index: 2; }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        .card-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px; }
+        .card-action { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: var(--white); border-radius: var(--radius-sm); box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-left: auto; color: var(--text-primary); transition: transform var(--transition-smooth); position: relative; z-index: 2; }
+        .floating-card:hover .card-action { transform: scale(1.1) translateX(4px) translateY(-4px); }
+
+        .anim-fade { opacity: 0; } .anim-peek { transform: translateY(110%) rotate(2deg); opacity: 0; transform-origin: top left; } .anim-up { opacity: 0; transform: translateY(40px); } .anim-portrait { opacity: 0; transform: translateX(150px) scale(1.08); filter: blur(12px); }
+        .is-visible.anim-fade { animation: fadeIn 1.2s var(--ease-out-expo) forwards; } .is-visible .anim-peek { animation: textPeekReveal 1.2s var(--ease-out-expo) forwards; } .is-visible.anim-up { animation: slideUpFade 1.2s var(--ease-out-expo) forwards; } .is-visible.anim-portrait { animation: portraitEntrance var(--transition-slow) forwards; }
+        .d-1 { animation-delay: 0.1s !important; } .d-2 { animation-delay: 0.2s !important; } .d-3 { animation-delay: 0.3s !important; } .d-4 { animation-delay: 0.4s !important; } .d-5 { animation-delay: 0.5s !important; } .d-6 { animation-delay: 0.6s !important; } .d-7 { animation-delay: 0.9s !important; } .d-8 { animation-delay: 1.1s !important; }
+        @keyframes fadeIn { to { opacity: 1; } } @keyframes textPeekReveal { 0% { transform: translateY(110%) rotate(2deg); opacity: 0; } 100% { transform: translateY(0) rotate(0deg); opacity: 1; } } @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } } @keyframes portraitEntrance { 0% { opacity: 0; transform: translateX(150px) scale(1.08); filter: blur(12px); } 100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); } } @keyframes highlightSweep { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } } @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0); } }
+        .is-visible.anim-float-active { animation: slideUpFade 1.2s var(--ease-out-expo) forwards, float 6s ease-in-out infinite 1.2s; }
+
+        @media (max-width: 1100px) {
+            .hero-title { font-size: 4rem; }
+            .hero-container { padding: 60px 40px 60px 60px; }
+            .hero-image-wrapper { right: -5%; width: 120%; }
+            .floating-card { width: 280px; padding: 24px; bottom: 20px; left: 10px; }
+            .nav-links, .header-cta { display: none; }
+        }
+        @media (max-width: 900px) {
+            .hero-container { flex-direction: column; padding: 60px 40px 0; overflow: hidden; }
+            .hero-content { max-width: 100%; margin-bottom: 40px; flex: none; }
+            .hero-title { font-size: 3.5rem; }
+            .hero-visual { width: 100%; height: 400px; justify-content: center; flex: none; }
+            .hero-image-wrapper { position: relative; width: 100%; height: 100%; right: 0; justify-content: center; }
+            .hero-image-wrapper img { object-position: bottom center; -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%); mask-image: linear-gradient(to top, black 80%, transparent 100%); }
+            .floating-card { position: relative; bottom: 20px; left: 0; width: 100%; margin-top: -60px; z-index: 10; }
+        }
+        @media (max-width: 600px) {
+            .hero-title { font-size: 2.8rem; }
+            .hero-stats { flex-direction: column; gap: 24px; }
+            .hero-actions { flex-direction: column; width: 100%; }
+            .btn { width: 100%; }
+            .hero-container { padding: 40px 20px 0; border-radius: 24px; }
+            .side-menu-panel { width: 100%; padding-left: 30px; padding-right: 30px; }
+        }
+
+        /* =========================
+           CLOUD / MIST TRANSITION (UNTOUCHED)
+        ========================= */
+        .mist-transition { position: relative; width: 100%; height: 250px; margin-top: -120px; z-index: 5; pointer-events: none; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; opacity: 0; }
+        .mist-shape { position: absolute; background: var(--off-white); border-radius: 50%; opacity: 0.95; filter: blur(60px); will-change: transform; }
+        .mist-1 { width: 80vw; height: 300px; left: -10vw; bottom: -150px; transform: rotate(-5deg); }
+        .mist-2 { width: 70vw; height: 250px; right: -15vw; bottom: -100px; transform: rotate(8deg); }
+        .mist-3 { width: 50vw; height: 200px; left: 30vw; bottom: -80px; opacity: 0.8; }
+
+        /* =========================
+           ULTRA-COMPACT EDITORIAL ABOUT SECTION (UNTOUCHED)
+        ========================= */
+        .editorial-section { background-color: var(--off-white); color: var(--black); padding: 40px 5% 100px; position: relative; z-index: 10; }
+        .ed-container { max-width: 1400px; margin: 0 auto; position: relative; }
+        .scroll-obj { opacity: 0; will-change: transform, opacity; transform-origin: center center; }
+        .ed-master-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .ed-cell-text { display: flex; flex-direction: column; gap: 32px; padding-top: 20px; }
+        .ed-huge-title { font-family: var(--font-serif); font-size: clamp(3.5rem, 8vw, 6.5rem); line-height: 0.9; letter-spacing: -0.04em; text-transform: uppercase; color: var(--black); margin: 0; }
+        .ed-highlight-box { padding-left: 30px; border-left: 2px solid var(--gold); max-width: 550px; }
+        .ed-paragraph { font-size: 1.1rem; line-height: 1.7; color: var(--muted); margin-bottom: 20px; }
+        .ed-paragraph:last-child { margin-bottom: 0; }
+        .ed-highlight-strong { font-family: var(--font-serif); font-size: 1.8rem; color: var(--black); line-height: 1.3; margin-top: 24px; }
+        .ed-stats-compact { display: flex; flex-wrap: wrap; gap: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+        .ed-stat-col { display: flex; flex-direction: column; }
+        .ed-stat-num { font-family: var(--font-serif); font-size: 3.5rem; line-height: 1; color: var(--black); margin-bottom: 4px; }
+        .ed-stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 600; }
+        .ed-cell-main-img { position: relative; height: 100%; min-height: 950px; max-height: 75vh; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+        .ed-cell-main-img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .ed-img-bg-accent { position: absolute; top: 20px; right: -20px; width: 80%; height: 100%; background: var(--cream); z-index: -1; }
+        .ed-cell-practice { grid-column: 1 / -1; background: var(--white); padding: 40px 60px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 20px; }
+        .ed-practice-block h3 { font-family: var(--font-serif); font-size: 2rem; color: var(--black); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--gold-light); }
+        .ed-practice-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .ed-practice-list li { font-size: 1.05rem; color: var(--muted); display: flex; align-items: flex-start; gap: 12px; }
+        .ed-practice-list li::before { content: '—'; color: var(--gold); font-weight: bold; }
+        .ed-cell-gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); grid-auto-rows: 320px; gap: 24px; grid-auto-flow: dense; margin-top: 20px; width: 100%; }
+        .ed-gallery-img { width: 100%; height: 100%; border-radius: 6px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .ed-gallery-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-out-expo); }
+        .ed-gallery-img:hover img { transform: scale(1.05); }
+        .ed-span-2 { grid-column: span 2; }
+        .ed-row-span-2 { grid-row: span 2; }
+        .ed-cell-quote { grid-column: 1 / -1; position: relative; padding: 80px 0 60px; text-align: center; }
+        .ed-quote-mark { font-family: var(--font-serif); font-size: 12rem; color: var(--pastel-yellow); position: absolute; top: 10px; left: 50%; transform: translateX(-50%); line-height: 1; z-index: 0; pointer-events: none; opacity: 0.4; }
+        .ed-quote-text { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.25; color: var(--black); position: relative; z-index: 1; font-style: italic; max-width: 900px; margin: 0 auto; }
+        .ed-cell-gold { grid-column: 1 / -1; background: var(--gold); border-radius: 8px; padding: 60px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; margin-bottom: -60px; }
+        .ed-gold-heading { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; color: var(--black); text-transform: uppercase; margin-bottom: 12px; }
+        @media (max-width: 900px) { .ed-master-grid { grid-template-columns: 1fr; gap: 60px; } .ed-cell-main-img { min-height: 400px; } .ed-cell-practice { grid-template-columns: 1fr; padding: 40px 30px; } .ed-cell-gold { padding: 40px; justify-content: center; text-align: center; } .ed-span-2 { grid-column: span 1; } }
+        @media (max-width: 600px) { .ed-stats-compact { gap: 20px; } .ed-stat-num { font-size: 2.5rem; } .ed-cell-gallery { grid-template-columns: 1fr; grid-auto-rows: 280px; } }
+
+        /* =========================
+           NEW ABOUT US SECTION
+        ========================= */
+        .about-us-section {
+            background-color: var(--cream);
+            color: var(--black);
+            padding: 120px 5%;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            border-top: 1px solid rgba(184, 155, 82, 0.2);
+        }
+
+        .about-us-bg-mark {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-serif);
+            font-size: 60vh;
+            color: var(--gold);
+            opacity: 0.03;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .about-us-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-us-top {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 60px;
+            margin-bottom: 80px;
+            align-items: flex-start;
+        }
+
+        .about-us-header {
+            flex: 1 1 300px;
+        }
+
+        .about-us-heading {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            color: var(--black);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .about-us-line {
+            width: 60px;
+            height: 2px;
+            background-color: var(--gold);
+        }
+
+        .about-us-intro {
+            flex: 2 1 500px;
+        }
+
+        .about-us-subheading {
+            font-family: var(--font-serif);
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            line-height: 1.4;
+            color: var(--black);
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .about-us-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--muted);
+        }
+
+        .about-us-blocks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+
+        .about-us-block {
+            flex: 1 1 400px;
+            background: var(--white);
+            padding: 60px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+            border-top: 3px solid var(--gold);
+            position: relative;
+        }
+
+        .about-us-block-label {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .about-us-block-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .about-us-block-desc {
+            font-size: 1.05rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .about-us-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(184, 155, 82, 0.2);
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .about-us-closing {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.2;
+            color: var(--black);
+        }
+
+        /* Isolated Reversible Animation CSS */
+        .au-scroll-anim {
+            opacity: 0;
+            will-change: transform, opacity;
+            transform-origin: center center;
+        }
+
+        @media (max-width: 900px) {
+            .about-us-section { padding: 80px 5%; }
+            .about-us-top { gap: 40px; margin-bottom: 60px; }
+            .about-us-blocks { gap: 30px; margin-bottom: 80px; }
+            .about-us-block { padding: 40px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================
+         HEADER (UNTOUCHED)
+    ========================= -->
+    <header class="header anim-fade d-1" id="anim-target-1">
+        <a href="#top" class="brand" id="home-link">
+            <img src="lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <nav class="nav-links">
+            <div class="nav-item">
+                <button class="nav-btn" id="nav-home">HOME</button>
+            </div>
+
+            <!-- RELATIONSHIP COUNSELLING DROPDOWN -->
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="rel-dropdown">
+                    RELATIONSHIP CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="rel-dropdown">
+                    <a href="#services" class="dropdown-item">ADHD</a>
+                    <a href="#services" class="dropdown-item">LBI CBT</a>
+                    <a href="#services" class="dropdown-item">Break-up Conselling</a>
+                    <a href="#services" class="dropdown-item">Couple Conselling</a>
+                    <a href="#services" class="dropdown-item">Teenage Conselling</a>
+                    <a href="#services" class="dropdown-item">Emotional Intelligence Conselling</a>
+                    <a href="#services" class="dropdown-item">Low Esteem Conselling</a>
+                    <a href="#services" class="dropdown-item">Trauma Recovery Conselling</a>
+                    <a href="#services" class="dropdown-item">Procastination</a>
+                    <a href="#services" class="dropdown-item">Psycho Theraphy</a>
+                    <a href="#services" class="dropdown-item">Gen-Z Conselling</a>
+                    <a href="#services" class="dropdown-item">Parenting</a>
+                </div>
+            </div>
+
+            <!-- LEGAL COUNSELLING DROPDOWN -->
+            <div class="nav-item">
+                <button class="nav-btn js-dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-target="leg-dropdown">
+                    LEGAL CONSELLING
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1L5 5L9 1"/></svg>
+                </button>
+                <div class="dropdown-menu" id="leg-dropdown">
+                    <a href="#services" class="dropdown-item">Divorce Guidance</a>
+                    <a href="#services" class="dropdown-item">Property Purchase</a>
+                    <a href="#services" class="dropdown-item">Civil Cases</a>
+                    <a href="#services" class="dropdown-item">Human Rights</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <a href="#consultation" class="header-cta"><span>Start a consultation</span></a>
+            
+            <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- =========================
+         PREMIUM EDITORIAL HAMBURGER MENU PANEL (UNTOUCHED)
+    ========================= -->
+    <div class="menu-overlay"></div>
+    <aside class="side-menu-panel">
+        <div class="menu-bg-letter">K</div>
+        <div class="menu-dec-plus">+</div>
+        <div class="menu-top">
+            <span class="menu-label">MENU</span>
+            <button class="menu-close close-on-click" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="menu-divider"></div>
+        <nav class="side-nav-links">
+            <a href="#top" class="side-link close-on-click js-scroll-home">
+                <span class="menu-num">01</span>
+                <span class="menu-text">Home</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#advocate" class="side-link close-on-click">
+                <span class="menu-num">02</span>
+                <span class="menu-text">Advocate Kritimalviya</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#photo-gallery" class="side-link close-on-click">
+                <span class="menu-num">03</span>
+                <span class="menu-text">Photo Gallery</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#awards" class="side-link close-on-click">
+                <span class="menu-num">04</span>
+                <span class="menu-text">Awards And Achivements</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#vlog" class="side-link close-on-click">
+                <span class="menu-num">05</span>
+                <span class="menu-text">Vlog</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#blog" class="side-link close-on-click">
+                <span class="menu-num">06</span>
+                <span class="menu-text">Blog</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+            <a href="#about-us" class="side-link close-on-click">
+                <span class="menu-num">07</span>
+                <span class="menu-text">About US</span>
+                <span class="menu-arrow">&rarr;</span>
+            </a>
+        </nav>
+        <div class="menu-footer">
+            <div class="menu-footer-line"></div>
+            <div class="menu-footer-title">ADV. KRITI MALVIYA</div>
+            <div class="menu-footer-desc">Legal & Relationship<br>Counselling</div>
+        </div>
+    </aside>
+
+    <!-- =========================
+         HERO (UNTOUCHED)
+    ========================= -->
+    <div id="top"></div>
+    <main class="hero-section">
+        <section class="hero-container">
+            <div class="hero-content">
+                <div class="js-hero-title">
+                    <h1 class="hero-title" id="anim-target-2">
+                        <span class="reveal-wrap"><span class="title-dark anim-peek d-2"><span class="title-highlight">Guidance</span> Better</span></span>
+                        <span class="reveal-wrap"><span class="title-light anim-peek d-3">Clearer Smarter</span></span>
+                    </h1>
+                </div>
+                <div class="js-hero-desc">
+                    <p class="hero-desc anim-up d-4" id="anim-target-3">Thoughtful legal and relationship guidance for people who need clarity, confidence, and a better way forward.</p>
+                </div>
+                <div class="js-hero-actions">
+                    <div class="hero-actions anim-up d-5" id="anim-target-4">
+                        <a href="#services" class="btn btn-primary"><span>Explore Services</span></a>
+                        <a href="#contact" class="btn btn-secondary"><span>Get in touch</span></a>
+                    </div>
+                </div>
+                <div class="js-hero-stats">
+                    <div class="hero-stats anim-up d-6" id="anim-target-5">
+                        <div class="stat-item"><span class="stat-value">10+</span><span class="stat-label">Years of<br>Experience</span></div>
+                        <div class="stat-item"><span class="stat-value">500+</span><span class="stat-label">Clients<br>Guided</span></div>
+                        <div class="stat-item"><span class="stat-value">2</span><span class="stat-label">Core Practice<br>Areas</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="js-hero-img" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none;">
+                    <div class="hero-image-wrapper anim-portrait d-7" id="anim-target-6"><img src="NB_K2.png" alt="Kriti Malviya"></div>
+                </div>
+                <div class="js-hero-card" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10;">
+                    <a href="#consultation" class="floating-card anim-float-active d-8" id="anim-target-7" style="pointer-events: auto;">
+                        <div class="card-tag">Consultation</div>
+                        <h3 class="card-title">Need clarity?</h3>
+                        <p class="card-desc">Let's discuss your situation and find the right way forward.</p>
+                        <div class="card-action">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================
+         CLOUD / MIST TRANSITION (UNTOUCHED)
+    ========================= -->
+    <div class="mist-transition" id="mist-layer">
+        <div class="mist-shape mist-1"></div>
+        <div class="mist-shape mist-2"></div>
+        <div class="mist-shape mist-3"></div>
+    </div>
+
+    <!-- =========================
+         ULTRA-COMPACT EDITORIAL ABOUT SECTION (UNTOUCHED)
+    ========================= -->
+    <section class="editorial-section" id="advocate">
+        <div class="ed-container">
+            <div class="ed-master-grid">
+                <div class="ed-cell-text">
+                    <h2 class="ed-huge-title scroll-obj" data-y="60" data-x="-40">ABOUT ADV.<br>KRITI MALVIYA</h2>
+                    <div class="ed-highlight-box scroll-obj" data-y="50" data-x="-20" data-r="1">
+                        <p class="ed-paragraph">Adv. Kirti Malviya is a legal professional with 10+ years of experience across banking, property, contracts, documentation, family-related matters, and dispute resolution.[cite: 3, 4]</p>
+                        <p class="ed-paragraph">With 500+ banking search reports and 20+ mediations resolved, she combines professional legal guidance with a practical, client-focused approach.[cite: 4]</p>
+                        <div class="ed-highlight-strong">Clear guidance.<br>Practical solutions.<br>Confidential support.</div>
+                    </div>
+                    <div class="ed-stats-compact scroll-obj" data-y="40">
+                        <div class="ed-stat-col"><div class="ed-stat-num">10+</div><div class="ed-stat-label">Years Exp.[cite: 4]</div></div>
+                        <div class="ed-stat-col"><div class="ed-stat-num">500+</div><div class="ed-stat-label">Reports[cite: 4]</div></div>
+                        <div class="ed-stat-col"><div class="ed-stat-num">20+</div><div class="ed-stat-label">Mediations[cite: 4]</div></div>
+                    </div>
+                </div>
+                <div class="ed-cell-main-img scroll-obj" data-y="100" data-x="30" data-scale="0.95" data-r="-1">
+                    <div class="ed-img-bg-accent"></div>
+                    <img src="AboutMe.png" alt="Advocate Kriti Malviya Portrait">
+                </div>
+                <div class="ed-cell-practice scroll-obj" data-y="60" data-scale="0.98">
+                    <div class="ed-practice-block">
+                        <h3>Legal Practice</h3>
+                        <ul class="ed-practice-list">
+                            <li>Banking[cite: 3, 4]</li>
+                            <li>Property[cite: 3, 4]</li>
+                            <li>Contracts[cite: 3, 4]</li>
+                            <li>Documentation[cite: 3, 4]</li>
+                            <li>Family-related matters[cite: 3, 4]</li>
+                            <li>Dispute Resolution[cite: 3, 4]</li>
+                        </ul>
+                    </div>
+                    <div class="ed-practice-block">
+                        <h3>Relationship & Personal Counselling</h3>
+                        <p class="ed-paragraph" style="margin-bottom: 20px; font-size: 1.05rem;">Confidential support for individuals and couples dealing with:[cite: 6]</p>
+                        <ul class="ed-practice-list">
+                            <li>Communication difficulties[cite: 6]</li>
+                            <li>Relationship conflicts[cite: 6]</li>
+                            <li>Family concerns[cite: 6]</li>
+                            <li>Separation[cite: 6]</li>
+                            <li>Emotional decision-making[cite: 6]</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ed-cell-gallery">
+                    <div class="ed-gallery-img ed-span-2 scroll-obj" data-y="50" data-x="-20" data-r="-2">
+                        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800" alt="Law Office Detail">
+                    </div>
+                    <div class="ed-gallery-img scroll-obj" data-y="80" data-r="2">
+                        <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=800" alt="Legal Details">
+                    </div>
+                </div>
+                <div class="ed-cell-quote scroll-obj" data-y="70" data-scale="1.05">
+                    <div class="ed-quote-mark">&ldquo;</div>
+                    <div class="ed-quote-text">"Understand the situation, clarify the options, explain the implications, and help clients move forward with confidence."</div>
+                </div>
+                <div class="ed-cell-gold scroll-obj" data-y="40" data-x="30">
+                    <div class="ed-gold-heading">CLEAR GUIDANCE</div>
+                    <div class="ed-gold-heading" style="color: var(--white); mix-blend-mode: overlay;">PRACTICAL SOLUTIONS</div>
+                    <div class="ed-gold-heading">CONFIDENTIAL SUPPORT</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FUTURE SECTION ANCHORS -->
+    <div id="consultation"></div>
+    <div id="photo-gallery"></div>
+    <div id="awards"></div>
+    <div id="vlog"></div>
+    <div id="blog"></div>
+    <div id="services"></div>
+
+    <!-- =========================
+         NEW ABOUT US SECTION
+    ========================= -->
+    <section id="about-us" class="about-us-section">
+        <div class="about-us-bg-mark">AU</div>
+        <div class="about-us-container">
+            
+            <div class="about-us-top">
+                <div class="about-us-header au-scroll-anim" data-y="40">
+                    <!-- EDIT: ABOUT US HEADING -->
+                    <h2 class="about-us-heading">ABOUT US</h2>
+                    <div class="about-us-line"></div>
+                </div>
+                <div class="about-us-intro au-scroll-anim" data-y="60" data-x="20">
+                    <!-- EDIT: ABOUT US INTRODUCTION -->
+                    <h3 class="about-us-subheading">Legal Expertise. Personal Understanding. Practical Solutions.[cite: 8]</h3>
+                    <p class="about-us-text">With 10+ years of experience in legal practice, Kirti Malviya provides professional legal guidance across banking, property documentation, contracts, compliance and dispute-resolution matters.[cite: 8] Her professional experience includes banking and financial-sector assignments involving HDFC Bank, Canara Bank, Axis Bank and other institutions.[cite: 8]</p>
+                </div>
+            </div>
+
+            <div class="about-us-blocks">
+                <!-- EDIT: LEGAL GUIDANCE -->
+                <div class="about-us-block au-scroll-anim" data-y="80" data-x="-20">
+                    <div class="about-us-block-label">01</div>
+                    <h4 class="about-us-block-title">Legal Guidance</h4>
+                    <p class="about-us-block-desc">The approach combines professional legal understanding with empathetic counselling, while keeping each consultation confidential and solution-oriented.[cite: 8]</p>
+                </div>
+
+                <!-- EDIT: RELATIONSHIP COUNSELLING -->
+                <div class="about-us-block au-scroll-anim" data-y="80" data-x="20">
+                    <div class="about-us-block-label">02</div>
+                    <h4 class="about-us-block-title">Relationship Counselling</h4>
+                    <p class="about-us-block-desc">Alongside legal services, the practice now also offers relationship and personal counselling, creating a supportive space where individuals can discuss interpersonal concerns, communication difficulties, family-related situations and relationship challenges.[cite: 8]</p>
+                </div>
+            </div>
+
+            <!-- EDIT: CLOSING STATEMENT & CTA -->
+            <div class="about-us-bottom au-scroll-anim" data-y="60" data-scale="0.95">
+                <!-- EDIT: CLOSING STATEMENT -->
+                <div class="about-us-closing">
+                    Clear guidance.<br>
+                    Practical solutions.<br>
+                    Confidential support.
+                </div>
+                <!-- EDIT: ABOUT US CTA -->
+                <a href="#consultation" class="btn btn-primary"><span>Start a consultation</span></a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =========================
+         JAVASCRIPT (UNTOUCHED)
+    ========================= -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* --- 1. INITIAL HERO ANIMATIONS --- */
+            setTimeout(() => {
+                document.querySelectorAll('[id^="anim-target-"]').forEach(el => el.classList.add('is-visible'));
+            }, 150);
+
+
+            /* --- 2. DROPDOWN LOGIC --- */
+            const dropdownToggles = document.querySelectorAll('.js-dropdown-toggle');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+            
+            function closeDropdowns() {
+                allDropdowns.forEach(menu => menu.classList.remove('is-active'));
+                dropdownToggles.forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+            }
+
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetId = toggle.getAttribute('data-target');
+                    const targetMenu = document.getElementById(targetId);
+                    const isOpen = targetMenu.classList.contains('is-active');
+                    closeDropdowns(); 
+                    if (!isOpen) {
+                        targetMenu.classList.add('is-active');
+                        toggle.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav-item')) closeDropdowns();
+            });
+
+
+            /* --- 3. HAMBURGER MENU LOGIC --- */
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidePanel = document.querySelector('.side-menu-panel');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const closeLinks = document.querySelectorAll('.close-on-click');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                menuToggle.classList.toggle('is-open', isMenuOpen);
+                menuToggle.setAttribute('aria-expanded', isMenuOpen);
+                sidePanel.classList.toggle('is-open', isMenuOpen);
+                menuOverlay.classList.toggle('is-active', isMenuOpen);
+                document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            menuOverlay.addEventListener('click', toggleMenu);
+
+            closeLinks.forEach(link => {
+                link.addEventListener('click', () => { if (isMenuOpen) toggleMenu(); });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeDropdowns();
+                    if (isMenuOpen) toggleMenu();
+                }
+            });
+
+
+            /* --- 4. HOME SCROLL LINKS --- */
+            document.getElementById('nav-home').addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            document.querySelectorAll('.js-scroll-home').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+
+
+            /* --- 5. LERP & SPRING-BASED SCROLL ANIMATIONS --- */
+            
+            let currentScroll = window.scrollY;
+            let targetScroll = window.scrollY;
+            let isAnimating = true;
+
+            function easeOutBack(x) {
+                const c1 = 1.70158;
+                const c3 = c1 + 1;
+                return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+            }
+            
+            function easeOutQuad(x) { return 1 - (1 - x) * (1 - x); }
+
+            const mistLayer = document.getElementById('mist-layer');
+            const mist1 = document.querySelector('.mist-1');
+            const mist2 = document.querySelector('.mist-2');
+            
+            const heroTitle = document.querySelector('.js-hero-title');
+            const heroDesc = document.querySelector('.js-hero-desc');
+            const heroActions = document.querySelector('.js-hero-actions');
+            const heroStats = document.querySelector('.js-hero-stats');
+            const heroImg = document.querySelector('.js-hero-img');
+            const heroCard = document.querySelector('.js-hero-card');
+            
+            const scrollObjs = document.querySelectorAll('.scroll-obj');
+            
+            function calculateObjTops() {
+                scrollObjs.forEach(obj => {
+                    const prevTransform = obj.style.transform;
+                    obj.style.transform = 'none'; 
+                    obj.dataset.absTop = obj.getBoundingClientRect().top + window.scrollY;
+                    obj.style.transform = prevTransform;
+                });
+            }
+            window.addEventListener('load', calculateObjTops);
+            setTimeout(calculateObjTops, 500);
+            window.addEventListener('resize', calculateObjTops);
+
+            function updateAnimations() {
+                currentScroll += (targetScroll - currentScroll) * 0.08;
+
+                if (Math.abs(targetScroll - currentScroll) < 0.1) {
+                    currentScroll = targetScroll;
+                    isAnimating = false;
+                } else {
+                    isAnimating = true;
+                    requestAnimationFrame(updateAnimations);
+                }
+
+                if (currentScroll < 1200) {
+                    if (heroTitle) {
+                        heroTitle.style.transform = `translateY(-${currentScroll * 0.25}px)`;
+                        heroTitle.style.opacity = Math.max(0, 1 - (currentScroll / 350));
+                    }
+                    if (heroDesc) {
+                        heroDesc.style.transform = `translateY(-${currentScroll * 0.35}px)`;
+                        heroDesc.style.opacity = Math.max(0, 1 - (currentScroll / 300));
+                    }
+                    if (heroActions) {
+                        heroActions.style.transform = `translateY(-${currentScroll * 0.45}px)`;
+                        heroActions.style.opacity = Math.max(0, 1 - (currentScroll / 250));
+                    }
+                    if (heroStats) {
+                        heroStats.style.transform = `translateY(-${currentScroll * 0.1}px) translateX(-${currentScroll * 0.1}px)`;
+                        heroStats.style.opacity = Math.max(0, 1 - (currentScroll / 450));
+                    }
+                    if (heroImg) {
+                        heroImg.style.transform = `translateY(-${currentScroll * 0.15}px) translateX(${currentScroll * 0.15}px) scale(${1 + currentScroll * 0.0003})`;
+                        heroImg.style.opacity = Math.max(0, 1 - (currentScroll / 600));
+                    }
+                    if (heroCard) {
+                        heroCard.style.transform = `translateY(${currentScroll * 0.15}px) translateX(-${currentScroll * 0.2}px) rotate(${currentScroll * -0.015}deg)`;
+                        heroCard.style.opacity = Math.max(0, 1 - (currentScroll / 500));
+                    }
+                }
+
+                if (currentScroll > 50 && currentScroll < 1800) {
+                    mistLayer.style.opacity = Math.min(1, (currentScroll - 50) / 400);
+                    mist1.style.transform = `rotate(-5deg) translateX(${currentScroll * 0.06}px) scale(${1 + currentScroll * 0.0001})`;
+                    mist2.style.transform = `rotate(8deg) translateX(-${currentScroll * 0.04}px) scale(${1 + currentScroll * 0.0002})`;
+                } else if (currentScroll <= 50) {
+                    mistLayer.style.opacity = 0;
+                }
+
+                const windowHeight = window.innerHeight;
+                
+                scrollObjs.forEach(obj => {
+                    if (!obj.dataset.absTop) return; 
+
+                    const absoluteTop = parseFloat(obj.dataset.absTop);
+                    const virtualTop = absoluteTop - currentScroll;
+                    
+                    const triggerY = windowHeight * 0.95;
+                    const settleY = windowHeight * 0.65;
+                    
+                    let progress = 0;
+                    if (virtualTop > triggerY) progress = 0;
+                    else if (virtualTop < settleY) progress = 1;
+                    else progress = 1 - ((virtualTop - settleY) / (triggerY - settleY));
+
+                    const easedProgress = easeOutBack(progress);
+                    const opacityProgress = easeOutQuad(progress);
+
+                    const startY = parseFloat(obj.dataset.y || 80);
+                    const startX = parseFloat(obj.dataset.x || 0);
+                    const startR = parseFloat(obj.dataset.r || 0);
+                    const startS = parseFloat(obj.dataset.scale || 1);
+                    
+                    const currentY = startY * (1 - easedProgress);
+                    const currentX = startX * (1 - easedProgress);
+                    const currentR = startR * (1 - easedProgress);
+                    const currentS = startS + ((1 - startS) * easedProgress);
+                    
+                    obj.style.opacity = Math.min(1, Math.max(0, opacityProgress * 1.5)); 
+                    obj.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${currentR}deg) scale(${currentS})`;
+                });
+            }
+
+            window.addEventListener('scroll', () => {
+                targetScroll = window.scrollY;
+                if (!isAnimating) {
+                    isAnimating = true;
+                    requestAnimationFrame(updateAnimations);
+                }
+            });
+            
+            updateAnimations();
+
+            /* --- 6. ABOUT US ISOLATED SCROLL ANIMATIONS --- */
+            const auScrollObjs = document.querySelectorAll('.au-scroll-anim');
+            
+            function calculateAuTops() {
+                auScrollObjs.forEach(obj => {
+                    const prevTransform = obj.style.transform;
+                    obj.style.transform = 'none'; 
+                    obj.dataset.absTop = obj.getBoundingClientRect().top + window.scrollY;
+                    obj.style.transform = prevTransform;
+                });
+            }
+            window.addEventListener('load', calculateAuTops);
+            setTimeout(calculateAuTops, 500);
+            window.addEventListener('resize', calculateAuTops);
+
+            let auCurrentScroll = window.scrollY;
+            let auTargetScroll = window.scrollY;
+            let isAuAnimating = true;
+
+            function updateAuAnimations() {
+                auCurrentScroll += (auTargetScroll - auCurrentScroll) * 0.08;
+
+                if (Math.abs(auTargetScroll - auCurrentScroll) < 0.1) {
+                    auCurrentScroll = auTargetScroll;
+                    isAuAnimating = false;
+                } else {
+                    isAuAnimating = true;
+                    requestAnimationFrame(updateAuAnimations);
+                }
+
+                const windowHeight = window.innerHeight;
+                
+                auScrollObjs.forEach(obj => {
+                    if (!obj.dataset.absTop) return; 
+
+                    const absoluteTop = parseFloat(obj.dataset.absTop);
+                    const virtualTop = absoluteTop - auCurrentScroll;
+                    
+                    const triggerY = windowHeight * 0.95;
+                    const settleY = windowHeight * 0.75; 
+                    
+                    let progress = 0;
+                    if (virtualTop > triggerY) progress = 0;
+                    else if (virtualTop < settleY) progress = 1;
+                    else progress = 1 - ((virtualTop - settleY) / (triggerY - settleY));
+
+                    const auEaseOutBack = (x) => {
+                        const c1 = 1.70158;
+                        const c3 = c1 + 1;
+                        return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+                    };
+                    const auEaseOutQuad = (x) => 1 - (1 - x) * (1 - x);
+
+                    const finalEasedProgress = auEaseOutBack(progress);
+                    const opacityProgress = auEaseOutQuad(progress);
+
+                    const startY = parseFloat(obj.dataset.y || 80);
+                    const startX = parseFloat(obj.dataset.x || 0);
+                    const startR = parseFloat(obj.dataset.r || 0);
+                    const startS = parseFloat(obj.dataset.scale || 1);
+                    
+                    const currentY = startY * (1 - finalEasedProgress);
+                    const currentX = startX * (1 - finalEasedProgress);
+                    const currentR = startR * (1 - finalEasedProgress);
+                    const currentS = startS + ((1 - startS) * finalEasedProgress);
+                    
+                    obj.style.opacity = Math.min(1, Math.max(0, opacityProgress * 1.5)); 
+                    obj.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${currentR}deg) scale(${currentS})`;
+                });
+            }
+
+            window.addEventListener('scroll', () => {
+                auTargetScroll = window.scrollY;
+                if (!isAuAnimating) {
+                    isAuAnimating = true;
+                    requestAnimationFrame(updateAuAnimations);
+                }
+            });
+            
+            updateAuAnimations();
+        });
+    </script>
+</body>
+</html>

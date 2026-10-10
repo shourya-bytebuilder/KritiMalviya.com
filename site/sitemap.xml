@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Homepage -->
+    <url>
+        <loc>https://kritimalviya.com/</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Consultation Booking -->
+    <url>
+        <loc>https://kritimalviya.com/consultation.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.95</priority>
+    </url>
+
+    <!-- Legal Counselling Practice -->
+    <url>
+        <loc>https://kritimalviya.com/services/legal.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+
+    <!-- Relationship Counselling Practice -->
+    <url>
+        <loc>https://kritimalviya.com/services/relationship.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+
+    <!-- Chambers Contact & Coordinates -->
+    <url>
+        <loc>https://kritimalviya.com/contact.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <!-- Editorial Blog & Legal Insights -->
+    <url>
+        <loc>https://kritimalviya.com/blog.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+
+    <!-- Awards & Milestones Archive -->
+    <url>
+        <loc>https://kritimalviya.com/awards.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.75</priority>
+    </url>
+
+    <!-- Chambers Photography Gallery -->
+    <url>
+        <loc>https://kritimalviya.com/gallery.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.75</priority>
+    </url>
+
+    <!-- Video Journal & Commentary -->
+    <url>
+        <loc>https://kritimalviya.com/vlog.html</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.75</priority>
+    </url>
+</urlset>

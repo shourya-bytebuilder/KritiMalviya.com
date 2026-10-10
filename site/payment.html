@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Consultation Payment — Adv. Kriti Malviya</title>
+    <meta name="description" content="Complete your consultation appointment payment securely via PhonePe.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Unified Stylesheet -->
+    <link rel="stylesheet" href="css/style.css?v=20261010">
+</head>
+<body data-page="payment">
+
+    <!-- TEST MODE BANNER -->
+    <div class="test-banner" id="test-banner">
+        ENCRYPTED PAYMENT ENVIRONMENT — PHONEPE SECURE GATEWAY INTEGRATION ACTIVE
+    </div>
+
+    <!-- GLOBAL HEADER -->
+    <header class="header">
+        <a href="index.html" class="brand" aria-label="Adv. Kriti Malviya Home">
+            <img src="assets/lawyer logo.jpg" alt="Logo" class="brand-logo">
+            <span class="brand-name">KRITIMALVIYA</span>
+        </a>
+
+        <div class="header-actions">
+            <span class="eyebrow payment-ssl-badge" style="margin:0; font-size:0.8rem; color:var(--gold);">🔒 256-BIT SSL ENCRYPTED</span>
+            <button type="button" class="help-trigger-btn js-open-help" aria-label="Need Help?"><span>Need Help?</span></button>
+            <a href="consultation.html" class="btn btn-outline btn-sm"><span>Cancel / Back</span></a>
+        </div>
+    </header>
+
+    <!-- MAIN PAYMENT SECTION -->
+    <main>
+        <section class="page-intro" style="padding-bottom: 20px;">
+            <div class="intro-left">
+                <div class="eyebrow">STEP 04 OF 04</div>
+                <h1 class="page-title" style="font-size: clamp(2.5rem, 5vw, 4rem);">CONSULTATION PAYMENT</h1>
+                <p class="page-desc">
+                    Review your consultation details and complete your appointment payment securely using the PhonePe payment gateway.
+                </p>
+            </div>
+        </section>
+
+        <section class="py-container">
+            
+            <!-- LEFT: GATEWAY INTERFACE -->
+            <div class="py-main">
+                <h2 class="step-heading">Payment Gateway</h2>
+                
+                <div class="gateway-chip">
+                    <div class="gateway-logo-wrap">
+                        <div style="width: 44px; height: 44px; border-radius: 8px; background: var(--phonepe-brand); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:1.4rem;">
+                            पे
+                        </div>
+                        <div>
+                            <div class="gateway-title">PhonePe Payment Gateway</div>
+                            <div class="gateway-subtitle">UPI, Credit/Debit Cards, Net Banking & Wallets</div>
+                        </div>
+                    </div>
+                    <span class="payment-status-badge status-pending" id="py-badge">PENDING</span>
+                </div>
+
+                <div id="payment-status-box" style="margin-bottom: 24px;"></div>
+
+                <div class="payment-security-notice" style="margin-top:0; margin-bottom:24px;">
+                    <strong>⚠️ Important Payment Notice:</strong> Do not refresh, reload, or press the back button during payment processing. Please complete your transaction on the PhonePe interface. Upon successful completion, you will be automatically returned to your confirmed appointment receipt.
+                </div>
+
+                <div style="background:var(--cream); padding:24px; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:30px;">
+                    <h4 style="font-size:0.95rem; font-weight:600; margin-bottom:8px; color:var(--black);">Client Trust & Confidentiality</h4>
+                    <p style="font-size:0.88rem; color:var(--muted); line-height:1.5;">
+                        Your payment is processed through encrypted PhonePe gateway channels. Upon verified completion, a unique Order ID (KM-YYYYMMDD-XXXX) will be generated and confirmation sent to your email.
+                    </p>
+                </div>
+
+                <div class="bk-actions" style="margin:0;">
+                    <button type="button" class="btn btn-primary" id="btn-pay" style="width:100%; padding:20px; font-size:1rem;">
+                        <span>Continue to Secure Payment (₹1,000) &rarr;</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT: SUMMARY SIDEBAR -->
+            <aside class="py-sidebar">
+                <h3 class="sb-title">Booking Summary</h3>
+                <div class="sb-item">
+                    <div class="sb-label">Consultation</div>
+                    <div class="sb-val" id="sum-type">General Legal Consultation</div>
+                </div>
+                <div class="sb-item">
+                    <div class="sb-label">Date & Time</div>
+                    <div class="sb-val"><span id="sum-date">--</span> at <span id="sum-time">--</span></div>
+                </div>
+                <div class="sb-item">
+                    <div class="sb-label">Duration & Mode</div>
+                    <div class="sb-val"><span id="sum-dur">30 Minutes</span> · <span id="sum-mode">Online</span></div>
+                </div>
+                <div class="sb-item">
+                    <div class="sb-label">Booking Reference</div>
+                    <div class="sb-val" id="sum-ref" style="font-family:monospace; color:var(--gold);">KM-PENDING</div>
+                </div>
+
+                <div class="sb-fee-row">
+                    <div class="sb-label" style="margin:0;">Total Amount</div>
+                    <div class="sb-fee-val" id="sum-total">₹1,000</div>
+                </div>
+
+                <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-subtle); text-align:center;">
+                    <button type="button" class="help-trigger-btn js-open-help" style="width:100%; justify-content:center;"><span>Payment Questions? Help</span></button>
+                </div>
+            </aside>
+
+        </section>
+    </main>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-bottom" style="border:none; padding:0; justify-content:center; text-align:center;">
+                <div class="footer-copy">
+                    &copy; 2026 Adv. Kriti Malviya. Official payment gateway integration via PhonePe.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase SDK & Integration Layer -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

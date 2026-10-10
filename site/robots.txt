@@ -1,0 +1,11 @@
+# ==============================================================================
+# ROBOTS.TXT — ADV. KRITI MALVIYA CHAMBERS (Kritimalviya.com)
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+
+# XML Sitemap Location
+Sitemap: https://kritimalviya.com/sitemap.xml
